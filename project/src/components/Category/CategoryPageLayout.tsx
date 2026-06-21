@@ -241,8 +241,8 @@ export default function CategoryPageLayout({
 
   return (
     <div className="min-h-screen bg-gray-50">
-      <div className={`bg-gradient-to-r ${heroGradient} text-white py-10 px-6`}>
-        <div className="max-w-screen-xl mx-auto">
+      <div className={`bg-gradient-to-r ${heroGradient} text-white py-10`}>
+        <div className="w-full px-4 sm:px-6 lg:px-8 xl:px-12">
           <nav className="flex items-center gap-2 text-white/80 text-xs mb-4">
             <Link to="/" className="hover:text-white transition-colors">Home</Link>
             <span>›</span>
@@ -292,7 +292,7 @@ export default function CategoryPageLayout({
         </div>
       )}
 
-      <div className="max-w-screen-xl mx-auto px-4 py-6 flex gap-6">
+      <div className="w-full px-4 sm:px-6 lg:px-8 xl:px-12 py-6 flex gap-6">
         <aside className="hidden md:block w-52 flex-shrink-0">
           <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-5 sticky top-4">
             <FilterPanel />

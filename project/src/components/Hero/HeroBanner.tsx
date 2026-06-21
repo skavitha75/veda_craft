@@ -109,7 +109,7 @@ export default function HeroBanner() {
 
             {/* Content */}
             <div className="absolute inset-0 flex items-center">
-              <div className="w-full px-6 md:px-10">
+              <div className="w-full px-4 sm:px-6 lg:px-8 xl:px-12">
                 <div 
                   className={`max-w-md transition-all duration-700 delay-300 transform ${
                     index === currentIndex ? 'translate-y-0 opacity-100' : 'translate-y-8 opacity-0'
