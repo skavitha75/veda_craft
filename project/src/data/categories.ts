@@ -5,13 +5,20 @@ export interface Category {
   slug: string;
 }
 
+import ecoImg from '../assets/categories/eco.jpeg';
+import wellnessImg from '../assets/categories/wellness.jpeg';
+import foodImg from '../assets/categories/food.jpeg';
+import craftImg from '../assets/categories/craft.jpeg';
+import fashionImg from '../assets/categories/fashion.jpeg';
+import decorImg from '../assets/categories/decor items.jpeg';
+
 const categories: Category[] = [
-  { id: 1, name: 'Eco', image: '', slug: 'eco' },
-  { id: 2, name: 'Wellness', image: '', slug: 'wellness' },
-  { id: 3, name: 'Food', image: '', slug: 'food' },
-  { id: 4, name: 'Craft', image: '', slug: 'craft' },
-  { id: 5, name: 'Fashion', image: '', slug: 'fashion' },
-  { id: 6, name: 'Decor Items', image: '', slug: 'decor' },
+  { id: 1, name: 'Eco', image: ecoImg, slug: 'eco' },
+  { id: 2, name: 'Wellness', image: wellnessImg, slug: 'wellness' },
+  { id: 3, name: 'Food', image: foodImg, slug: 'food' },
+  { id: 4, name: 'Craft', image: craftImg, slug: 'craft' },
+  { id: 5, name: 'Fashion', image: fashionImg, slug: 'fashion' },
+  { id: 6, name: 'Decor Items', image: decorImg, slug: 'decor' },
 ];
 
 export default categories;

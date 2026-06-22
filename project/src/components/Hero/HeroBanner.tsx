@@ -1,7 +1,13 @@
 import { useState, useEffect } from 'react';
 import { ArrowRight, ChevronLeft, ChevronRight } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
-import bannerImg from '../../assets/banners/banner2.jpeg';
+
+import ecoBanner from '../../assets/banners/ecobanner.jpeg';
+import wellnessBanner from '../../assets/banners/wellnessbanner.jpeg';
+import foodBanner from '../../assets/banners/foodbanner.jpeg';
+import craftBanner from '../../assets/banners/craftbanner.jpeg';
+import fashionBanner from '../../assets/banners/fashionbanner.jpeg';
+import decorBanner from '../../assets/banners/decoritembanner.jpeg';
 
 const banners = [
   {
@@ -10,7 +16,7 @@ const banners = [
     subtitle: 'Discover thoughtfully crafted products that are kind to the planet and support skilled artisans and communities.',
     buttonText: 'Shop Eco Products',
     link: '/eco',
-    image: bannerImg, // Local image from assets
+    image: ecoBanner,
     titleColor: 'text-green-800',
     btnColor: 'bg-green-600 hover:bg-green-700',
   },
@@ -20,7 +26,7 @@ const banners = [
     subtitle: 'Explore our natural wellness collection for a balanced and peaceful lifestyle.',
     buttonText: 'Shop Wellness',
     link: '/wellness',
-    image: 'https://images.pexels.com/photos/3735149/pexels-photo-3735149.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2',
+    image: wellnessBanner,
     titleColor: 'text-teal-800',
     btnColor: 'bg-teal-600 hover:bg-teal-700',
   },
@@ -30,7 +36,7 @@ const banners = [
     subtitle: 'Ethically sourced, organic food items brought directly from the farm to your table.',
     buttonText: 'Shop Organic Food',
     link: '/food',
-    image: 'https://images.pexels.com/photos/1640777/pexels-photo-1640777.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2',
+    image: foodBanner,
     titleColor: 'text-orange-800',
     btnColor: 'bg-orange-600 hover:bg-orange-700',
   },
@@ -40,7 +46,7 @@ const banners = [
     subtitle: 'Masterpieces handcrafted by skilled artisans, preserving ancient traditions and culture.',
     buttonText: 'Shop Crafts',
     link: '/craft',
-    image: 'https://images.pexels.com/photos/4202325/pexels-photo-4202325.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2',
+    image: craftBanner,
     titleColor: 'text-purple-800',
     btnColor: 'bg-purple-600 hover:bg-purple-700',
   },
@@ -50,7 +56,7 @@ const banners = [
     subtitle: 'Express yourself with eco-friendly clothing that looks good and does good.',
     buttonText: 'Shop Fashion',
     link: '/fashion',
-    image: 'https://images.pexels.com/photos/6044266/pexels-photo-6044266.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2',
+    image: fashionBanner,
     titleColor: 'text-rose-800',
     btnColor: 'bg-rose-600 hover:bg-rose-700',
   },
@@ -60,7 +66,7 @@ const banners = [
     subtitle: 'Transform your space with beautiful, rustic decor that tells a unique story.',
     buttonText: 'Shop Decor',
     link: '/decor',
-    image: 'https://images.pexels.com/photos/3094218/pexels-photo-3094218.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2',
+    image: decorBanner,
     titleColor: 'text-amber-800',
     btnColor: 'bg-amber-600 hover:bg-amber-700',
   }
@@ -91,9 +97,9 @@ export default function HeroBanner() {
   };
 
   return (
-    <section className="w-full relative overflow-hidden bg-gray-100 group">
+    <section className="w-full relative overflow-hidden group">
       <div 
-        className="flex transition-transform duration-700 ease-in-out h-[280px] md:h-[360px] lg:h-[400px]"
+        className="flex transition-transform duration-700 ease-in-out h-[260px] sm:h-[320px] md:h-[400px] lg:h-[460px] xl:h-[520px]"
         style={{ transform: `translateX(-${currentIndex * 100}%)` }}
       >
         {banners.map((banner, index) => (
@@ -105,7 +111,7 @@ export default function HeroBanner() {
             />
             
             {/* Gradient overlay for text readability */}
-            <div className="absolute inset-0 bg-gradient-to-r from-white/80 via-white/40 to-transparent" />
+            <div className="absolute inset-0 bg-gradient-to-r from-black/60 via-black/20 to-transparent" />
 
             {/* Content */}
             <div className="absolute inset-0 flex items-center">
@@ -115,10 +121,10 @@ export default function HeroBanner() {
                     index === currentIndex ? 'translate-y-0 opacity-100' : 'translate-y-8 opacity-0'
                   }`}
                 >
-                  <h1 className={`text-2xl md:text-3xl lg:text-4xl font-extrabold leading-tight mb-3 whitespace-pre-line ${banner.titleColor}`}>
+                  <h1 className="text-2xl md:text-3xl lg:text-4xl font-extrabold leading-tight mb-3 whitespace-pre-line text-white drop-shadow-md">
                     {banner.title}
                   </h1>
-                  <p className="text-sm md:text-base text-gray-800 font-medium mb-6 leading-relaxed max-w-sm">
+                  <p className="text-sm md:text-base text-white/90 font-medium mb-6 leading-relaxed max-w-sm drop-shadow">
                     {banner.subtitle}
                   </p>
                   <button

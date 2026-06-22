@@ -143,7 +143,7 @@ export default function CategoryPageLayout({
     categories: [],
     features: [],
     discounts: [],
-    priceMax: 1000,
+    priceMax: 5000,
     inStock: false,
     outOfStock: false,
   });
@@ -157,7 +157,7 @@ export default function CategoryPageLayout({
   };
 
   const clearAll = () =>
-    setFilters({ categories: [], features: [], discounts: [], priceMax: 1000, inStock: false, outOfStock: false });
+    setFilters({ categories: [], features: [], discounts: [], priceMax: 5000, inStock: false, outOfStock: false });
 
   const activeFiltersCount =
     filters.categories.length + filters.features.length + filters.discounts.length +
@@ -165,15 +165,43 @@ export default function CategoryPageLayout({
 
   const filteredProducts = useMemo(() => {
     return products.filter((product) => {
+      // 1. Category
       if (filters.categories.length > 0 && !filters.categories.includes(product.category)) {
         return false;
       }
+      
+      // 2. Price
       if (product.price > filters.priceMax) {
         return false;
       }
+
+      // 3. Availability (Pseudo-random: ID % 7 == 0 is Out of Stock)
+      const isOutOfStock = product.id % 7 === 0;
+      if (filters.inStock && !filters.outOfStock && isOutOfStock) return false;
+      if (filters.outOfStock && !filters.inStock && !isOutOfStock) return false;
+
+      // 4. Features
+      if (filters.features.length > 0) {
+        // Assign 1-2 consistent pseudo-random features to each product based on ID
+        const feature1 = features[product.id % features.length];
+        const feature2 = features[(product.id * 2) % features.length];
+        const productFeatures = [feature1, feature2];
+        
+        // Product must have at least ONE of the selected features
+        const hasFeature = filters.features.some(f => productFeatures.includes(f));
+        if (!hasFeature) return false;
+      }
+
+      // 5. Discount
+      if (filters.discounts.length > 0) {
+        // Assign a consistent pseudo-random discount based on ID
+        const productDiscount = discounts[product.id % discounts.length];
+        if (!filters.discounts.includes(productDiscount)) return false;
+      }
+
       return true;
     });
-  }, [products, filters]);
+  }, [products, filters, features, discounts]);
 
   const FilterPanel = () => (
     <aside className="w-full space-y-1">
@@ -196,7 +224,7 @@ export default function CategoryPageLayout({
         <input
           type="range"
           min={0}
-          max={1000}
+          max={5000}
           value={filters.priceMax}
           onChange={(e) => setFilters((f) => ({ ...f, priceMax: Number(e.target.value) }))}
           className="w-full accent-green-600"
@@ -204,7 +232,7 @@ export default function CategoryPageLayout({
         <div className="flex justify-between text-xs text-gray-500 mt-1">
           <span>₹0</span>
           <span className="text-green-700 font-semibold">₹{filters.priceMax}</span>
-          <span>₹1000</span>
+          <span>₹5000</span>
         </div>
       </div>
 

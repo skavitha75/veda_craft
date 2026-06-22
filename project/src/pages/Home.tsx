@@ -1,12 +1,38 @@
 import HeroBanner from '../components/Hero/HeroBanner';
 import CategorySection from '../components/Categories/CategorySection';
 import ProductSection from '../components/Products/ProductSection';
-import products from '../data/products';
+
+import { ecoProducts } from '../data/ecoProducts';
+import { foodProducts } from '../data/foodProducts';
+import { wellnessProducts } from '../data/wellnessProducts';
+import { craftProducts } from '../data/craftProducts';
+import { decorProducts } from '../data/decorProducts';
+import { fashionProducts } from '../data/fashionProducts';
+
+// Helper to shuffle an array nicely
+const shuffle = <T,>(array: T[]): T[] => {
+  const newArr = [...array];
+  for (let i = newArr.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [newArr[i], newArr[j]] = [newArr[j], newArr[i]];
+  }
+  return newArr;
+};
 
 export default function Home() {
-  const bestSellers = products.filter((p) => p.section === 'bestsellers');
-  const newArrivals = products.filter((p) => p.section === 'newarrivals');
-  const trending = products.filter((p) => p.section === 'trending');
+  const allProducts = [
+    ...ecoProducts,
+    ...foodProducts,
+    ...wellnessProducts,
+    ...craftProducts,
+    ...decorProducts,
+    ...fashionProducts
+  ];
+
+  // Get products for each section and shuffle them so it looks like a curated mix
+  const bestSellers = shuffle(allProducts.filter((p) => p.section === 'bestsellers'));
+  const newArrivals = shuffle(allProducts.filter((p) => p.section === 'newarrivals'));
+  const trending = shuffle(allProducts.filter((p) => p.section === 'trending'));
 
   return (
     <main className="bg-white">

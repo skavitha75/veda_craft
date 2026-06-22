@@ -1,6 +1,6 @@
 import { Lamp } from 'lucide-react';
 import CategoryPageLayout from '../components/Category/CategoryPageLayout';
-import products from '../data/products'; // Mock data for now
+import { decorProducts } from '../data/decorProducts';
 
 const decorCategories = ['Wall Art', 'Lighting', 'Rugs & Carpets', 'Vases & Planters', 'Table Accents'];
 const decorFeatures = ['Handmade', 'Upcycled', 'Rustic', 'Minimalist', 'Bohemian'];
@@ -12,10 +12,10 @@ export default function DecorItemsPage() {
       title="Home Decor Items"
       description="Transform your space with beautiful, handcrafted decor that tells a story 🖼️"
       tags={['Handmade Decor', 'Upcycled Art', 'Rustic Charm', 'Interior Styling']}
-      heroGradient="from-green-800 via-green-600 to-amber-500"
+      heroGradient="from-amber-900 via-amber-700 to-yellow-600"
       icon={Lamp}
       badgeColorClass="bg-amber-700"
-      products={products} // In a real app, filter products by category 'Decor'
+      products={decorProducts}
       categories={decorCategories}
       features={decorFeatures}
       discounts={discounts}
