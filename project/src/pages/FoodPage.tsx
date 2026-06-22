@@ -1,10 +1,10 @@
 import { UtensilsCrossed } from 'lucide-react';
 import CategoryPageLayout from '../components/Category/CategoryPageLayout';
-import products from '../data/products'; // Mock data for now
+import { foodProducts } from '../data/foodProducts';
 
-const foodCategories = ['Herbal Tea', 'Spices & Seasonings', 'Healthy Snacks', 'Organic Honey', 'Superfoods'];
-const foodFeatures = ['Organic', 'Gluten-Free', 'No Preservatives', 'Farm Fresh', 'Non-GMO'];
-const discounts = ['10% off & Above', '20% off & Above', '30% off & Above'];
+const foodCategories = ['Grains', 'Spices', 'Honey', 'Oils', 'Snacks'];
+const foodFeatures = ['Organic', 'Farm Fresh', 'No Preservatives', 'Locally Sourced', 'Vegan'];
+const discounts = ['10% off & Above', '20% off & Above', '40% off & Above'];
 
 export default function FoodPage() {
   return (
@@ -15,7 +15,7 @@ export default function FoodPage() {
       heroGradient="from-green-800 via-green-600 to-amber-500"
       icon={UtensilsCrossed}
       badgeColorClass="bg-orange-600"
-      products={products} // In a real app, filter products by category 'Food'
+      products={foodProducts}
       categories={foodCategories}
       features={foodFeatures}
       discounts={discounts}

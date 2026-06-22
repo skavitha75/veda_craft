@@ -163,7 +163,17 @@ export default function CategoryPageLayout({
     filters.categories.length + filters.features.length + filters.discounts.length +
     (filters.inStock ? 1 : 0) + (filters.outOfStock ? 1 : 0);
 
-  const filteredProducts = useMemo(() => products, [products]); // In a real app, apply filters here
+  const filteredProducts = useMemo(() => {
+    return products.filter((product) => {
+      if (filters.categories.length > 0 && !filters.categories.includes(product.category)) {
+        return false;
+      }
+      if (product.price > filters.priceMax) {
+        return false;
+      }
+      return true;
+    });
+  }, [products, filters]);
 
   const FilterPanel = () => (
     <aside className="w-full space-y-1">

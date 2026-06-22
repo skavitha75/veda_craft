@@ -2,7 +2,7 @@ import { HeartPulse } from 'lucide-react';
 import CategoryPageLayout from '../components/Category/CategoryPageLayout';
 import { wellnessProducts } from '../data/wellnessProducts';
 
-const wellnessCategories = ['Essential Oils', 'Herbal Supplements', 'Yoga Mats', 'Meditation Cushions', 'Natural Skincare'];
+const wellnessCategories = ['Aromatherapy', 'Supplements & Teas', 'Yoga & Meditation', 'Skincare & Bath', 'Massage Tools'];
 const wellnessFeatures = ['Organic', 'Cruelty-Free', 'Vegan', 'Therapeutic Grade', 'Ayurvedic'];
 const discounts = ['10% off & Above', '25% off & Above', '50% off & Above'];
 

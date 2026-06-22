@@ -15,7 +15,7 @@ export const wellnessProducts: Product[] = [
   {
     id: 101,
     name: 'Aromatherapy Candle',
-    category: 'Wellness',
+    category: 'Aromatherapy',
     price: 399,
     rating: 4.8,
     image: AromatherapyCandle,
@@ -24,7 +24,7 @@ export const wellnessProducts: Product[] = [
   {
     id: 102,
     name: 'Essential Oil',
-    category: 'Wellness',
+    category: 'Aromatherapy',
     price: 499,
     rating: 4.7,
     image: Essitentialoil,
@@ -33,7 +33,7 @@ export const wellnessProducts: Product[] = [
   {
     id: 103,
     name: 'Herbal Tea Pack',
-    category: 'Wellness',
+    category: 'Supplements & Teas',
     price: 299,
     rating: 4.5,
     image: HerbalTeaPack,
@@ -42,7 +42,7 @@ export const wellnessProducts: Product[] = [
   {
     id: 104,
     name: 'Herbal Supplements',
-    category: 'Wellness',
+    category: 'Supplements & Teas',
     price: 599,
     rating: 4.6,
     image: Herbalsupplements,
@@ -51,7 +51,7 @@ export const wellnessProducts: Product[] = [
   {
     id: 105,
     name: 'Massage Roller',
-    category: 'Wellness',
+    category: 'Massage Tools',
     price: 349,
     rating: 4.4,
     image: MassageRoller,
@@ -60,7 +60,7 @@ export const wellnessProducts: Product[] = [
   {
     id: 106,
     name: 'Meditation Cushion',
-    category: 'Wellness',
+    category: 'Yoga & Meditation',
     price: 799,
     rating: 4.9,
     image: MeditationCushion,
@@ -69,7 +69,7 @@ export const wellnessProducts: Product[] = [
   {
     id: 107,
     name: 'Organic Face Serum',
-    category: 'Wellness',
+    category: 'Skincare & Bath',
     price: 699,
     rating: 4.7,
     image: OrganicFaceSerum,
@@ -78,25 +78,16 @@ export const wellnessProducts: Product[] = [
   {
     id: 108,
     name: 'Vegan Soap',
-    category: 'Wellness',
+    category: 'Skincare & Bath',
     price: 199,
     rating: 4.5,
     image: VeganSoap,
     section: 'trending',
   },
   {
-    id: 109,
-    name: 'Wellness Gift Box',
-    category: 'Wellness',
-    price: 1499,
-    rating: 4.8,
-    image: WellnessGiftBox,
-    section: 'trending',
-  },
-  {
     id: 110,
     name: 'Skincare Cream',
-    category: 'Wellness',
+    category: 'Skincare & Bath',
     price: 549,
     rating: 4.6,
     image: skincarecream,
@@ -105,7 +96,7 @@ export const wellnessProducts: Product[] = [
   {
     id: 111,
     name: 'Yoga Mat',
-    category: 'Wellness',
+    category: 'Yoga & Meditation',
     price: 899,
     rating: 4.8,
     image: yogamat,

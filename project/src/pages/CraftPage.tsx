@@ -1,6 +1,6 @@
 import { Scissors } from 'lucide-react';
 import CategoryPageLayout from '../components/Category/CategoryPageLayout';
-import products from '../data/products'; // Mock data for now
+import { craftProducts } from '../data/craftProducts';
 
 const craftCategories = ['Pottery', 'Weaving', 'Woodwork', 'Paper Crafts', 'Metal Art'];
 const craftFeatures = ['Handcrafted', 'Traditional', 'Unique', 'Locally Made', 'Customizable'];
@@ -15,7 +15,7 @@ export default function CraftPage() {
       heroGradient="from-green-800 via-green-600 to-amber-500"
       icon={Scissors}
       badgeColorClass="bg-purple-600"
-      products={products} // In a real app, filter products by category 'Craft'
+      products={craftProducts}
       categories={craftCategories}
       features={craftFeatures}
       discounts={discounts}
