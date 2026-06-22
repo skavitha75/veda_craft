@@ -107,13 +107,13 @@ export default function ProductDetailsPage() {
           <div className="flex gap-4">
             <div className="flex flex-col gap-2 w-20 flex-shrink-0">
               {[1, 2, 3, 4].map((item) => (
-                <div key={item} className="aspect-square bg-gray-50 border border-gray-200 rounded-md overflow-hidden cursor-pointer hover:border-green-500">
-                   <img src={product.image} alt="thumbnail" className="w-full h-full object-cover" />
+                <div key={item} className="bg-white border border-gray-200 rounded-md overflow-hidden cursor-pointer hover:border-green-500">
+                   <img src={product.image} alt="thumbnail" className="w-full h-auto object-cover" />
                 </div>
               ))}
             </div>
-            <div className="flex-1 bg-gray-50 rounded-xl overflow-hidden aspect-[4/5] flex items-center justify-center border border-gray-100">
-               <img src={product.image} alt={product.name} className="max-w-full max-h-full object-contain p-4" />
+            <div className="flex-1 flex items-start justify-center">
+               <img src={product.image} alt={product.name} className="w-full h-auto rounded-xl object-contain shadow-sm border border-gray-100" />
             </div>
           </div>
 

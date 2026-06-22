@@ -12,7 +12,7 @@ import yogamat from '../assets/products/wellnessproducts/yogamat.jpeg';
 
 export const wellnessProducts: Product[] = [
   {
-    id: 101,
+    id: 601,
     name: 'Aromatherapy Candle',
     category: 'Aromatherapy',
     price: 399,
@@ -21,7 +21,7 @@ export const wellnessProducts: Product[] = [
     section: 'bestsellers',
   },
   {
-    id: 102,
+    id: 602,
     name: 'Essential Oil',
     category: 'Aromatherapy',
     price: 499,
@@ -30,7 +30,7 @@ export const wellnessProducts: Product[] = [
     section: 'bestsellers',
   },
   {
-    id: 103,
+    id: 603,
     name: 'Herbal Tea Pack',
     category: 'Supplements & Teas',
     price: 299,
@@ -39,7 +39,7 @@ export const wellnessProducts: Product[] = [
     section: 'bestsellers',
   },
   {
-    id: 104,
+    id: 604,
     name: 'Herbal Supplements',
     category: 'Supplements & Teas',
     price: 599,
@@ -48,7 +48,7 @@ export const wellnessProducts: Product[] = [
     section: 'bestsellers',
   },
   {
-    id: 105,
+    id: 605,
     name: 'Massage Roller',
     category: 'Massage Tools',
     price: 349,
@@ -57,7 +57,7 @@ export const wellnessProducts: Product[] = [
     section: 'newarrivals',
   },
   {
-    id: 106,
+    id: 606,
     name: 'Meditation Cushion',
     category: 'Yoga & Meditation',
     price: 799,
@@ -66,7 +66,7 @@ export const wellnessProducts: Product[] = [
     section: 'newarrivals',
   },
   {
-    id: 107,
+    id: 607,
     name: 'Organic Face Serum',
     category: 'Skincare & Bath',
     price: 699,
@@ -75,7 +75,7 @@ export const wellnessProducts: Product[] = [
     section: 'newarrivals',
   },
   {
-    id: 108,
+    id: 608,
     name: 'Vegan Soap',
     category: 'Skincare & Bath',
     price: 199,
@@ -84,7 +84,7 @@ export const wellnessProducts: Product[] = [
     section: 'trending',
   },
   {
-    id: 110,
+    id: 609,
     name: 'Skincare Cream',
     category: 'Skincare & Bath',
     price: 549,
@@ -93,7 +93,7 @@ export const wellnessProducts: Product[] = [
     section: 'trending',
   },
   {
-    id: 111,
+    id: 610,
     name: 'Yoga Mat',
     category: 'Yoga & Meditation',
     price: 899,

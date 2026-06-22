@@ -12,7 +12,7 @@ import shirt from '../assets/products/fashionproducts/linenshirt.jpeg';
 
 export const fashionProducts: Product[] = [
   {
-    id: 101,
+    id: 501,
     name: 'Coconut Shell Necklace',
     category: 'Handmade Jewelry',
     price: 349,
@@ -21,7 +21,7 @@ export const fashionProducts: Product[] = [
     section: 'bestsellers',
   },
   {
-    id: 102,
+    id: 502,
     name: 'Organic Cotton Kurti',
     category: 'Cotton Apparel',
     price: 899,
@@ -30,7 +30,7 @@ export const fashionProducts: Product[] = [
     section: 'newarrivals',
   },
   {
-    id: 103,
+    id: 503,
     name: 'Handloom Cotton Saree',
     category: 'Handloom Sarees',
     price: 1599,
@@ -39,7 +39,7 @@ export const fashionProducts: Product[] = [
     section: 'bestsellers',
   },
   {
-    id: 104,
+    id: 504,
     name: 'Eco-friendly Cotton T-Shirt',
     category: 'Cotton Apparel',
     price: 499,
@@ -48,7 +48,7 @@ export const fashionProducts: Product[] = [
     section: 'trending',
   },
   {
-    id: 105,
+    id: 505,
     name: 'Handcrafted Earrings',
     category: 'Handmade Jewelry',
     price: 249,
@@ -57,7 +57,7 @@ export const fashionProducts: Product[] = [
     section: 'bestsellers',
   },
   {
-    id: 106,
+    id: 506,
     name: 'Sustainable Jute Handbag',
     category: 'Eco Bags',
     price: 699,
@@ -66,7 +66,7 @@ export const fashionProducts: Product[] = [
     section: 'trending',
   },
   {
-    id: 107,
+    id: 507,
     name: 'Pure Linen Pant',
     category: 'Linen Wear',
     price: 1199,
@@ -75,7 +75,7 @@ export const fashionProducts: Product[] = [
     section: 'newarrivals',
   },
   {
-    id: 108,
+    id: 508,
     name: 'Classic Linen Shirt',
     category: 'Linen Wear',
     price: 1299,
