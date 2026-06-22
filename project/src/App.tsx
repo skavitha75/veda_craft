@@ -8,7 +8,7 @@ import FoodPage from './pages/FoodPage';
 import CraftPage from './pages/CraftPage';
 import FashionPage from './pages/FashionPage';
 import DecorItemsPage from './pages/DecorItemsPage';
-import ProductDetailsPage from './pages/ProductDetailsPage';
+import ProductDetail from './pages/ProductDetail';
 import Footer from './components/Footer/Footer';
 
 function App() {
@@ -26,7 +26,7 @@ function App() {
             <Route path="/craft" element={<CraftPage />} />
             <Route path="/fashion" element={<FashionPage />} />
             <Route path="/decor" element={<DecorItemsPage />} />
-            <Route path="/product/:id" element={<ProductDetailsPage />} />
+            <Route path="/product/:id" element={<ProductDetail />} />
           </Routes>
         </div>
         <Footer />

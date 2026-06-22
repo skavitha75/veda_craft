@@ -7,7 +7,6 @@ import MassageRoller from '../assets/products/wellnessproducts/MassageRoller.jpe
 import MeditationCushion from '../assets/products/wellnessproducts/MeditationCushion.jpeg';
 import OrganicFaceSerum from '../assets/products/wellnessproducts/OrganicFaceSerum.jpeg';
 import VeganSoap from '../assets/products/wellnessproducts/VeganSoap.jpeg';
-import WellnessGiftBox from '../assets/products/wellnessproducts/WellnessGiftBox.jpeg';
 import skincarecream from '../assets/products/wellnessproducts/skincarecream.jpeg';
 import yogamat from '../assets/products/wellnessproducts/yogamat.jpeg';
 

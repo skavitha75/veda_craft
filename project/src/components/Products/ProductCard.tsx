@@ -11,18 +11,19 @@ export default function ProductCard({ product }: ProductCardProps) {
   return (
     <div className="bg-white rounded-xl border border-gray-100 overflow-hidden shadow-sm hover:shadow-md transition-all duration-200 hover:-translate-y-0.5 group flex flex-col">
       {/* Image Container */}
-      <Link to={`/product/${product.id}`} className="relative overflow-hidden bg-gray-50 aspect-square block">
-        <img
-          src={product.image}
-          alt={product.name}
-          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-        />
-      </Link>
-      {/* Wishlist Button */}
-      <div className="absolute top-2 right-2">
-        <WishlistButton productId={product.id} />
+      <div className="relative overflow-hidden bg-gray-50 aspect-square block">
+        <Link to={`/product/${product.id}`} className="block w-full h-full">
+          <img
+            src={product.image}
+            alt={product.name}
+            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+          />
+        </Link>
+        {/* Wishlist Button */}
+        <div className="absolute top-2 right-2">
+          <WishlistButton productId={product.id} />
+        </div>
       </div>
-    </div>
 
       {/* Product Info */ }
   <div className="p-2.5 flex flex-col gap-1 flex-1">
