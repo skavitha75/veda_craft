@@ -12,7 +12,7 @@ export default function FoodPage() {
       title="Organic Food"
       description="Taste the purity of nature with our ethically sourced, organic food items 🍯"
       tags={['Farm Fresh', 'Healthy Living', 'Locally Sourced', 'Pesticide Free']}
-      heroGradient="from-orange-700 via-amber-600 to-yellow-500"
+      heroGradient="from-green-800 via-green-600 to-amber-500"
       icon={UtensilsCrossed}
       badgeColorClass="bg-orange-600"
       products={products} // In a real app, filter products by category 'Food'

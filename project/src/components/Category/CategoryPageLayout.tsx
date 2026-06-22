@@ -78,11 +78,11 @@ function ProductCard({ product, badgeIcon: BadgeIcon, badgeText, badgeColorClass
         {/* Wishlist */}
         <button
           onClick={() => setWished((w) => !w)}
-          className={`absolute top-2 right-2 w-8 h-8 flex items-center justify-center rounded-full shadow-md transition-all duration-200 ${
-            wished ? 'bg-red-500 text-white scale-110' : 'bg-white text-gray-400 hover:text-red-400'
+          className={`absolute top-2 right-2 w-8 h-8 flex items-center justify-center rounded-full bg-white shadow-md transition-all duration-200 hover:scale-110 ${
+            wished ? 'text-red-500' : 'text-gray-400 hover:text-red-400'
           }`}
         >
-          <Heart className="w-4 h-4" fill={wished ? 'currentColor' : 'none'} />
+          <Heart className={`w-4 h-4 ${wished ? 'fill-red-500' : ''}`} />
         </button>
       </div>
 
@@ -174,7 +174,7 @@ export default function CategoryPageLayout({
         {activeFiltersCount > 0 && (
           <button
             onClick={clearAll}
-            className="flex items-center gap-1 text-xs text-red-500 hover:text-red-700 font-medium transition-colors"
+            className="flex items-center gap-1 text-xs text-green-600 hover:text-green-700 font-medium transition-colors"
           >
             <X className="w-3 h-3" /> Clear All ({activeFiltersCount})
           </button>

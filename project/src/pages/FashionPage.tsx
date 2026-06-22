@@ -12,7 +12,7 @@ export default function FashionPage() {
       title="Sustainable Fashion"
       description="Express yourself with eco-friendly clothing and accessories that look good and do good 👗"
       tags={['Slow Fashion', 'Handloom', 'Natural Dyes', 'Ethical Wear']}
-      heroGradient="from-rose-800 via-rose-600 to-red-400"
+      heroGradient="from-green-800 via-green-600 to-amber-500"
       icon={Shirt}
       badgeColorClass="bg-rose-600"
       products={products} // In a real app, filter products by category 'Fashion'

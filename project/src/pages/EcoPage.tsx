@@ -12,7 +12,7 @@ export default function EcoPage() {
       title="Eco-Friendly Products"
       description="Handcrafted, sustainable products by rural artisans — good for you, great for the planet 🌿"
       tags={['Zero Waste', 'Biodegradable', 'Artisan Made', 'Planet Friendly']}
-      heroGradient="from-green-800 via-green-700 to-emerald-600"
+      heroGradient="from-green-800 via-green-600 to-amber-500"
       icon={Leaf}
       badgeColorClass="bg-green-600"
       products={ecoProducts}

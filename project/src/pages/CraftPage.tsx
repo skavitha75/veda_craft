@@ -12,7 +12,7 @@ export default function CraftPage() {
       title="Artisan Crafts"
       description="Discover unique masterpieces handcrafted by skilled artisans preserving ancient traditions 🏺"
       tags={['Handcrafted', 'Traditional Art', 'Support Artisans', 'Cultural Heritage']}
-      heroGradient="from-indigo-800 via-purple-700 to-pink-600"
+      heroGradient="from-green-800 via-green-600 to-amber-500"
       icon={Scissors}
       badgeColorClass="bg-purple-600"
       products={products} // In a real app, filter products by category 'Craft'
