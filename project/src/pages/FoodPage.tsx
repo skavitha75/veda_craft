@@ -2,7 +2,7 @@ import { UtensilsCrossed } from 'lucide-react';
 import CategoryPageLayout from '../components/Category/CategoryPageLayout';
 import { foodProducts } from '../data/foodProducts';
 
-const foodCategories = ['Grains', 'Spices', 'Honey', 'Oils', 'Snacks'];
+const foodCategories = ['Grains', 'Spices', 'Honey', 'Oils', 'Nuts', 'Fresh Produce'];
 const foodFeatures = ['Organic', 'Farm Fresh', 'No Preservatives', 'Locally Sourced', 'Vegan'];
 const discounts = ['10% off & Above', '20% off & Above', '40% off & Above'];
 

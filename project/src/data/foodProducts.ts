@@ -16,7 +16,7 @@ export const foodProducts: Product[] = [
   {
     id: 401,
     name: 'Organic Almonds',
-    category: 'Food',
+    category: 'Nuts',
     price: 699,
     rating: 4.8,
     image: almonds,
@@ -25,7 +25,7 @@ export const foodProducts: Product[] = [
   {
     id: 402,
     name: 'Fresh Bananas',
-    category: 'Food',
+    category: 'Fresh Produce',
     price: 99,
     rating: 4.6,
     image: banana,
@@ -34,7 +34,7 @@ export const foodProducts: Product[] = [
   {
     id: 403,
     name: 'Farm Carrots',
-    category: 'Food',
+    category: 'Fresh Produce',
     price: 79,
     rating: 4.7,
     image: carrot,
@@ -43,7 +43,7 @@ export const foodProducts: Product[] = [
   {
     id: 404,
     name: 'Cold Pressed Coconut Oil',
-    category: 'Food',
+    category: 'Oils',
     price: 349,
     rating: 4.9,
     image: coconutoil,
@@ -52,7 +52,7 @@ export const foodProducts: Product[] = [
   {
     id: 405,
     name: 'Premium Dates',
-    category: 'Food',
+    category: 'Nuts',
     price: 499,
     rating: 4.8,
     image: dates,
@@ -61,7 +61,7 @@ export const foodProducts: Product[] = [
   {
     id: 406,
     name: 'Raw Forest Honey',
-    category: 'Food',
+    category: 'Honey',
     price: 399,
     rating: 4.9,
     image: honey,
@@ -70,7 +70,7 @@ export const foodProducts: Product[] = [
   {
     id: 407,
     name: 'Organic Mangoes',
-    category: 'Food',
+    category: 'Fresh Produce',
     price: 249,
     rating: 4.7,
     image: mango,
@@ -79,7 +79,7 @@ export const foodProducts: Product[] = [
   {
     id: 408,
     name: 'Black Pepper',
-    category: 'Food',
+    category: 'Spices',
     price: 199,
     rating: 4.8,
     image: pepper,
@@ -88,7 +88,7 @@ export const foodProducts: Product[] = [
   {
     id: 409,
     name: 'Fresh Tomatoes',
-    category: 'Food',
+    category: 'Fresh Produce',
     price: 59,
     rating: 4.5,
     image: tomata,
@@ -97,7 +97,7 @@ export const foodProducts: Product[] = [
   {
     id: 410,
     name: 'Turmeric Powder',
-    category: 'Food',
+    category: 'Spices',
     price: 149,
     rating: 4.7,
     image: turmaric,
@@ -106,7 +106,7 @@ export const foodProducts: Product[] = [
   {
     id: 411,
     name: 'Organic Millet',
-    category: 'Food',
+    category: 'Grains',
     price: 129,
     rating: 4.6,
     image: millet,
@@ -115,7 +115,7 @@ export const foodProducts: Product[] = [
   {
     id: 412,
     name: 'Ragi Flour',
-    category: 'Food',
+    category: 'Grains',
     price: 89,
     rating: 4.8,
     image: ragi,

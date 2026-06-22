@@ -14,7 +14,7 @@ export const craftProducts: Product[] = [
   {
     id: 301,
     name: 'Cotton Table Runner',
-    category: 'Crafts',
+    category: 'Weaving',
     price: 399,
     rating: 4.7,
     image: cottontablerunner,
@@ -23,7 +23,7 @@ export const craftProducts: Product[] = [
   {
     id: 302,
     name: 'Terracotta Flower Pot',
-    category: 'Crafts',
+    category: 'Pottery',
     price: 249,
     rating: 4.6,
     image: flowerpot,
@@ -32,7 +32,7 @@ export const craftProducts: Product[] = [
   {
     id: 303,
     name: 'Handmade Paper Bag',
-    category: 'Crafts',
+    category: 'Paper Crafts',
     price: 149,
     rating: 4.5,
     image: handmadepaperbag,
@@ -41,7 +41,7 @@ export const craftProducts: Product[] = [
   {
     id: 304,
     name: 'Iron Candle Holder',
-    category: 'Crafts',
+    category: 'Metal Art',
     price: 499,
     rating: 4.8,
     image: ironcandleholder,
@@ -50,7 +50,7 @@ export const craftProducts: Product[] = [
   {
     id: 305,
     name: 'Metal Wall Hanging',
-    category: 'Crafts',
+    category: 'Metal Art',
     price: 899,
     rating: 4.9,
     image: metalwallhanging,
@@ -59,7 +59,7 @@ export const craftProducts: Product[] = [
   {
     id: 306,
     name: 'Handmade Paper Notebook',
-    category: 'Crafts',
+    category: 'Paper Crafts',
     price: 199,
     rating: 4.7,
     image: papernotebook,
@@ -68,7 +68,7 @@ export const craftProducts: Product[] = [
   {
     id: 307,
     name: 'Wooden Storage Box',
-    category: 'Crafts',
+    category: 'Woodwork',
     price: 699,
     rating: 4.8,
     image: storagebox,
@@ -77,7 +77,7 @@ export const craftProducts: Product[] = [
   {
     id: 308,
     name: 'Copper Water Bottle',
-    category: 'Crafts',
+    category: 'Metal Art',
     price: 799,
     rating: 4.9,
     image: waterbottle,
@@ -86,7 +86,7 @@ export const craftProducts: Product[] = [
   {
     id: 309,
     name: 'Wooden Spice Box',
-    category: 'Crafts',
+    category: 'Woodwork',
     price: 549,
     rating: 4.6,
     image: woodenspicebox,
@@ -95,7 +95,7 @@ export const craftProducts: Product[] = [
   {
     id: 310,
     name: 'Wooden Wall Shelf',
-    category: 'Crafts',
+    category: 'Woodwork',
     price: 999,
     rating: 4.8,
     image: woodenwallshelf,
