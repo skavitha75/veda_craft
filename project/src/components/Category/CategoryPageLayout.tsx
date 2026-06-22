@@ -64,11 +64,13 @@ function ProductCard({ product, badgeIcon: BadgeIcon, badgeText, badgeColorClass
   return (
     <div className="bg-white rounded-2xl border border-gray-100 overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 hover:-translate-y-1 group flex flex-col">
       <div className="relative overflow-hidden bg-gray-50 aspect-square">
-        <img
-          src={product.image}
-          alt={product.name}
-          className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
-        />
+        <Link to={`/product/${product.id}`} className="block w-full h-full">
+          <img
+            src={product.image}
+            alt={product.name}
+            className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+          />
+        </Link>
         {/* Badge */}
         <div className="absolute top-2 left-2">
           <span className={`flex items-center gap-1 text-white text-[10px] font-bold px-2 py-0.5 rounded-full ${badgeColorClass}`}>
@@ -87,7 +89,9 @@ function ProductCard({ product, badgeIcon: BadgeIcon, badgeText, badgeColorClass
       </div>
 
       <div className="p-3 flex flex-col gap-1 flex-1">
-        <h3 className="text-xs font-semibold text-gray-800 leading-tight line-clamp-2">{product.name}</h3>
+        <Link to={`/product/${product.id}`} className="hover:text-green-600 transition-colors">
+          <h3 className="text-xs font-semibold text-gray-800 leading-tight line-clamp-2">{product.name}</h3>
+        </Link>
         <p className="text-[10px] text-green-600 font-medium">{product.category}</p>
 
         <div className="flex items-center justify-between mt-auto pt-2">
