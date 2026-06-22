@@ -10,28 +10,39 @@ import FashionPage from './pages/FashionPage';
 import DecorItemsPage from './pages/DecorItemsPage';
 import ProductDetail from './pages/ProductDetail';
 import Footer from './components/Footer/Footer';
+import WishlistPage from './pages/WishlistPage';
+
+import { CartProvider } from './context/CartContext';
+import { WishlistProvider } from './context/WishlistContext';
+import CartDrawer from './components/Cart/CartDrawer';
 
 function App() {
   return (
-    <BrowserRouter>
-      <div className="min-h-screen bg-gray-50 flex flex-col">
-        <Header />
-        <Navbar />
-        <div className="flex-1">
-          <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/eco" element={<EcoPage />} />
-            <Route path="/wellness" element={<WellnessPage />} />
-            <Route path="/food" element={<FoodPage />} />
-            <Route path="/craft" element={<CraftPage />} />
-            <Route path="/fashion" element={<FashionPage />} />
-            <Route path="/decor" element={<DecorItemsPage />} />
-            <Route path="/product/:id" element={<ProductDetail />} />
-          </Routes>
-        </div>
-        <Footer />
-      </div>
-    </BrowserRouter>
+    <WishlistProvider>
+      <CartProvider>
+        <BrowserRouter>
+          <div className="min-h-screen bg-gray-50 flex flex-col">
+            <Header />
+            <Navbar />
+            <div className="flex-1">
+              <Routes>
+                <Route path="/" element={<Home />} />
+                <Route path="/eco" element={<EcoPage />} />
+                <Route path="/wellness" element={<WellnessPage />} />
+                <Route path="/food" element={<FoodPage />} />
+                <Route path="/craft" element={<CraftPage />} />
+                <Route path="/fashion" element={<FashionPage />} />
+                <Route path="/decor" element={<DecorItemsPage />} />
+                <Route path="/product/:id" element={<ProductDetail />} />
+                <Route path="/wishlist" element={<WishlistPage />} />
+              </Routes>
+            </div>
+            <Footer />
+            <CartDrawer />
+          </div>
+        </BrowserRouter>
+      </CartProvider>
+    </WishlistProvider>
   );
 }
 

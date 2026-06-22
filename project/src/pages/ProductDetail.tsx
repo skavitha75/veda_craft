@@ -10,6 +10,7 @@ import { fashionProducts } from '../data/fashionProducts';
 import ProductTabs from '../components/Products/ProductTabs';
 import ReviewCard from '../components/Products/ReviewCard';
 import ProductSection from '../components/Products/ProductSection';
+import { useCart } from '../context/CartContext';
 
 // Combine all products to find the one we need
 const allProducts = [
@@ -65,6 +66,7 @@ export default function ProductDetailsPage() {
   const { id } = useParams<{ id: string }>();
   const product = allProducts.find((p) => p.id === Number(id));
 
+  const { addToCart } = useCart();
   const [quantity, setQuantity] = useState(1);
   const [pincode, setPincode] = useState('');
 
@@ -163,7 +165,17 @@ export default function ProductDetailsPage() {
 
             {/* Action Buttons */}
             <div className="grid grid-cols-2 gap-4 mb-10">
-              <button className="bg-green-700 hover:bg-green-800 text-white font-semibold py-3 px-6 rounded-md transition-colors shadow-sm">
+              <button 
+                onClick={() => addToCart({
+                  id: product.id,
+                  name: product.name,
+                  price: product.price,
+                  image: product.image,
+                  quantity: quantity,
+                  rating: product.rating
+                })}
+                className="bg-green-700 hover:bg-green-800 text-white font-semibold py-3 px-6 rounded-md transition-colors shadow-sm"
+              >
                 Add To Cart
               </button>
               <button className="bg-white hover:bg-gray-50 text-gray-800 border border-gray-300 font-semibold py-3 px-6 rounded-md transition-colors shadow-sm">

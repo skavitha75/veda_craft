@@ -2,12 +2,15 @@ import { Link } from 'react-router-dom';
 import { ShoppingCart, Star } from 'lucide-react';
 import { Product } from '../../data/products';
 import WishlistButton from './WishlistButton';
+import { useCart } from '../../context/CartContext';
 
 interface ProductCardProps {
   product: Product;
 }
 
 export default function ProductCard({ product }: ProductCardProps) {
+  const { addToCart } = useCart();
+
   return (
     <div className="bg-white rounded-xl border border-gray-100 overflow-hidden shadow-sm hover:shadow-md transition-all duration-200 hover:-translate-y-0.5 group flex flex-col">
       {/* Image Container */}
@@ -21,7 +24,7 @@ export default function ProductCard({ product }: ProductCardProps) {
         </Link>
         {/* Wishlist Button */}
         <div className="absolute top-2 right-2">
-          <WishlistButton productId={product.id} />
+          <WishlistButton product={product} />
         </div>
       </div>
 
@@ -46,7 +49,17 @@ export default function ProductCard({ product }: ProductCardProps) {
     </div>
 
     {/* Add Button */}
-    <button className="mt-1.5 w-full flex items-center justify-center gap-1.5 border border-green-500 text-green-600 hover:bg-green-600 hover:text-white text-xs font-semibold py-1.5 rounded-md transition-all duration-200 active:scale-95">
+    <button 
+      onClick={() => addToCart({
+        id: product.id,
+        name: product.name,
+        price: product.price,
+        image: product.image,
+        quantity: 1,
+        rating: product.rating
+      })}
+      className="mt-1.5 w-full flex items-center justify-center gap-1.5 border border-green-500 text-green-600 hover:bg-green-600 hover:text-white text-xs font-semibold py-1.5 rounded-md transition-all duration-200 active:scale-95"
+    >
       <ShoppingCart className="w-3 h-3" />
       Add
     </button>

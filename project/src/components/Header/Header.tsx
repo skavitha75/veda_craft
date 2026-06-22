@@ -4,10 +4,15 @@ import { Link } from 'react-router-dom';
 import logoImg from '../../assets/products/WhatsApp_Image_2026-06-19_at_11.31.57_AM.jpeg';
 import LocationSelector from './LocationSelector';
 import SearchBar from './SearchBar';
+import { useCart } from '../../context/CartContext';
+import { useWishlist } from '../../context/WishlistContext';
 
 export default function Header() {
-  const [cartCount] = useState(0);
-  const [wishlistCount] = useState(0);
+  const { items, toggleCart } = useCart();
+  const { items: wishlistItems } = useWishlist();
+  const wishlistCount = wishlistItems.length;
+
+  const cartCount = items.reduce((acc, item) => acc + item.quantity, 0);
 
   return (
     <header className="bg-white border-b border-gray-200 sticky top-0 z-50 shadow-sm">
@@ -42,7 +47,10 @@ export default function Header() {
             </button>
 
             {/* Cart */}
-            <button className="flex flex-col items-center gap-0.5 text-gray-600 hover:text-green-600 transition-colors">
+            <button 
+              onClick={() => toggleCart(true)}
+              className="flex flex-col items-center gap-0.5 text-gray-600 hover:text-green-600 transition-colors"
+            >
               <div className="relative">
                 <ShoppingCart className="w-5 h-5" />
                 {cartCount > 0 && (
@@ -55,7 +63,10 @@ export default function Header() {
             </button>
 
             {/* Wishlist */}
-            <button className="flex flex-col items-center gap-0.5 text-gray-600 hover:text-green-600 transition-colors">
+            <Link 
+              to="/wishlist" 
+              className="flex flex-col items-center gap-0.5 text-gray-600 hover:text-green-600 transition-colors"
+            >
               <div className="relative">
                 <Heart className="w-5 h-5" />
                 {wishlistCount > 0 && (
@@ -65,7 +76,7 @@ export default function Header() {
                 )}
               </div>
               <span className="text-[10px] font-medium hidden sm:block">Wishlist</span>
-            </button>
+            </Link>
           </div>
         </div>
       </div>

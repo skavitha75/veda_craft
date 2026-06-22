@@ -2,6 +2,8 @@ import { useState, useMemo } from 'react';
 import { Star, ShoppingCart, Heart, SlidersHorizontal, ChevronDown, ChevronUp, X } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { Product } from '../../data/products';
+import { useCart } from '../../context/CartContext';
+import { useWishlist } from '../../context/WishlistContext';
 
 interface Filters {
   categories: string[];
@@ -53,10 +55,21 @@ function FilterSection({
 }
 
 function ProductCard({ product, badgeIcon: BadgeIcon, badgeText, badgeColorClass }: { product: Product, badgeIcon: React.ElementType, badgeText: string, badgeColorClass: string }) {
-  const [wished, setWished] = useState(false);
+  const { addToCart } = useCart();
+  const { isInWishlist, toggleWishlist } = useWishlist();
+  const wished = isInWishlist(product.id);
   const [added, setAdded] = useState(false);
 
-  const handleAdd = () => {
+  const handleAdd = (e: React.MouseEvent) => {
+    e.preventDefault();
+    addToCart({
+      id: product.id,
+      name: product.name,
+      price: product.price,
+      image: product.image,
+      quantity: 1,
+      rating: product.rating
+    });
     setAdded(true);
     setTimeout(() => setAdded(false), 1200);
   };
@@ -79,7 +92,10 @@ function ProductCard({ product, badgeIcon: BadgeIcon, badgeText, badgeColorClass
         </div>
         {/* Wishlist */}
         <button
-          onClick={() => setWished((w) => !w)}
+          onClick={(e) => {
+            e.preventDefault();
+            toggleWishlist(product);
+          }}
           className={`absolute top-2 right-2 w-8 h-8 flex items-center justify-center rounded-full bg-white shadow-md transition-all duration-200 hover:scale-110 ${
             wished ? 'text-red-500' : 'text-gray-400 hover:text-red-400'
           }`}
