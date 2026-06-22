@@ -1,6 +1,6 @@
 import { Leaf } from 'lucide-react';
 import CategoryPageLayout from '../components/Category/CategoryPageLayout';
-import products from '../data/products';
+import { ecoProducts } from '../data/ecoProducts';
 
 const ecoCategories = ['Bamboo', 'Jute', 'Palm Leaf', 'Wood', 'Cotton', 'Coconut Shell'];
 const ecoFeatures = ['Handmade', 'Reusable', 'Plastic-Free', 'Organic', 'Natural'];
@@ -15,7 +15,7 @@ export default function EcoPage() {
       heroGradient="from-green-800 via-green-700 to-emerald-600"
       icon={Leaf}
       badgeColorClass="bg-green-600"
-      products={products}
+      products={ecoProducts}
       categories={ecoCategories}
       features={ecoFeatures}
       discounts={discounts}
