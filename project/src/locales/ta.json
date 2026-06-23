@@ -9,11 +9,17 @@
     "seller": "விற்பனையாளர்"
   },
   "header": {
-    "search": "தேடுக",
+    "search": "தயாரிப்புகளை தேடுக...",
     "profile": "சுயவிவரம்",
     "cart": "வண்டி",
     "wishlist": "விருப்பப்பட்டியல்",
-    "deliveryIn": "2 நாட்களில் டெலிவரி"
+    "deliveryIn": "2 நாட்களில் டெலிவரி",
+    "changeLanguage": "மொழி மாற்றவும்"
+  },
+  "search": {
+    "placeholder": "தயாரிப்புகளை தேடுக...",
+    "noResults": "இதற்கு தயாரிப்புகள் இல்லை",
+    "category": "வகை"
   },
   "cart": {
     "title": "உங்கள் வண்டி",
@@ -22,7 +28,7 @@
     "quantity": "அளவு",
     "amount": "தொகை",
     "priceSummary": "விலை சுருக்கம்",
-    "inclusiveTaxes": "வரிகள் உட்பட",
+    "inclusiveTaxes": "வரிகள் உட்பட விலைகள்",
     "bagTotal": "மொத்தம்",
     "items": "பொருட்கள்",
     "discount": "தள்ளுபடி",
@@ -31,5 +37,130 @@
     "free": "இலவசம்",
     "youPay": "நீங்கள் செலுத்துவது",
     "checkout": "பணம் செலுத்து"
+  },
+  "wishlist": {
+    "title": "உங்கள் விருப்பப்பட்டியல்",
+    "empty": "விருப்பப்பட்டியல் காலியாக உள்ளது",
+    "emptyDesc": "நீங்கள் விரும்பும் பொருட்களை இங்கே சேமிக்கவும்.",
+    "continueShopping": "தொடர்ந்து வாங்க"
+  },
+  "checkout": {
+    "deliveryAddress": "டெலிவரி முகவரி",
+    "addAddress": "முகவரி சேர்க்க",
+    "noAddress": "டெலிவரி முகவரி இல்லை.",
+    "addNewAddress": "புதிய முகவரி சேர்க்க",
+    "deliverTo": "டெலிவரி இடம்:",
+    "selectAddress": "முகவரி தேர்ந்தெடுக்கவும்",
+    "mobile": "மொபைல்:",
+    "quantity": "அளவு:",
+    "amount": "தொகை",
+    "priceSummary": "விலை சுருக்கம்",
+    "inclusiveTaxes": "வரிகள் உட்பட விலைகள்",
+    "bagTotal": "மொத்தம்",
+    "discount": "தள்ளுபடி",
+    "subTotal": "உப மொத்தம்",
+    "convenience": "சேவை கட்டணம்",
+    "free": "இலவசம்",
+    "youPay": "நீங்கள் செலுத்துவது",
+    "placeOrder": "ஆர்டர் செய்யுங்கள்",
+    "cartEmpty": "வண்டி காலியாக உள்ளது.",
+    "continueShopping": "தொடர்ந்து வாங்க",
+    "items": "பொருட்கள்"
+  },
+  "address": {
+    "title": "முகவரி சேர்க்க",
+    "fullName": "முழு பெயர்",
+    "fullNamePlaceholder": "முழு பெயர் உள்ளிடுக",
+    "phoneNumber": "தொலைபேசி எண்",
+    "phoneNumberPlaceholder": "தொலைபேசி எண் உள்ளிடுக",
+    "address": "முகவரி",
+    "addressPlaceholder": "வீட்டு எண், கட்டிடம், தெரு, பகுதி",
+    "city": "நகரம்",
+    "cityPlaceholder": "நகரம் உள்ளிடுக",
+    "state": "மாநிலம்",
+    "statePlaceholder": "மாநிலம் உள்ளிடுக",
+    "pincode": "பின்கோட்",
+    "pincodePlaceholder": "பின்கோட் உள்ளிடுக",
+    "landmark": "அருகிலுள்ள இடம் (விருப்பமானது)",
+    "landmarkPlaceholder": "அருகிலுள்ள இடம் உள்ளிடுக",
+    "addressType": "முகவரி வகை",
+    "home": "வீடு",
+    "work": "வேலை",
+    "cancel": "ரத்துசெய்",
+    "save": "முகவரி சேமி",
+    "requiredFullName": "முழு பெயர் தேவை",
+    "requiredPhone": "தொலைபேசி எண் தேவை",
+    "requiredAddress": "முகவரி தேவை",
+    "requiredCity": "நகரம் தேவை",
+    "requiredState": "மாநிலம் தேவை",
+    "requiredPincode": "பின்கோட் தேவை"
+  },
+  "product": {
+    "notFound": "தயாரிப்பு கிடைக்கவில்லை",
+    "notFoundDesc": "நீங்கள் தேடும் தயாரிப்பு இல்லை அல்லது அகற்றப்பட்டது.",
+    "returnHome": "முகப்புக்கு திரும்பு",
+    "reviews": "மதிப்புரைகள்",
+    "addToCart": "வண்டியில் சேர்",
+    "buyNow": "இப்போது வாங்க",
+    "deliveryLocation": "டெலிவரி இடம் தேர்ந்தெடுக்கவும்",
+    "deliveryLocationDesc": "உங்கள் பகுதியின் பின்கோட்டை உள்ளிடுக",
+    "enterPincode": "பின்கோட் உள்ளிடுக",
+    "apply": "சரிபார்க்க",
+    "highlights": "தயாரிப்பு சிறப்பம்சங்கள்",
+    "review": "மதிப்புரைகள்",
+    "similarProducts": "ஒத்த தயாரிப்புகள்",
+    "biodegradable": "உயிர் சிதைவடையக்கூடியது • பிளாஸ்டிக் இல்லாதது • இயற்கை",
+    "off": "தள்ளுபடி"
+  },
+  "home": {
+    "bestSellers": "சிறந்த விற்பனை",
+    "newArrivals": "புதிய வருகைகள்",
+    "trending": "பிரபலமான தயாரிப்புகள்",
+    "shopByCategory": "வகையின்படி வாங்கவும்"
+  },
+  "category": {
+    "eco": "சுற்றுச்சூழல்",
+    "wellness": "உடல்நலம்",
+    "food": "உணவு",
+    "craft": "கைவினை",
+    "fashion": "ஃபேஷன்",
+    "decor": "அலங்காரம்"
+  },
+  "login": {
+    "welcome": "மீண்டும் வரவேற்கிறோம்!",
+    "subtitle": "Vedacraft இல் உங்கள் பயணத்தை தொடர உள்நுழையவும்",
+    "email": "மின்னஞ்சல்",
+    "emailPlaceholder": "மின்னஞ்சல் உள்ளிடுக",
+    "password": "கடவுச்சொல்",
+    "passwordPlaceholder": "கடவுச்சொல் உள்ளிடுக",
+    "forgotPassword": "கடவுச்சொல் மறந்துவிட்டீர்களா?",
+    "loginButton": "உள்நுழை",
+    "orContinueWith": "அல்லது தொடரவும்",
+    "noAccount": "கணக்கு இல்லையா?",
+    "signUp": "பதிவு செய்யுங்கள்"
+  },
+  "footer": {
+    "tagline": "கிராமப்புற பெண் தொழில்முனைவோர், சுய உதவி குழுக்கள் மற்றும் கலைஞர்களை வலுப்படுத்துகிறோம்.",
+    "explore": "ஆராயுங்கள்",
+    "contact": "தொடர்பு",
+    "about": "பற்றி",
+    "event": "நிகழ்வு",
+    "whoCanJoin": "யார் சேரலாம்",
+    "community": "சமூகம்",
+    "allRightsReserved": "அனைத்து உரிமைகளும் பாதுகாக்கப்பட்டவை."
+  },
+  "productCard": {
+    "addToCart": "வண்டியில் சேர்",
+    "wishlist": "விருப்பப்பட்டியல்",
+    "addedToCart": "சேர்க்கப்பட்டது!"
+  },
+  "voiceSearch": {
+    "listening": "கேட்கிறது...",
+    "processing": "செயலாக்குகிறது...",
+    "speakNow": "இப்போது பேசுங்கள்...",
+    "errPermission": "மைக்ரோஃபோன் அனுமதி மறுக்கப்பட்டது",
+    "errNoSpeech": "பேச்சு எதுவும் கண்டறியப்படவில்லை. மீண்டும் முயற்சிக்கவும்.",
+    "errMicUnavailable": "மைக்ரோஃபோன் கிடைக்கவில்லை",
+    "errUnsupported": "இந்த உலாவியில் குரல் தேடல் ஆதரிக்கப்படவில்லை"
   }
 }

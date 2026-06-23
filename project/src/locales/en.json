@@ -5,15 +5,21 @@
     "food": "Food",
     "craft": "Craft",
     "fashion": "Fashion",
-    "decor": "Decor items",
+    "decor": "Decor Items",
     "seller": "Seller"
   },
   "header": {
-    "search": "Search",
+    "search": "Search products...",
     "profile": "Profile",
     "cart": "Cart",
     "wishlist": "Wishlist",
-    "deliveryIn": "Delivery In 2 days"
+    "deliveryIn": "Delivery In 2 days",
+    "changeLanguage": "Change Language"
+  },
+  "search": {
+    "placeholder": "Search products...",
+    "noResults": "No products found for",
+    "category": "Category"
   },
   "cart": {
     "title": "Your Cart",
@@ -31,5 +37,130 @@
     "free": "Free",
     "youPay": "You Pay",
     "checkout": "Check Out"
+  },
+  "wishlist": {
+    "title": "Your Wishlist",
+    "empty": "Your wishlist is empty",
+    "emptyDesc": "Save items you love here to easily find them later.",
+    "continueShopping": "Continue Shopping"
+  },
+  "checkout": {
+    "deliveryAddress": "Delivery Address",
+    "addAddress": "Add Address",
+    "noAddress": "No delivery address saved.",
+    "addNewAddress": "Add a new address",
+    "deliverTo": "Deliver to:",
+    "selectAddress": "Select an address",
+    "mobile": "Mobile:",
+    "quantity": "Quantity:",
+    "amount": "Amount",
+    "priceSummary": "Price Summary",
+    "inclusiveTaxes": "Prices are inclusive of all taxes",
+    "bagTotal": "Bag Total",
+    "discount": "Discount on MRP",
+    "subTotal": "Sub Total",
+    "convenience": "Convenience Charges",
+    "free": "Free",
+    "youPay": "You Pay",
+    "placeOrder": "Place Order",
+    "cartEmpty": "Your cart is empty.",
+    "continueShopping": "Continue Shopping",
+    "items": "items"
+  },
+  "address": {
+    "title": "Add Address",
+    "fullName": "Full Name",
+    "fullNamePlaceholder": "Enter Full Name",
+    "phoneNumber": "Phone Number",
+    "phoneNumberPlaceholder": "Enter Phone Number",
+    "address": "Address",
+    "addressPlaceholder": "House no, Building, street, area",
+    "city": "City",
+    "cityPlaceholder": "Enter City",
+    "state": "State",
+    "statePlaceholder": "Enter State",
+    "pincode": "Pincode",
+    "pincodePlaceholder": "Enter Pincode",
+    "landmark": "Landmark (Optional)",
+    "landmarkPlaceholder": "Enter Landmark",
+    "addressType": "Address Type",
+    "home": "Home",
+    "work": "Work",
+    "cancel": "Cancel",
+    "save": "Save Address",
+    "requiredFullName": "Full Name is required",
+    "requiredPhone": "Phone Number is required",
+    "requiredAddress": "Address is required",
+    "requiredCity": "City is required",
+    "requiredState": "State is required",
+    "requiredPincode": "Pincode is required"
+  },
+  "product": {
+    "notFound": "Product Not Found",
+    "notFoundDesc": "The product you're looking for doesn't exist or has been removed.",
+    "returnHome": "Return to Home",
+    "reviews": "reviews",
+    "addToCart": "Add To Cart",
+    "buyNow": "Buy Now",
+    "deliveryLocation": "Select Delivery Location",
+    "deliveryLocationDesc": "Enter the pincode of your area to check product availability and delivery options",
+    "enterPincode": "Enter Pincode",
+    "apply": "Apply",
+    "highlights": "Product Highlights",
+    "review": "Reviews",
+    "similarProducts": "Similar Products",
+    "biodegradable": "Biodegradable • Plastic-Free • Natural",
+    "off": "OFF"
+  },
+  "home": {
+    "bestSellers": "Best Sellers",
+    "newArrivals": "New Arrivals",
+    "trending": "Trending Products",
+    "shopByCategory": "Shop by Category"
+  },
+  "category": {
+    "eco": "Eco",
+    "wellness": "Wellness",
+    "food": "Food",
+    "craft": "Craft",
+    "fashion": "Fashion",
+    "decor": "Decor"
+  },
+  "login": {
+    "welcome": "Welcome Back!",
+    "subtitle": "Login to continue your journey with Vedacraft",
+    "email": "Email",
+    "emailPlaceholder": "Enter your email",
+    "password": "Password",
+    "passwordPlaceholder": "Enter your password",
+    "forgotPassword": "Forgot Password?",
+    "loginButton": "Login",
+    "orContinueWith": "or continue with",
+    "noAccount": "Don't have an account?",
+    "signUp": "Sign Up"
+  },
+  "footer": {
+    "tagline": "Empowering rural women entrepreneurs, self-help groups, and artisans to build sustainable, joyful businesses.",
+    "explore": "Explore",
+    "contact": "Contact",
+    "about": "About",
+    "event": "Event",
+    "whoCanJoin": "Who Can Join",
+    "community": "Community",
+    "allRightsReserved": "All rights reserved."
+  },
+  "productCard": {
+    "addToCart": "Add to Cart",
+    "wishlist": "Wishlist",
+    "addedToCart": "Added!"
+  },
+  "voiceSearch": {
+    "listening": "Listening...",
+    "processing": "Processing speech...",
+    "speakNow": "Speak now...",
+    "errPermission": "Microphone permission denied",
+    "errNoSpeech": "No speech detected. Try again.",
+    "errMicUnavailable": "Microphone is unavailable",
+    "errUnsupported": "Voice search not supported in this browser"
   }
 }

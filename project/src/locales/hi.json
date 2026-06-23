@@ -9,11 +9,17 @@
     "seller": "विक्रेता"
   },
   "header": {
-    "search": "खोजें",
+    "search": "उत्पाद खोजें...",
     "profile": "प्रोफ़ाइल",
     "cart": "कार्ट",
     "wishlist": "विशलिस्ट",
-    "deliveryIn": "2 दिनों में डिलीवरी"
+    "deliveryIn": "2 दिनों में डिलीवरी",
+    "changeLanguage": "भाषा बदलें"
+  },
+  "search": {
+    "placeholder": "उत्पाद खोजें...",
+    "noResults": "इसके लिए कोई उत्पाद नहीं मिला",
+    "category": "श्रेणी"
   },
   "cart": {
     "title": "आपकी कार्ट",
@@ -22,7 +28,7 @@
     "quantity": "मात्रा",
     "amount": "रकम",
     "priceSummary": "मूल्य सारांश",
-    "inclusiveTaxes": "कर सहित",
+    "inclusiveTaxes": "कर सहित कीमतें",
     "bagTotal": "कुल",
     "items": "सामान",
     "discount": "छूट",
@@ -31,5 +37,130 @@
     "free": "मुफ़्त",
     "youPay": "आप भुगतान करते हैं",
     "checkout": "चेक आउट"
+  },
+  "wishlist": {
+    "title": "आपकी विशलिस्ट",
+    "empty": "आपकी विशलिस्ट खाली है",
+    "emptyDesc": "जो चीज़ें आपको पसंद हैं उन्हें यहाँ सेव करें।",
+    "continueShopping": "खरीदारी जारी रखें"
+  },
+  "checkout": {
+    "deliveryAddress": "डिलीवरी पता",
+    "addAddress": "पता जोड़ें",
+    "noAddress": "कोई डिलीवरी पता नहीं।",
+    "addNewAddress": "नया पता जोड़ें",
+    "deliverTo": "डिलीवरी यहाँ:",
+    "selectAddress": "पता चुनें",
+    "mobile": "मोबाइल:",
+    "quantity": "मात्रा:",
+    "amount": "रकम",
+    "priceSummary": "मूल्य सारांश",
+    "inclusiveTaxes": "कर सहित कीमतें",
+    "bagTotal": "कुल",
+    "discount": "छूट",
+    "subTotal": "उप-योग",
+    "convenience": "सुविधा शुल्क",
+    "free": "मुफ़्त",
+    "youPay": "आप भुगतान करते हैं",
+    "placeOrder": "ऑर्डर करें",
+    "cartEmpty": "आपकी कार्ट खाली है।",
+    "continueShopping": "खरीदारी जारी रखें",
+    "items": "सामान"
+  },
+  "address": {
+    "title": "पता जोड़ें",
+    "fullName": "पूरा नाम",
+    "fullNamePlaceholder": "पूरा नाम दर्ज करें",
+    "phoneNumber": "फ़ोन नंबर",
+    "phoneNumberPlaceholder": "फ़ोन नंबर दर्ज करें",
+    "address": "पता",
+    "addressPlaceholder": "मकान नंबर, इमारत, सड़क, क्षेत्र",
+    "city": "शहर",
+    "cityPlaceholder": "शहर दर्ज करें",
+    "state": "राज्य",
+    "statePlaceholder": "राज्य दर्ज करें",
+    "pincode": "पिनकोड",
+    "pincodePlaceholder": "पिनकोड दर्ज करें",
+    "landmark": "लैंडमार्क (वैकल्पिक)",
+    "landmarkPlaceholder": "लैंडमार्क दर्ज करें",
+    "addressType": "पता प्रकार",
+    "home": "घर",
+    "work": "काम",
+    "cancel": "रद्द करें",
+    "save": "पता सेव करें",
+    "requiredFullName": "पूरा नाम आवश्यक है",
+    "requiredPhone": "फ़ोन नंबर आवश्यक है",
+    "requiredAddress": "पता आवश्यक है",
+    "requiredCity": "शहर आवश्यक है",
+    "requiredState": "राज्य आवश्यक है",
+    "requiredPincode": "पिनकोड आवश्यक है"
+  },
+  "product": {
+    "notFound": "उत्पाद नहीं मिला",
+    "notFoundDesc": "जो उत्पाद आप खोज रहे हैं वह मौजूद नहीं है या हटा दिया गया है।",
+    "returnHome": "होम पर वापस जाएं",
+    "reviews": "समीक्षाएं",
+    "addToCart": "कार्ट में जोड़ें",
+    "buyNow": "अभी खरीदें",
+    "deliveryLocation": "डिलीवरी स्थान चुनें",
+    "deliveryLocationDesc": "उत्पाद की उपलब्धता जांचने के लिए अपने क्षेत्र का पिनकोड दर्ज करें",
+    "enterPincode": "पिनकोड दर्ज करें",
+    "apply": "जांचें",
+    "highlights": "उत्पाद हाइलाइट्स",
+    "review": "समीक्षाएं",
+    "similarProducts": "समान उत्पाद",
+    "biodegradable": "जैव-अपघटनीय • प्लास्टिक-मुक्त • प्राकृतिक",
+    "off": "छूट"
+  },
+  "home": {
+    "bestSellers": "सबसे ज्यादा बिकने वाले",
+    "newArrivals": "नए आगमन",
+    "trending": "ट्रेंडिंग उत्पाद",
+    "shopByCategory": "श्रेणी के अनुसार खरीदें"
+  },
+  "category": {
+    "eco": "ईको",
+    "wellness": "स्वास्थ्य",
+    "food": "भोजन",
+    "craft": "शिल्प",
+    "fashion": "फैशन",
+    "decor": "सजावट"
+  },
+  "login": {
+    "welcome": "वापस स्वागत है!",
+    "subtitle": "Vedacraft के साथ अपनी यात्रा जारी रखने के लिए लॉगिन करें",
+    "email": "ईमेल",
+    "emailPlaceholder": "ईमेल दर्ज करें",
+    "password": "पासवर्ड",
+    "passwordPlaceholder": "पासवर्ड दर्ज करें",
+    "forgotPassword": "पासवर्ड भूल गए?",
+    "loginButton": "लॉगिन",
+    "orContinueWith": "या जारी रखें",
+    "noAccount": "खाता नहीं है?",
+    "signUp": "साइन अप करें"
+  },
+  "footer": {
+    "tagline": "ग्रामीण महिला उद्यमियों, स्वयं सहायता समूहों और कारीगरों को सशक्त बनाना।",
+    "explore": "अन्वेषण करें",
+    "contact": "संपर्क",
+    "about": "के बारे में",
+    "event": "कार्यक्रम",
+    "whoCanJoin": "कौन शामिल हो सकता है",
+    "community": "समुदाय",
+    "allRightsReserved": "सर्वाधिकार सुरक्षित।"
+  },
+  "productCard": {
+    "addToCart": "कार्ट में जोड़ें",
+    "wishlist": "विशलिस्ट",
+    "addedToCart": "जोड़ा गया!"
+  },
+  "voiceSearch": {
+    "listening": "सुन रहा है...",
+    "processing": "प्रक्रिया जारी है...",
+    "speakNow": "अब बोलें...",
+    "errPermission": "माइक्रोफ़ोन अनुमति अस्वीकृत",
+    "errNoSpeech": "कोई आवाज़ नहीं मिली। फिर प्रयास करें।",
+    "errMicUnavailable": "माइक्रोफ़ोन अनुपलब्ध है",
+    "errUnsupported": "इस ब्राउज़र में वॉयस सर्च समर्थित नहीं है"
   }
 }

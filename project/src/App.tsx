@@ -16,12 +16,14 @@ import LoginPage from './pages/LoginPage';
 
 import { CartProvider } from './context/CartContext';
 import { WishlistProvider } from './context/WishlistContext';
+import { AuthProvider } from './context/AuthContext';
 import CartDrawer from './components/Cart/CartDrawer';
 
 function App() {
   return (
-    <WishlistProvider>
-      <CartProvider>
+    <AuthProvider>
+      <WishlistProvider>
+        <CartProvider>
         <BrowserRouter>
           <div className="min-h-screen bg-gray-50 flex flex-col">
             <Header />
@@ -45,8 +47,9 @@ function App() {
             <CartDrawer />
           </div>
         </BrowserRouter>
-      </CartProvider>
-    </WishlistProvider>
+        </CartProvider>
+      </WishlistProvider>
+    </AuthProvider>
   );
 }
 

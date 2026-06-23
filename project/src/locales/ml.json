@@ -9,11 +9,17 @@
     "seller": "വില്പനക്കാരൻ"
   },
   "header": {
-    "search": "തിരയുക",
+    "search": "ഉൽപ്പന്നങ്ങൾ തിരയുക...",
     "profile": "പ്രൊഫൈൽ",
     "cart": "കാർട്ട്",
     "wishlist": "വിഷ്‌ലിസ്റ്റ്",
-    "deliveryIn": "2 ദിവസത്തിനുള്ളിൽ ഡെലിവറി"
+    "deliveryIn": "2 ദിവസത്തിനുള്ളിൽ ഡെലിവറി",
+    "changeLanguage": "ഭാഷ മാറ്റുക"
+  },
+  "search": {
+    "placeholder": "ഉൽപ്പന്നങ്ങൾ തിരയുക...",
+    "noResults": "ഇതിന് ഉൽപ്പന്നങ്ങൾ കണ്ടെത്തിയില്ല",
+    "category": "വിഭാഗം"
   },
   "cart": {
     "title": "നിങ്ങളുടെ കാർട്ട്",
@@ -22,7 +28,7 @@
     "quantity": "അളവ്",
     "amount": "തുക",
     "priceSummary": "വില സംഗ്രഹം",
-    "inclusiveTaxes": "നികുതികൾ ഉൾപ്പെടെ",
+    "inclusiveTaxes": "നികുതികൾ ഉൾപ്പെടെ വിലകൾ",
     "bagTotal": "ആകെ",
     "items": "ഇനങ്ങൾ",
     "discount": "കിഴിവ്",
@@ -31,5 +37,130 @@
     "free": "സൗജന്യം",
     "youPay": "നിങ്ങൾ നൽകുന്നത്",
     "checkout": "ചെക്ക് ഔട്ട്"
+  },
+  "wishlist": {
+    "title": "നിങ്ങളുടെ വിഷ്‌ലിസ്റ്റ്",
+    "empty": "നിങ്ങളുടെ വിഷ്‌ലിസ്റ്റ് ശൂന്യമാണ്",
+    "emptyDesc": "നിങ്ങൾക്ക് ഇഷ്ടമുള്ള ഇനങ്ങൾ ഇവിടെ സേവ് ചെയ്യുക.",
+    "continueShopping": "ഷോപ്പിംഗ് തുടരുക"
+  },
+  "checkout": {
+    "deliveryAddress": "ഡെലിവറി വിലാസം",
+    "addAddress": "വിലാസം ചേർക്കുക",
+    "noAddress": "ഡെലിവറി വിലാസം ഇല്ല.",
+    "addNewAddress": "പുതിയ വിലാസം ചേർക്കുക",
+    "deliverTo": "ഡെലിവറി:",
+    "selectAddress": "വിലാസം തിരഞ്ഞെടുക്കുക",
+    "mobile": "മൊബൈൽ:",
+    "quantity": "അളവ്:",
+    "amount": "തുക",
+    "priceSummary": "വില സംഗ്രഹം",
+    "inclusiveTaxes": "നികുതികൾ ഉൾപ്പെടെ വിലകൾ",
+    "bagTotal": "ആകെ",
+    "discount": "കിഴിവ്",
+    "subTotal": "ഉപതുക",
+    "convenience": "സേവന നിരക്ക്",
+    "free": "സൗജന്യം",
+    "youPay": "നിങ്ങൾ നൽകുന്നത്",
+    "placeOrder": "ഓർഡർ ചെയ്യുക",
+    "cartEmpty": "നിങ്ങളുടെ കാർട്ട് ശൂന്യമാണ്.",
+    "continueShopping": "ഷോപ്പിംഗ് തുടരുക",
+    "items": "ഇനങ്ങൾ"
+  },
+  "address": {
+    "title": "വിലാസം ചേർക്കുക",
+    "fullName": "പൂർണ്ണ നാമം",
+    "fullNamePlaceholder": "പൂർണ്ണ നാമം നൽകുക",
+    "phoneNumber": "ഫോൺ നമ്പർ",
+    "phoneNumberPlaceholder": "ഫോൺ നമ്പർ നൽകുക",
+    "address": "വിലാസം",
+    "addressPlaceholder": "വീട്ടു നമ്പർ, കെട്ടിടം, തെരുവ്, പ്രദേശം",
+    "city": "നഗരം",
+    "cityPlaceholder": "നഗരം നൽകുക",
+    "state": "സംസ്ഥാനം",
+    "statePlaceholder": "സംസ്ഥാനം നൽകുക",
+    "pincode": "പിൻകോഡ്",
+    "pincodePlaceholder": "പിൻകോഡ് നൽകുക",
+    "landmark": "ലാൻഡ്‌മാർക്ക് (ഐച്ഛികം)",
+    "landmarkPlaceholder": "ലാൻഡ്‌മാർക്ക് നൽകുക",
+    "addressType": "വിലാസ തരം",
+    "home": "വീട്",
+    "work": "ജോലി",
+    "cancel": "റദ്ദാക്കുക",
+    "save": "വിലാസം സേവ് ചെയ്യുക",
+    "requiredFullName": "പൂർണ്ണ നാമം ആവശ്യമാണ്",
+    "requiredPhone": "ഫോൺ നമ്പർ ആവശ്യമാണ്",
+    "requiredAddress": "വിലാസം ആവശ്യമാണ്",
+    "requiredCity": "നഗരം ആവശ്യമാണ്",
+    "requiredState": "സംസ്ഥാനം ആവശ്യമാണ്",
+    "requiredPincode": "പിൻകോഡ് ആവശ്യമാണ്"
+  },
+  "product": {
+    "notFound": "ഉൽപ്പന്നം കണ്ടെത്തിയില്ല",
+    "notFoundDesc": "നിങ്ങൾ തിരയുന്ന ഉൽപ്പന്നം നിലവിലില്ല അല്ലെങ്കിൽ നീക്കം ചെയ്തിരിക്കുന്നു.",
+    "returnHome": "ഹോമിലേക്ക് മടങ്ങുക",
+    "reviews": "അവലോകനങ്ങൾ",
+    "addToCart": "കാർട്ടിൽ ചേർക്കുക",
+    "buyNow": "ഇപ്പോൾ വാങ്ങുക",
+    "deliveryLocation": "ഡെലിവറി സ്ഥലം തിരഞ്ഞെടുക്കുക",
+    "deliveryLocationDesc": "ഉൽപ്പന്ന ലഭ്യത പരിശോധിക്കാൻ നിങ്ങളുടെ പ്രദേശത്തിന്റെ പിൻകോഡ് നൽകുക",
+    "enterPincode": "പിൻകോഡ് നൽകുക",
+    "apply": "പരിശോധിക്കുക",
+    "highlights": "ഉൽപ്പന്ന ഹൈലൈറ്റുകൾ",
+    "review": "അവലോകനങ്ങൾ",
+    "similarProducts": "സമാന ഉൽപ്പന്നങ്ങൾ",
+    "biodegradable": "ജൈവ-ജീർണ്ണ • പ്ലാസ്റ്റിക്-മുക്ത • പ്രകൃതിദത്തം",
+    "off": "കിഴിവ്"
+  },
+  "home": {
+    "bestSellers": "ഏറ്റവും കൂടുതൽ വിൽക്കുന്നവ",
+    "newArrivals": "പുതിയ വരവുകൾ",
+    "trending": "ട്രെൻഡിംഗ് ഉൽപ്പന്നങ്ങൾ",
+    "shopByCategory": "വിഭാഗം അനുസരിച്ച് ഷോപ്പ് ചെയ്യുക"
+  },
+  "category": {
+    "eco": "ഇക്കോ",
+    "wellness": "വെൽനെസ്",
+    "food": "ഭക്ഷണം",
+    "craft": "കരകൗശലം",
+    "fashion": "ഫാഷൻ",
+    "decor": "അലങ്കാരം"
+  },
+  "login": {
+    "welcome": "സ്വാഗതം!",
+    "subtitle": "Vedacraft നോടൊപ്പം നിങ്ങളുടെ യാത്ര തുടരാൻ ലോഗിൻ ചെയ്യുക",
+    "email": "ഇമെയിൽ",
+    "emailPlaceholder": "ഇമെയിൽ നൽകുക",
+    "password": "പാസ്‌വേഡ്",
+    "passwordPlaceholder": "പാസ്‌വേഡ് നൽകുക",
+    "forgotPassword": "പാസ്‌വേഡ് മറന്നോ?",
+    "loginButton": "ലോഗിൻ",
+    "orContinueWith": "അല്ലെങ്കിൽ തുടരുക",
+    "noAccount": "അക്കൗണ്ട് ഇല്ലേ?",
+    "signUp": "സൈൻ അപ്പ്"
+  },
+  "footer": {
+    "tagline": "ഗ്രാമീണ വനിതാ സംരംഭകരെ, സ്വ-സഹായ ഗ്രൂപ്പുകളെ, കരകൗശല തൊഴിലാളികളെ ശക്തിപ്പെടുത്തുന്നു.",
+    "explore": "പര്യവേക്ഷണം",
+    "contact": "ബന്ധപ്പെടുക",
+    "about": "ഞങ്ങളെ കുറിച്ച്",
+    "event": "ഇവന്റ്",
+    "whoCanJoin": "ആർക്ക് ചേരാം",
+    "community": "കമ്മ്യൂണിറ്റി",
+    "allRightsReserved": "എല്ലാ അവകാശങ്ങളും നിക്ഷിപ്തം."
+  },
+  "productCard": {
+    "addToCart": "കാർട്ടിൽ ചേർക്കുക",
+    "wishlist": "വിഷ്‌ലിസ്റ്റ്",
+    "addedToCart": "ചേർത്തു!"
+  },
+  "voiceSearch": {
+    "listening": "ശ്രദ്ധിക്കുന്നു...",
+    "processing": "പ്രോസസ്സ് ചെയ്യുന്നു...",
+    "speakNow": "ഇപ്പോൾ സംസാരിക്കുക...",
+    "errPermission": "മൈക്രോഫോൺ അനുമതി നിഷേധിച്ചു",
+    "errNoSpeech": "സംസാരം ഒന്നും കണ്ടെത്തിയില്ല. വീണ്ടും ശ്രമിക്കുക.",
+    "errMicUnavailable": "മൈക്രോഫോൺ ലഭ്യമല്ല",
+    "errUnsupported": "ഈ ബ്രൗസറിൽ വോയ്‌സ് സെർച്ച് പിന്തുണയ്ക്കുന്നില്ല"
   }
 }

@@ -1,7 +1,10 @@
 import { Phone, Mail, Instagram, Facebook, Youtube } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 import logoImg from '../../assets/products/WhatsApp_Image_2026-06-19_at_11.31.57_AM.jpeg';
 
 export default function Footer() {
+  const { t } = useTranslation();
+
   return (
     <footer className="bg-gray-950 text-gray-300">
       <div className="w-full px-4 sm:px-6 lg:px-8 xl:px-12 py-12">
@@ -16,8 +19,7 @@ export default function Footer() {
               />
             </div>
             <p className="text-sm text-gray-400 leading-relaxed max-w-xs mb-5">
-              Empowering rural women entrepreneurs, self-help groups, and artisans to build
-              sustainable, joyful businesses.
+              {t('footer.tagline')}
             </p>
             <div className="flex flex-col gap-2">
               <a
@@ -39,12 +41,16 @@ export default function Footer() {
 
           {/* Column 2 - Explore */}
           <div>
-            <h3 className="text-amber-400 font-semibold text-base mb-4">Explore</h3>
+            <h3 className="text-amber-400 font-semibold text-base mb-4">{t('footer.explore')}</h3>
             <ul className="flex flex-col gap-3">
-              {['About', 'Event', 'Who Can Join'].map((item) => (
-                <li key={item}>
+              {[
+                { key: 'footer.about', label: t('footer.about') },
+                { key: 'footer.event', label: t('footer.event') },
+                { key: 'footer.whoCanJoin', label: t('footer.whoCanJoin') },
+              ].map((item) => (
+                <li key={item.key}>
                   <a href="#" className="text-sm text-gray-400 hover:text-white transition-colors">
-                    {item}
+                    {item.label}
                   </a>
                 </li>
               ))}
@@ -53,12 +59,15 @@ export default function Footer() {
 
           {/* Column 3 - Contact */}
           <div>
-            <h3 className="text-amber-400 font-semibold text-base mb-4">Contact</h3>
+            <h3 className="text-amber-400 font-semibold text-base mb-4">{t('footer.contact')}</h3>
             <ul className="flex flex-col gap-3">
-              {['Contact', 'Community'].map((item) => (
-                <li key={item}>
+              {[
+                { key: 'footer.contact', label: t('footer.contact') },
+                { key: 'footer.community', label: t('footer.community') },
+              ].map((item) => (
+                <li key={item.key}>
                   <a href="#" className="text-sm text-gray-400 hover:text-white transition-colors">
-                    {item}
+                    {item.label}
                   </a>
                 </li>
               ))}
@@ -69,7 +78,7 @@ export default function Footer() {
         {/* Bottom Bar */}
         <div className="mt-10 pt-6 border-t border-gray-800 flex flex-col sm:flex-row items-center justify-between gap-4">
           <p className="text-xs text-gray-600">
-            &copy; {new Date().getFullYear()} Vedha Craft. All rights reserved.
+            &copy; {new Date().getFullYear()} Vedha Craft. {t('footer.allRightsReserved')}
           </p>
           <div className="flex items-center gap-4">
             <a

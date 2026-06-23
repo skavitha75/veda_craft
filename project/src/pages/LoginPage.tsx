@@ -1,10 +1,28 @@
 import React, { useState } from 'react';
 import { Mail, Lock, Eye, EyeOff } from 'lucide-react';
-import { Link } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
+import { useAuth } from '../context/AuthContext';
 import logoImg from '../assets/products/WhatsApp_Image_2026-06-19_at_11.31.57_AM.jpeg';
 
 export default function LoginPage() {
   const [showPassword, setShowPassword] = useState(false);
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const { t } = useTranslation();
+  const { login } = useAuth();
+  
+  const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
+  const redirect = searchParams.get('redirect') || '/';
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (email && password) {
+      login(email);
+      navigate(redirect);
+    }
+  };
 
   return (
     <div className="min-h-screen bg-gray-50 flex flex-col justify-center items-center relative overflow-hidden">
@@ -23,24 +41,26 @@ export default function LoginPage() {
 
         {/* Header Text */}
         <div className="text-center mb-8">
-          <h2 className="text-2xl font-bold text-[#1c6b32] mb-2">Welcome Back!</h2>
-          <p className="text-gray-500 text-sm">Login to continue your journey with Vedacraft</p>
+          <h2 className="text-2xl font-bold text-[#1c6b32] mb-2">{t('login.welcome')}</h2>
+          <p className="text-gray-500 text-sm">{t('login.subtitle')}</p>
         </div>
 
         {/* Form */}
-        <form className="space-y-5">
+        <form onSubmit={handleSubmit} className="space-y-5">
           
           {/* Email Field */}
           <div>
-            <label className="block text-sm font-medium text-[#1c6b32] mb-1.5">Email</label>
+            <label className="block text-sm font-medium text-[#1c6b32] mb-1.5">{t('login.email')}</label>
             <div className="relative">
               <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                 <Mail className="h-5 w-5 text-[#1c6b32]" />
               </div>
               <input
                 type="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
                 className="w-full pl-10 pr-3 py-2.5 border border-gray-200 rounded-lg focus:outline-none focus:ring-1 focus:ring-[#1c6b32] focus:border-[#1c6b32] transition-colors"
-                placeholder="Enter your email"
+                placeholder={t('login.emailPlaceholder')}
                 required
               />
             </div>
@@ -48,15 +68,17 @@ export default function LoginPage() {
 
           {/* Password Field */}
           <div>
-            <label className="block text-sm font-medium text-[#1c6b32] mb-1.5">Password</label>
+            <label className="block text-sm font-medium text-[#1c6b32] mb-1.5">{t('login.password')}</label>
             <div className="relative">
               <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                 <Lock className="h-5 w-5 text-[#1c6b32]" />
               </div>
               <input
                 type={showPassword ? 'text' : 'password'}
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
                 className="w-full pl-10 pr-10 py-2.5 border border-gray-200 rounded-lg focus:outline-none focus:ring-1 focus:ring-[#1c6b32] focus:border-[#1c6b32] transition-colors"
-                placeholder="Enter your password"
+                placeholder={t('login.passwordPlaceholder')}
                 required
               />
               <button
@@ -76,7 +98,7 @@ export default function LoginPage() {
           {/* Forgot Password */}
           <div className="flex justify-end">
             <a href="#" className="text-sm font-medium text-[#1c6b32] hover:underline">
-              Forgot Password?
+              {t('login.forgotPassword')}
             </a>
           </div>
 
@@ -85,7 +107,7 @@ export default function LoginPage() {
             type="submit"
             className="w-full bg-[#f5b027] hover:bg-[#e09e20] text-white font-bold py-3 px-4 rounded-lg transition-colors duration-200 shadow-md"
           >
-            Login
+            {t('login.loginButton')}
           </button>
 
         </form>
@@ -96,7 +118,7 @@ export default function LoginPage() {
             <div className="w-full border-t border-gray-200"></div>
           </div>
           <div className="relative flex justify-center text-sm">
-            <span className="px-2 bg-white text-gray-500">or continue with</span>
+            <span className="px-2 bg-white text-gray-500">{t('login.orContinueWith')}</span>
           </div>
         </div>
 
@@ -121,9 +143,9 @@ export default function LoginPage() {
 
         {/* Footer Text */}
         <div className="mt-8 text-center text-sm text-gray-600">
-          Don't have an account?{' '}
+          {t('login.noAccount')}{' '}
           <a href="#" className="font-bold text-[#1c6b32] hover:underline">
-            Sign Up
+            {t('login.signUp')}
           </a>
         </div>
 

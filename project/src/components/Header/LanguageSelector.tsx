@@ -62,7 +62,10 @@ export default function LanguageSelector() {
             <ul className="max-h-80 overflow-y-auto">
               {languages.map((lang) => (
                 <li key={lang.code}>
-                  <label className="flex items-center gap-3 px-4 py-2 hover:bg-gray-50 cursor-pointer transition-colors group">
+                  <button
+                    onClick={() => changeLanguage(lang.code)}
+                    className="w-full flex items-center gap-3 px-4 py-2 hover:bg-gray-50 cursor-pointer transition-colors group text-left"
+                  >
                     <div className={`w-4 h-4 rounded-full border flex items-center justify-center ${currentLang.code === lang.code ? 'border-[#f5b027]' : 'border-gray-300'}`}>
                       {currentLang.code === lang.code && (
                         <div className="w-2 h-2 rounded-full bg-[#f5b027]"></div>
@@ -71,16 +74,7 @@ export default function LanguageSelector() {
                     <span className={`text-sm ${currentLang.code === lang.code ? 'text-[#f5b027] font-medium' : 'text-gray-700 group-hover:text-gray-900'}`}>
                       {lang.label} - {lang.short}
                     </span>
-                  </label>
-                  {/* Invisible radio for accessibility */}
-                  <input 
-                    type="radio" 
-                    name="language" 
-                    value={lang.code} 
-                    checked={currentLang.code === lang.code}
-                    onChange={() => changeLanguage(lang.code)}
-                    className="hidden"
-                  />
+                  </button>
                 </li>
               ))}
             </ul>

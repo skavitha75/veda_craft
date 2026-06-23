@@ -1,6 +1,7 @@
 import { useParams, Link } from 'react-router-dom';
 import { ChevronRight, Star, Leaf, HeartPulse, Sparkles, Sprout, Minus, Plus } from 'lucide-react';
 import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { ecoProducts } from '../data/ecoProducts';
 import { foodProducts } from '../data/foodProducts';
 import { wellnessProducts } from '../data/wellnessProducts';
@@ -65,6 +66,7 @@ const mockReviews = [
 export default function ProductDetailsPage() {
   const { id } = useParams<{ id: string }>();
   const product = allProducts.find((p) => p.id === Number(id));
+  const { t } = useTranslation();
 
   const { addToCart } = useCart();
   const [quantity, setQuantity] = useState(1);
@@ -74,10 +76,10 @@ export default function ProductDetailsPage() {
     return (
       <div className="min-h-screen flex items-center justify-center bg-gray-50 text-gray-800">
         <div className="text-center">
-          <h2 className="text-2xl font-bold mb-2">Product Not Found</h2>
-          <p className="mb-4">The product you're looking for doesn't exist or has been removed.</p>
+          <h2 className="text-2xl font-bold mb-2">{t('product.notFound')}</h2>
+          <p className="mb-4">{t('product.notFoundDesc')}</p>
           <Link to="/" className="text-green-600 hover:underline">
-            Return to Home
+            {t('product.returnHome')}
           </Link>
         </div>
       </div>
@@ -95,7 +97,7 @@ export default function ProductDetailsPage() {
         
         {/* Breadcrumb */}
         <nav className="flex items-center text-sm text-gray-500 mb-8">
-          <Link to="/" className="hover:text-green-600">Home</Link>
+          <Link to="/" className="hover:text-green-600">{t('product.returnHome').split(' ')[0]}</Link>
           <ChevronRight className="w-4 h-4 mx-2" />
           <span className="hover:text-green-600 cursor-pointer">{product.category}</span>
           <ChevronRight className="w-4 h-4 mx-2" />
@@ -105,7 +107,7 @@ export default function ProductDetailsPage() {
         {/* Main Product Area */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-10 mb-12">
           
-          {/* Image Gallery (Mocked with single image replicated for thumbnails) */}
+          {/* Image Gallery */}
           <div className="flex gap-4">
             <div className="flex flex-col gap-2 w-20 flex-shrink-0">
               {[1, 2, 3, 4].map((item) => (
@@ -122,7 +124,7 @@ export default function ProductDetailsPage() {
           {/* Product Info */}
           <div className="flex flex-col">
             <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-2">{product.name}</h1>
-            <p className="text-sm text-gray-500 mb-4">Biodegradable • Plastic - Free • Biodegradable</p>
+            <p className="text-sm text-gray-500 mb-4">{t('product.biodegradable')}</p>
 
             {/* Rating */}
             <div className="flex items-center gap-3 mb-6">
@@ -134,14 +136,14 @@ export default function ProductDetailsPage() {
                   <Star key={star} className="w-4 h-4 fill-yellow-400 text-yellow-400" />
                 ))}
               </div>
-              <span className="text-sm text-blue-600">(1,248 reviews)</span>
+              <span className="text-sm text-blue-600">(1,248 {t('product.reviews')})</span>
             </div>
 
             {/* Price */}
             <div className="flex items-end gap-3 mb-6">
               <span className="text-3xl font-bold text-gray-900">&#8377; {product.price}</span>
               <span className="text-lg text-gray-400 line-through mb-1">&#8377; {Math.round(product.price * 1.5)}</span>
-              <span className="text-sm text-green-600 font-semibold mb-1.5">50% OFF</span>
+              <span className="text-sm text-green-600 font-semibold mb-1.5">50% {t('product.off')}</span>
             </div>
 
             {/* Quantity */}
@@ -176,27 +178,27 @@ export default function ProductDetailsPage() {
                 })}
                 className="bg-green-700 hover:bg-green-800 text-white font-semibold py-3 px-6 rounded-md transition-colors shadow-sm"
               >
-                Add To Cart
+                {t('product.addToCart')}
               </button>
               <button className="bg-white hover:bg-gray-50 text-gray-800 border border-gray-300 font-semibold py-3 px-6 rounded-md transition-colors shadow-sm">
-                Buy Now
+                {t('product.buyNow')}
               </button>
             </div>
 
             {/* Delivery Location */}
             <div className="border-t border-gray-100 pt-6">
-              <h3 className="font-semibold text-gray-900 mb-2">Select Delivery Location</h3>
-              <p className="text-sm text-gray-600 mb-4">Enter the pincode of your area to check product availability and delivery options</p>
+              <h3 className="font-semibold text-gray-900 mb-2">{t('product.deliveryLocation')}</h3>
+              <p className="text-sm text-gray-600 mb-4">{t('product.deliveryLocationDesc')}</p>
               <div className="flex">
                 <input 
                   type="text" 
-                  placeholder="Enter Pincode" 
+                  placeholder={t('product.enterPincode')}
                   value={pincode}
                   onChange={(e) => setPincode(e.target.value)}
                   className="border border-gray-300 rounded-l-md px-4 py-2.5 flex-1 focus:outline-none focus:ring-1 focus:ring-green-500 focus:border-green-500"
                 />
                 <button className="bg-gray-50 border border-l-0 border-gray-300 text-gray-700 font-medium px-6 py-2.5 rounded-r-md hover:bg-gray-100 transition-colors">
-                  Apply
+                  {t('product.apply')}
                 </button>
               </div>
             </div>
@@ -206,7 +208,7 @@ export default function ProductDetailsPage() {
 
         {/* Product Highlights */}
         <div className="py-8 border-t border-gray-100 mb-8">
-          <h2 className="text-lg font-bold text-gray-900 mb-6">Product Highlights</h2>
+          <h2 className="text-lg font-bold text-gray-900 mb-6">{t('product.highlights')}</h2>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
             <div className="flex flex-col items-center">
               <div className="w-12 h-12 bg-green-50 rounded-full flex items-center justify-center text-green-700 mb-3">
@@ -220,7 +222,7 @@ export default function ProductDetailsPage() {
                 <HeartPulse className="w-6 h-6" />
               </div>
               <h4 className="font-semibold text-gray-900 text-sm mb-1">Gentle On Scalp</h4>
-              <p className="text-xs text-gray-600">Smooth rounded teeth reduce hair - fall</p>
+              <p className="text-xs text-gray-600">Smooth rounded teeth reduce hair-fall</p>
             </div>
             <div className="flex flex-col items-center">
               <div className="w-12 h-12 bg-green-50 rounded-full flex items-center justify-center text-green-700 mb-3">
@@ -248,7 +250,7 @@ export default function ProductDetailsPage() {
 
         {/* Reviews Section */}
         <div className="mt-16 mb-16">
-          <h2 className="text-lg font-bold text-gray-900 mb-6">Review</h2>
+          <h2 className="text-lg font-bold text-gray-900 mb-6">{t('product.review')}</h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             {mockReviews.map((review) => (
               <ReviewCard key={review.id} review={review} />
@@ -258,11 +260,11 @@ export default function ProductDetailsPage() {
 
       </div>
 
-      {/* Similar Products (Outside max-w-7xl to let ProductSection manage its own padding if needed, but it's fine inside) */}
+      {/* Similar Products */}
       {similarProducts.length > 0 && (
         <div className="bg-gray-50 pt-8 pb-4">
           <div className="max-w-7xl mx-auto">
-            <ProductSection title="Similar Products" products={similarProducts} />
+            <ProductSection title={t('product.similarProducts')} products={similarProducts} />
           </div>
         </div>
       )}

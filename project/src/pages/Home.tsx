@@ -1,6 +1,7 @@
 import HeroBanner from '../components/Hero/HeroBanner';
 import CategorySection from '../components/Categories/CategorySection';
 import ProductSection from '../components/Products/ProductSection';
+import { useTranslation } from 'react-i18next';
 
 import { ecoProducts } from '../data/ecoProducts';
 import { foodProducts } from '../data/foodProducts';
@@ -20,6 +21,8 @@ const shuffle = <T,>(array: T[]): T[] => {
 };
 
 export default function Home() {
+  const { t } = useTranslation();
+
   const allProducts = [
     ...ecoProducts,
     ...foodProducts,
@@ -44,15 +47,15 @@ export default function Home() {
       </div>
 
       {/* Best Sellers */}
-      <ProductSection title="Best Sellers" products={bestSellers} />
+      <ProductSection title={t('home.bestSellers')} products={bestSellers} />
 
       {/* New Arrivals */}
       <div className="bg-gray-50">
-        <ProductSection title="New Arrivals" products={newArrivals} />
+        <ProductSection title={t('home.newArrivals')} products={newArrivals} />
       </div>
 
       {/* Trending Products */}
-      <ProductSection title="Trending Products" products={trending} />
+      <ProductSection title={t('home.trending')} products={trending} />
 
       {/* Spacer before footer */}
       <div className="h-8" />

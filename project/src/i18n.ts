@@ -24,8 +24,14 @@ i18n
   .init({
     resources,
     fallbackLng: 'en',
+    // LanguageDetector will look in localStorage under key 'i18nextLng'
+    detection: {
+      order: ['localStorage', 'navigator'],
+      caches: ['localStorage'],
+      lookupLocalStorage: 'i18nextLng',
+    },
     interpolation: {
-      escapeValue: false, // react already safes from xss
+      escapeValue: false,
     },
   });
 

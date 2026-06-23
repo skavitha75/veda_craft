@@ -9,11 +9,17 @@
     "seller": "ಮಾರಾಟಗಾರ"
   },
   "header": {
-    "search": "ಹುಡುಕಿ",
+    "search": "ಉತ್ಪನ್ನಗಳನ್ನು ಹುಡುಕಿ...",
     "profile": "ಪ್ರೊಫೈಲ್",
     "cart": "ಕಾರ್ಟ್",
     "wishlist": "ವಿಶ್ಲಿಸ್ಟ್",
-    "deliveryIn": "2 ದಿನಗಳಲ್ಲಿ ವಿತರಣೆ"
+    "deliveryIn": "2 ದಿನಗಳಲ್ಲಿ ವಿತರಣೆ",
+    "changeLanguage": "ಭಾಷೆ ಬದಲಿಸಿ"
+  },
+  "search": {
+    "placeholder": "ಉತ್ಪನ್ನಗಳನ್ನು ಹುಡುಕಿ...",
+    "noResults": "ಇದಕ್ಕಾಗಿ ಉತ್ಪನ್ನಗಳು ಸಿಗಲಿಲ್ಲ",
+    "category": "ವರ್ಗ"
   },
   "cart": {
     "title": "ನಿಮ್ಮ ಕಾರ್ಟ್",
@@ -22,7 +28,7 @@
     "quantity": "ಪ್ರಮಾಣ",
     "amount": "ಮೊತ್ತ",
     "priceSummary": "ಬೆಲೆ ಸಾರಾಂಶ",
-    "inclusiveTaxes": "ತೆರಿಗೆಗಳು ಸೇರಿದಂತೆ",
+    "inclusiveTaxes": "ತೆರಿಗೆಗಳು ಸೇರಿದಂತೆ ಬೆಲೆಗಳು",
     "bagTotal": "ಒಟ್ಟು",
     "items": "ವಸ್ತುಗಳು",
     "discount": "ರಿಯಾಯಿತಿ",
@@ -31,5 +37,130 @@
     "free": "ಉಚಿತ",
     "youPay": "ನೀವು ಪಾವತಿಸುವಿರಿ",
     "checkout": "ಪಾವತಿಸಿ"
+  },
+  "wishlist": {
+    "title": "ನಿಮ್ಮ ವಿಶ್ಲಿಸ್ಟ್",
+    "empty": "ನಿಮ್ಮ ವಿಶ್ಲಿಸ್ಟ್ ಖಾಲಿಯಾಗಿದೆ",
+    "emptyDesc": "ನಿಮಗೆ ಇಷ್ಟವಾದ ವಸ್ತುಗಳನ್ನು ಇಲ್ಲಿ ಸೇವ್ ಮಾಡಿ.",
+    "continueShopping": "ಶಾಪಿಂಗ್ ಮುಂದುವರಿಸಿ"
+  },
+  "checkout": {
+    "deliveryAddress": "ವಿತರಣಾ ವಿಳಾಸ",
+    "addAddress": "ವಿಳಾಸ ಸೇರಿಸಿ",
+    "noAddress": "ವಿತರಣಾ ವಿಳಾಸ ಇಲ್ಲ.",
+    "addNewAddress": "ಹೊಸ ವಿಳಾಸ ಸೇರಿಸಿ",
+    "deliverTo": "ವಿತರಣಾ ಸ್ಥಳ:",
+    "selectAddress": "ವಿಳಾಸ ಆಯ್ಕೆ ಮಾಡಿ",
+    "mobile": "ಮೊಬೈಲ್:",
+    "quantity": "ಪ್ರಮಾಣ:",
+    "amount": "ಮೊತ್ತ",
+    "priceSummary": "ಬೆಲೆ ಸಾರಾಂಶ",
+    "inclusiveTaxes": "ತೆರಿಗೆಗಳು ಸೇರಿದಂತೆ ಬೆಲೆಗಳು",
+    "bagTotal": "ಒಟ್ಟು",
+    "discount": "ರಿಯಾಯಿತಿ",
+    "subTotal": "ಉಪ ಮೊತ್ತ",
+    "convenience": "ಸೇವಾ ಶುಲ್ಕ",
+    "free": "ಉಚಿತ",
+    "youPay": "ನೀವು ಪಾವತಿಸುವಿರಿ",
+    "placeOrder": "ಆದೇಶ ಮಾಡಿ",
+    "cartEmpty": "ನಿಮ್ಮ ಕಾರ್ಟ್ ಖಾಲಿಯಾಗಿದೆ.",
+    "continueShopping": "ಶಾಪಿಂಗ್ ಮುಂದುವರಿಸಿ",
+    "items": "ವಸ್ತುಗಳು"
+  },
+  "address": {
+    "title": "ವಿಳಾಸ ಸೇರಿಸಿ",
+    "fullName": "ಪೂರ್ಣ ಹೆಸರು",
+    "fullNamePlaceholder": "ಪೂರ್ಣ ಹೆಸರು ನಮೂದಿಸಿ",
+    "phoneNumber": "ಫೋನ್ ಸಂಖ್ಯೆ",
+    "phoneNumberPlaceholder": "ಫೋನ್ ಸಂಖ್ಯೆ ನಮೂದಿಸಿ",
+    "address": "ವಿಳಾಸ",
+    "addressPlaceholder": "ಮನೆ ಸಂಖ್ಯೆ, ಕಟ್ಟಡ, ಬೀದಿ, ಪ್ರದೇಶ",
+    "city": "ನಗರ",
+    "cityPlaceholder": "ನಗರ ನಮೂದಿಸಿ",
+    "state": "ರಾಜ್ಯ",
+    "statePlaceholder": "ರಾಜ್ಯ ನಮೂದಿಸಿ",
+    "pincode": "ಪಿನ್‌ಕೋಡ್",
+    "pincodePlaceholder": "ಪಿನ್‌ಕೋಡ್ ನಮೂದಿಸಿ",
+    "landmark": "ಲ್ಯಾಂಡ್‌ಮಾರ್ಕ್ (ಐಚ್ಛಿಕ)",
+    "landmarkPlaceholder": "ಲ್ಯಾಂಡ್‌ಮಾರ್ಕ್ ನಮೂದಿಸಿ",
+    "addressType": "ವಿಳಾಸ ಪ್ರಕಾರ",
+    "home": "ಮನೆ",
+    "work": "ಕೆಲಸ",
+    "cancel": "ರದ್ದುಮಾಡಿ",
+    "save": "ವಿಳಾಸ ಉಳಿಸಿ",
+    "requiredFullName": "ಪೂರ್ಣ ಹೆಸರು ಅಗತ್ಯವಿದೆ",
+    "requiredPhone": "ಫೋನ್ ಸಂಖ್ಯೆ ಅಗತ್ಯವಿದೆ",
+    "requiredAddress": "ವಿಳಾಸ ಅಗತ್ಯವಿದೆ",
+    "requiredCity": "ನಗರ ಅಗತ್ಯವಿದೆ",
+    "requiredState": "ರಾಜ್ಯ ಅಗತ್ಯವಿದೆ",
+    "requiredPincode": "ಪಿನ್‌ಕೋಡ್ ಅಗತ್ಯವಿದೆ"
+  },
+  "product": {
+    "notFound": "ಉತ್ಪನ್ನ ಸಿಗಲಿಲ್ಲ",
+    "notFoundDesc": "ನೀವು ಹುಡುಕುತ್ತಿರುವ ಉತ್ಪನ್ನ ಇಲ್ಲ ಅಥವಾ ತೆಗೆದುಹಾಕಲಾಗಿದೆ.",
+    "returnHome": "ಹೋಮ್‌ಗೆ ಹಿಂತಿರುಗಿ",
+    "reviews": "ಸಮೀಕ್ಷೆಗಳು",
+    "addToCart": "ಕಾರ್ಟ್‌ಗೆ ಸೇರಿಸಿ",
+    "buyNow": "ಈಗ ಖರೀದಿಸಿ",
+    "deliveryLocation": "ವಿತರಣಾ ಸ್ಥಳ ಆಯ್ಕೆ ಮಾಡಿ",
+    "deliveryLocationDesc": "ಉತ್ಪನ್ನ ಲಭ್ಯತೆ ತಿಳಿಯಲು ನಿಮ್ಮ ಪ್ರದೇಶದ ಪಿನ್‌ಕೋಡ್ ನಮೂದಿಸಿ",
+    "enterPincode": "ಪಿನ್‌ಕೋಡ್ ನಮೂದಿಸಿ",
+    "apply": "ತಪಾಸಣೆ ಮಾಡಿ",
+    "highlights": "ಉತ್ಪನ್ನ ವಿಶೇಷಾಂಶಗಳು",
+    "review": "ಸಮೀಕ್ಷೆಗಳು",
+    "similarProducts": "ಇದೇ ರೀತಿಯ ಉತ್ಪನ್ನಗಳು",
+    "biodegradable": "ಜೈವಿಕ-ವಿಘಟನೀಯ • ಪ್ಲಾಸ್ಟಿಕ್-ಮುಕ್ತ • ನೈಸರ್ಗಿಕ",
+    "off": "ರಿಯಾಯಿತಿ"
+  },
+  "home": {
+    "bestSellers": "ಅತ್ಯಧಿಕ ಮಾರಾಟ",
+    "newArrivals": "ಹೊಸ ಆಗಮನಗಳು",
+    "trending": "ಟ್ರೆಂಡಿಂಗ್ ಉತ್ಪನ್ನಗಳು",
+    "shopByCategory": "ವರ್ಗದ ಪ್ರಕಾರ ಶಾಪಿಂಗ್"
+  },
+  "category": {
+    "eco": "ಪರಿಸರ",
+    "wellness": "ಯೋಗಕ್ಷೇಮ",
+    "food": "ಆಹಾರ",
+    "craft": "ಕರಕುಶಲ",
+    "fashion": "ಫ್ಯಾಷನ್",
+    "decor": "ಅಲಂಕಾರ"
+  },
+  "login": {
+    "welcome": "ಮರಳಿ ಸ್ವಾಗತ!",
+    "subtitle": "Vedacraft ನೊಂದಿಗೆ ನಿಮ್ಮ ಪ್ರಯಾಣ ಮುಂದುವರಿಸಲು ಲಾಗಿನ್ ಮಾಡಿ",
+    "email": "ಇಮೇಲ್",
+    "emailPlaceholder": "ಇಮೇಲ್ ನಮೂದಿಸಿ",
+    "password": "ಪಾಸ್‌ವರ್ಡ್",
+    "passwordPlaceholder": "ಪಾಸ್‌ವರ್ಡ್ ನಮೂದಿಸಿ",
+    "forgotPassword": "ಪಾಸ್‌ವರ್ಡ್ ಮರೆತಿದ್ದೀರಾ?",
+    "loginButton": "ಲಾಗಿನ್",
+    "orContinueWith": "ಅಥವಾ ಮುಂದುವರಿಸಿ",
+    "noAccount": "ಖಾತೆ ಇಲ್ಲವೇ?",
+    "signUp": "ಸೈನ್ ಅಪ್"
+  },
+  "footer": {
+    "tagline": "ಗ್ರಾಮೀಣ ಮಹಿಳಾ ಉದ್ಯಮಿಗಳು, ಸ್ವ-ಸಹಾಯ ಗುಂಪುಗಳು ಮತ್ತು ಕರಕುಶಲ ಕಾರ್ಮಿಕರನ್ನು ಸಬಲಪಡಿಸುವುದು.",
+    "explore": "ಅನ್ವೇಷಿಸಿ",
+    "contact": "ಸಂಪರ್ಕ",
+    "about": "ಬಗ್ಗೆ",
+    "event": "ಕಾರ್ಯಕ್ರಮ",
+    "whoCanJoin": "ಯಾರು ಸೇರಬಹುದು",
+    "community": "ಸಮುದಾಯ",
+    "allRightsReserved": "ಎಲ್ಲ ಹಕ್ಕುಗಳು ಕಾಯ್ದಿರಿಸಲಾಗಿದೆ."
+  },
+  "productCard": {
+    "addToCart": "ಕಾರ್ಟ್‌ಗೆ ಸೇರಿಸಿ",
+    "wishlist": "ವಿಶ್ಲಿಸ್ಟ್",
+    "addedToCart": "ಸೇರಿಸಲಾಗಿದೆ!"
+  },
+  "voiceSearch": {
+    "listening": "ಕೇಳಿಸಿಕೊಳ್ಳುತ್ತಿದೆ...",
+    "processing": "ಪ್ರಕ್ರಿಯೆಗೊಳಿಸಲಾಗುತ್ತಿದೆ...",
+    "speakNow": "ಈಗ ಮಾತನಾಡಿ...",
+    "errPermission": "ಮೈಕ್ರೊಫೋನ್ ಅನುಮತಿ ನಿರಾಕರಿಸಲಾಗಿದೆ",
+    "errNoSpeech": "ಯಾವುದೇ ಧ್ವನಿ ಪತ್ತೆಯಾಗಿಲ್ಲ. ಮತ್ತೆ ಪ್ರಯತ್ನಿಸಿ.",
+    "errMicUnavailable": "ಮೈಕ್ರೊಫೋನ್ ಲಭ್ಯವಿಲ್ಲ",
+    "errUnsupported": "ಈ ಬ್ರೌಸರ್‌ನಲ್ಲಿ ಧ್ವನಿ ಹುಡುಕಾಟ ಬೆಂಬಲಿಸುವುದಿಲ್ಲ"
   }
 }

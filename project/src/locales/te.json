@@ -9,20 +9,26 @@
     "seller": "విక్రేత"
   },
   "header": {
-    "search": "శోధన",
+    "search": "ఉత్పత్తులు వెతకండి...",
     "profile": "ప్రొఫైల్",
     "cart": "కార్ట్",
     "wishlist": "విష్ లిస్ట్",
-    "deliveryIn": "2 రోజుల్లో డెలివరీ"
+    "deliveryIn": "2 రోజుల్లో డెలివరీ",
+    "changeLanguage": "భాష మార్చండి"
+  },
+  "search": {
+    "placeholder": "ఉత్పత్తులు వెతకండి...",
+    "noResults": "దీనికి ఉత్పత్తులు దొరకలేదు",
+    "category": "వర్గం"
   },
   "cart": {
     "title": "మీ కార్ట్",
     "empty": "మీ కార్ట్ ఖాళీగా ఉంది",
     "continueShopping": "కొనుగోలు కొనసాగించండి",
-    "quantity": "మొత్తం",
+    "quantity": "పరిమాణం",
     "amount": "మొత్తం",
     "priceSummary": "ధర సారాంశం",
-    "inclusiveTaxes": "పన్నులతో సహా",
+    "inclusiveTaxes": "పన్నులతో సహా ధరలు",
     "bagTotal": "మొత్తం",
     "items": "వస్తువులు",
     "discount": "డిస్కౌంట్",
@@ -31,5 +37,130 @@
     "free": "ఉచితం",
     "youPay": "మీరు చెల్లించేది",
     "checkout": "చెల్లించండి"
+  },
+  "wishlist": {
+    "title": "మీ విష్ లిస్ట్",
+    "empty": "మీ విష్ లిస్ట్ ఖాళీగా ఉంది",
+    "emptyDesc": "మీకు నచ్చిన వస్తువులను ఇక్కడ సేవ్ చేయండి.",
+    "continueShopping": "కొనుగోలు కొనసాగించండి"
+  },
+  "checkout": {
+    "deliveryAddress": "డెలివరీ చిరునామా",
+    "addAddress": "చిరునామా జోడించండి",
+    "noAddress": "డెలివరీ చిరునామా లేదు.",
+    "addNewAddress": "కొత్త చిరునామా జోడించండి",
+    "deliverTo": "డెలివరీ:",
+    "selectAddress": "చిరునామా ఎంచుకోండి",
+    "mobile": "మొబైల్:",
+    "quantity": "పరిమాణం:",
+    "amount": "మొత్తం",
+    "priceSummary": "ధర సారాంశం",
+    "inclusiveTaxes": "పన్నులతో సహా ధరలు",
+    "bagTotal": "మొత్తం",
+    "discount": "డిస్కౌంట్",
+    "subTotal": "ఉప మొత్తం",
+    "convenience": "సేవా రుసుము",
+    "free": "ఉచితం",
+    "youPay": "మీరు చెల్లించేది",
+    "placeOrder": "ఆర్డర్ చేయండి",
+    "cartEmpty": "మీ కార్ట్ ఖాళీగా ఉంది.",
+    "continueShopping": "కొనుగోలు కొనసాగించండి",
+    "items": "వస్తువులు"
+  },
+  "address": {
+    "title": "చిరునామా జోడించండి",
+    "fullName": "పూర్తి పేరు",
+    "fullNamePlaceholder": "పూర్తి పేరు నమోదు చేయండి",
+    "phoneNumber": "ఫోన్ నంబర్",
+    "phoneNumberPlaceholder": "ఫోన్ నంబర్ నమోదు చేయండి",
+    "address": "చిరునామా",
+    "addressPlaceholder": "ఇంటి నంబర్, భవనం, వీధి, ప్రాంతం",
+    "city": "నగరం",
+    "cityPlaceholder": "నగరం నమోదు చేయండి",
+    "state": "రాష్ట్రం",
+    "statePlaceholder": "రాష్ట్రం నమోదు చేయండి",
+    "pincode": "పిన్‌కోడ్",
+    "pincodePlaceholder": "పిన్‌కోడ్ నమోదు చేయండి",
+    "landmark": "లాండ్‌మార్క్ (ఐచ్ఛికం)",
+    "landmarkPlaceholder": "లాండ్‌మార్క్ నమోదు చేయండి",
+    "addressType": "చిరునామా రకం",
+    "home": "ఇల్లు",
+    "work": "పని",
+    "cancel": "రద్దు చేయి",
+    "save": "చిరునామా సేవ్ చేయి",
+    "requiredFullName": "పూర్తి పేరు అవసరం",
+    "requiredPhone": "ఫోన్ నంబర్ అవసరం",
+    "requiredAddress": "చిరునామా అవసరం",
+    "requiredCity": "నగరం అవసరం",
+    "requiredState": "రాష్ట్రం అవసరం",
+    "requiredPincode": "పిన్‌కోడ్ అవసరం"
+  },
+  "product": {
+    "notFound": "ఉత్పత్తి దొరకలేదు",
+    "notFoundDesc": "మీరు వెతుకుతున్న ఉత్పత్తి లేదు లేదా తొలగించబడింది.",
+    "returnHome": "హోమ్‌కు తిరిగి వెళ్ళండి",
+    "reviews": "సమీక్షలు",
+    "addToCart": "కార్ట్‌కు జోడించు",
+    "buyNow": "ఇప్పుడు కొనండి",
+    "deliveryLocation": "డెలివరీ స్థానం ఎంచుకోండి",
+    "deliveryLocationDesc": "ఉత్పత్తి అందుబాటు తనిఖీ చేయడానికి మీ ప్రాంతం పిన్‌కోడ్ నమోదు చేయండి",
+    "enterPincode": "పిన్‌కోడ్ నమోదు చేయండి",
+    "apply": "తనిఖీ చేయి",
+    "highlights": "ఉత్పత్తి విశేషాలు",
+    "review": "సమీక్షలు",
+    "similarProducts": "సమాన ఉత్పత్తులు",
+    "biodegradable": "జీవ-వియోగ్యం • ప్లాస్టిక్-రహిత • సహజమైన",
+    "off": "తగ్గింపు"
+  },
+  "home": {
+    "bestSellers": "అత్యధికంగా అమ్ముడవుతున్నవి",
+    "newArrivals": "కొత్త ఉత్పత్తులు",
+    "trending": "ట్రెండింగ్ ఉత్పత్తులు",
+    "shopByCategory": "వర్గం ప్రకారం కొనండి"
+  },
+  "category": {
+    "eco": "ఎకో",
+    "wellness": "వెల్నెస్",
+    "food": "ఆహారం",
+    "craft": "క్రాఫ్ట్",
+    "fashion": "ఫ్యాషన్",
+    "decor": "అలంకరణ"
+  },
+  "login": {
+    "welcome": "తిరిగి స్వాగతం!",
+    "subtitle": "Vedacraft తో మీ ప్రయాణం కొనసాగించడానికి లాగిన్ చేయండి",
+    "email": "ఇమెయిల్",
+    "emailPlaceholder": "ఇమెయిల్ నమోదు చేయండి",
+    "password": "పాస్‌వర్డ్",
+    "passwordPlaceholder": "పాస్‌వర్డ్ నమోదు చేయండి",
+    "forgotPassword": "పాస్‌వర్డ్ మర్చిపోయారా?",
+    "loginButton": "లాగిన్",
+    "orContinueWith": "లేదా కొనసాగించండి",
+    "noAccount": "ఖాతా లేదా?",
+    "signUp": "సైన్ అప్"
+  },
+  "footer": {
+    "tagline": "గ్రామీణ మహిళా పారిశ్రామికవేత్తలు, స్వయం సహాయక సంఘాలు మరియు చేతివృత్తుల నిపుణులను శక్తివంతం చేయడం.",
+    "explore": "అన్వేషించు",
+    "contact": "సంప్రదించు",
+    "about": "గురించి",
+    "event": "ఈవెంట్",
+    "whoCanJoin": "ఎవరు చేరవచ్చు",
+    "community": "సమాజం",
+    "allRightsReserved": "అన్ని హక్కులూ రక్షించబడ్డాయి."
+  },
+  "productCard": {
+    "addToCart": "కార్ట్‌కు జోడించు",
+    "wishlist": "విష్ లిస్ట్",
+    "addedToCart": "జోడించబడింది!"
+  },
+  "voiceSearch": {
+    "listening": "వింటున్నాము...",
+    "processing": "ప్రాసెస్ చేయబడుతోంది...",
+    "speakNow": "ఇప్పుడు మాట్లాడండి...",
+    "errPermission": "మైక్రోఫోన్ అనుమతి నిరాకరించబడింది",
+    "errNoSpeech": "మాట్లాడినది గుర్తించబడలేదు. మళ్ళీ ప్రయత్నించండి.",
+    "errMicUnavailable": "మైక్రోఫోన్ అందుబాటులో లేదు",
+    "errUnsupported": "ఈ బ్రౌజర్‌లో వాయిస్ సెర్చ్ సపోర్ట్ చేయదు"
   }
 }
