@@ -1,0 +1,35 @@
+{
+  "nav": {
+    "eco": "ಪರಿಸರ",
+    "wellness": "ಯೋಗಕ್ಷೇಮ",
+    "food": "ಆಹಾರ",
+    "craft": "ಕರಕುಶಲ",
+    "fashion": "ಫ್ಯಾಷನ್",
+    "decor": "ಅಲಂಕಾರ",
+    "seller": "ಮಾರಾಟಗಾರ"
+  },
+  "header": {
+    "search": "ಹುಡುಕಿ",
+    "profile": "ಪ್ರೊಫೈಲ್",
+    "cart": "ಕಾರ್ಟ್",
+    "wishlist": "ವಿಶ್ಲಿಸ್ಟ್",
+    "deliveryIn": "2 ದಿನಗಳಲ್ಲಿ ವಿತರಣೆ"
+  },
+  "cart": {
+    "title": "ನಿಮ್ಮ ಕಾರ್ಟ್",
+    "empty": "ನಿಮ್ಮ ಕಾರ್ಟ್ ಖಾಲಿಯಾಗಿದೆ",
+    "continueShopping": "ಶಾಪಿಂಗ್ ಮುಂದುವರಿಸಿ",
+    "quantity": "ಪ್ರಮಾಣ",
+    "amount": "ಮೊತ್ತ",
+    "priceSummary": "ಬೆಲೆ ಸಾರಾಂಶ",
+    "inclusiveTaxes": "ತೆರಿಗೆಗಳು ಸೇರಿದಂತೆ",
+    "bagTotal": "ಒಟ್ಟು",
+    "items": "ವಸ್ತುಗಳು",
+    "discount": "ರಿಯಾಯಿತಿ",
+    "subTotal": "ಉಪ ಮೊತ್ತ",
+    "convenience": "ಸೇವಾ ಶುಲ್ಕ",
+    "free": "ಉಚಿತ",
+    "youPay": "ನೀವು ಪಾವತಿಸುವಿರಿ",
+    "checkout": "ಪಾವತಿಸಿ"
+  }
+}

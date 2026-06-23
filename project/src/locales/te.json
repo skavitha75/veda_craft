@@ -1,0 +1,35 @@
+{
+  "nav": {
+    "eco": "ఎకో",
+    "wellness": "వెల్నెస్",
+    "food": "ఆహారం",
+    "craft": "క్రాఫ్ట్",
+    "fashion": "ఫ్యాషన్",
+    "decor": "అలంకరణ",
+    "seller": "విక్రేత"
+  },
+  "header": {
+    "search": "శోధన",
+    "profile": "ప్రొఫైల్",
+    "cart": "కార్ట్",
+    "wishlist": "విష్ లిస్ట్",
+    "deliveryIn": "2 రోజుల్లో డెలివరీ"
+  },
+  "cart": {
+    "title": "మీ కార్ట్",
+    "empty": "మీ కార్ట్ ఖాళీగా ఉంది",
+    "continueShopping": "కొనుగోలు కొనసాగించండి",
+    "quantity": "మొత్తం",
+    "amount": "మొత్తం",
+    "priceSummary": "ధర సారాంశం",
+    "inclusiveTaxes": "పన్నులతో సహా",
+    "bagTotal": "మొత్తం",
+    "items": "వస్తువులు",
+    "discount": "డిస్కౌంట్",
+    "subTotal": "ఉప మొత్తం",
+    "convenience": "సేవా రుసుము",
+    "free": "ఉచితం",
+    "youPay": "మీరు చెల్లించేది",
+    "checkout": "చెల్లించండి"
+  }
+}

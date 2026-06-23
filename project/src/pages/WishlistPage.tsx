@@ -1,4 +1,3 @@
-import React from 'react';
 import { useWishlist } from '../context/WishlistContext';
 import ProductCard from '../components/Products/ProductCard';
 import { Link } from 'react-router-dom';

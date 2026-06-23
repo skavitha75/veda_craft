@@ -11,6 +11,8 @@ import DecorItemsPage from './pages/DecorItemsPage';
 import ProductDetail from './pages/ProductDetail';
 import Footer from './components/Footer/Footer';
 import WishlistPage from './pages/WishlistPage';
+import CheckoutPage from './pages/CheckoutPage';
+import LoginPage from './pages/LoginPage';
 
 import { CartProvider } from './context/CartContext';
 import { WishlistProvider } from './context/WishlistContext';
@@ -35,6 +37,8 @@ function App() {
                 <Route path="/decor" element={<DecorItemsPage />} />
                 <Route path="/product/:id" element={<ProductDetail />} />
                 <Route path="/wishlist" element={<WishlistPage />} />
+                <Route path="/checkout" element={<CheckoutPage />} />
+                <Route path="/login" element={<LoginPage />} />
               </Routes>
             </div>
             <Footer />

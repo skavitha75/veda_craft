@@ -1,0 +1,35 @@
+{
+  "nav": {
+    "eco": "ईको",
+    "wellness": "स्वास्थ्य",
+    "food": "भोजन",
+    "craft": "शिल्प",
+    "fashion": "फैशन",
+    "decor": "सजावट",
+    "seller": "विक्रेता"
+  },
+  "header": {
+    "search": "खोजें",
+    "profile": "प्रोफ़ाइल",
+    "cart": "कार्ट",
+    "wishlist": "विशलिस्ट",
+    "deliveryIn": "2 दिनों में डिलीवरी"
+  },
+  "cart": {
+    "title": "आपकी कार्ट",
+    "empty": "आपकी कार्ट खाली है",
+    "continueShopping": "खरीदारी जारी रखें",
+    "quantity": "मात्रा",
+    "amount": "रकम",
+    "priceSummary": "मूल्य सारांश",
+    "inclusiveTaxes": "कर सहित",
+    "bagTotal": "कुल",
+    "items": "सामान",
+    "discount": "छूट",
+    "subTotal": "उप-योग",
+    "convenience": "सुविधा शुल्क",
+    "free": "मुफ़्त",
+    "youPay": "आप भुगतान करते हैं",
+    "checkout": "चेक आउट"
+  }
+}

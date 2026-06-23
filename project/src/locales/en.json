@@ -1,0 +1,35 @@
+{
+  "nav": {
+    "eco": "Eco",
+    "wellness": "Wellness",
+    "food": "Food",
+    "craft": "Craft",
+    "fashion": "Fashion",
+    "decor": "Decor items",
+    "seller": "Seller"
+  },
+  "header": {
+    "search": "Search",
+    "profile": "Profile",
+    "cart": "Cart",
+    "wishlist": "Wishlist",
+    "deliveryIn": "Delivery In 2 days"
+  },
+  "cart": {
+    "title": "Your Cart",
+    "empty": "Your cart is empty",
+    "continueShopping": "Continue Shopping",
+    "quantity": "Quantity",
+    "amount": "Amount",
+    "priceSummary": "Price Summary",
+    "inclusiveTaxes": "Prices are inclusive of all taxes",
+    "bagTotal": "Bag Total",
+    "items": "items",
+    "discount": "Discount on MRP",
+    "subTotal": "Sub Total",
+    "convenience": "Convenience Charges",
+    "free": "Free",
+    "youPay": "You Pay",
+    "checkout": "Check Out"
+  }
+}

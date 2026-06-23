@@ -1,9 +1,13 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import { X, Trash2, Star, ChevronLeft, Minus, Plus } from 'lucide-react';
 import { useCart } from '../../context/CartContext';
+import { useTranslation } from 'react-i18next';
 
 export default function CartDrawer() {
+  const { t } = useTranslation();
   const { items, isOpen, toggleCart, removeFromCart, updateQuantity } = useCart();
+  const navigate = useNavigate();
 
   if (!isOpen) return null;
 
@@ -31,19 +35,19 @@ export default function CartDrawer() {
           >
             <ChevronLeft className="w-5 h-5" />
           </button>
-          <h2 className="text-lg font-bold text-gray-900">Your Cart</h2>
+          <h2 className="text-lg font-bold text-gray-900">{t('cart.title')}</h2>
         </div>
 
         {/* Cart Items */}
         <div className="flex-1 overflow-y-auto p-4 bg-gray-50">
           {items.length === 0 ? (
             <div className="flex flex-col items-center justify-center h-full text-gray-500 gap-4">
-              <p>Your cart is empty</p>
+              <p>{t('cart.empty')}</p>
               <button 
                 onClick={() => toggleCart(false)}
                 className="text-green-600 font-medium hover:underline"
               >
-                Continue Shopping
+                {t('cart.continueShopping')}
               </button>
             </div>
           ) : (
@@ -63,7 +67,7 @@ export default function CartDrawer() {
                       )}
                       
                       <div className="flex items-center text-sm text-gray-600">
-                        <span className="mr-2 text-xs">Quantity :</span>
+                        <span className="mr-2 text-xs">{t('cart.quantity')} :</span>
                         <div className="flex items-center gap-3 border border-gray-300 rounded px-2 py-0.5">
                           <button 
                             onClick={() => updateQuantity(item.id, item.quantity - 1)}
@@ -91,7 +95,7 @@ export default function CartDrawer() {
                   </div>
                   
                   <div className="mt-3 pt-3 border-t border-gray-100 flex justify-between items-center">
-                    <span className="text-xs text-gray-500 font-medium">Amount</span>
+                    <span className="text-xs text-gray-500 font-medium">{t('cart.amount')}</span>
                     <span className="text-sm font-bold text-gray-900">&#8377;{item.price * item.quantity}</span>
                   </div>
                 </div>
@@ -102,29 +106,29 @@ export default function CartDrawer() {
           {/* Price Summary */}
           {items.length > 0 && (
             <div className="mt-6 bg-white p-4 border border-gray-200 rounded-sm">
-              <h3 className="font-bold text-gray-900 mb-1">Price Summary</h3>
-              <p className="text-[10px] text-gray-500 mb-4">Prices are inclusive of all taxes</p>
+              <h3 className="font-bold text-gray-900 mb-1">{t('cart.priceSummary')}</h3>
+              <p className="text-[10px] text-gray-500 mb-4">{t('cart.inclusiveTaxes')}</p>
               
               <div className="flex flex-col gap-3 text-sm text-gray-700">
                 <div className="flex justify-between">
-                  <span>Bag Total ( {totalItems} items )</span>
+                  <span>{t('cart.bagTotal')} ( {totalItems} {t('cart.items')} )</span>
                   <span className="font-medium">&#8377;{bagTotal}</span>
                 </div>
                 <div className="flex justify-between">
-                  <span>Discount on MRP</span>
+                  <span>{t('cart.discount')}</span>
                   <span className="font-medium">-&#8377; {discount}</span>
                 </div>
                 <div className="flex justify-between">
-                  <span>Sub Total</span>
+                  <span>{t('cart.subTotal')}</span>
                   <span className="font-medium">-&#8377; {discount}</span>
                 </div>
                 <div className="flex justify-between">
-                  <span>Convenience Charges</span>
-                  <span className="text-green-600 font-medium">Free</span>
+                  <span>{t('cart.convenience')}</span>
+                  <span className="text-green-600 font-medium">{t('cart.free')}</span>
                 </div>
                 
                 <div className="border-t border-gray-200 pt-3 mt-1 flex justify-between items-center">
-                  <span className="font-bold text-gray-900">You Pay</span>
+                  <span className="font-bold text-gray-900">{t('cart.youPay')}</span>
                   <span className="font-bold text-gray-900">&#8377;{youPay}</span>
                 </div>
               </div>
@@ -136,8 +140,14 @@ export default function CartDrawer() {
         {items.length > 0 && (
           <div className="p-4 border-t border-gray-100 bg-white flex justify-between items-center">
             <div className="font-bold text-gray-900">&#8377; {youPay}</div>
-            <button className="bg-[#6cc24a] hover:bg-[#5db33e] text-white font-semibold py-2.5 px-8 rounded transition-colors text-sm">
-              Check Out
+            <button 
+              onClick={() => {
+                toggleCart(false);
+                navigate('/checkout');
+              }}
+              className="bg-[#6cc24a] hover:bg-[#5db33e] text-white font-semibold py-2.5 px-8 rounded transition-colors text-sm"
+            >
+              {t('cart.checkout')}
             </button>
           </div>
         )}

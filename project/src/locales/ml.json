@@ -1,0 +1,35 @@
+{
+  "nav": {
+    "eco": "ഇക്കോ",
+    "wellness": "വെൽനെസ്",
+    "food": "ഭക്ഷണം",
+    "craft": "കരകൗശലം",
+    "fashion": "ഫാഷൻ",
+    "decor": "അലങ്കാരം",
+    "seller": "വില്പനക്കാരൻ"
+  },
+  "header": {
+    "search": "തിരയുക",
+    "profile": "പ്രൊഫൈൽ",
+    "cart": "കാർട്ട്",
+    "wishlist": "വിഷ്‌ലിസ്റ്റ്",
+    "deliveryIn": "2 ദിവസത്തിനുള്ളിൽ ഡെലിവറി"
+  },
+  "cart": {
+    "title": "നിങ്ങളുടെ കാർട്ട്",
+    "empty": "നിങ്ങളുടെ കാർട്ട് ശൂന്യമാണ്",
+    "continueShopping": "ഷോപ്പിംഗ് തുടരുക",
+    "quantity": "അളവ്",
+    "amount": "തുക",
+    "priceSummary": "വില സംഗ്രഹം",
+    "inclusiveTaxes": "നികുതികൾ ഉൾപ്പെടെ",
+    "bagTotal": "ആകെ",
+    "items": "ഇനങ്ങൾ",
+    "discount": "കിഴിവ്",
+    "subTotal": "ഉപതുക",
+    "convenience": "സേവന നിരക്ക്",
+    "free": "സൗജന്യം",
+    "youPay": "നിങ്ങൾ നൽകുന്നത്",
+    "checkout": "ചെക്ക് ഔട്ട്"
+  }
+}

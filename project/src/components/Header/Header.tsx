@@ -1,13 +1,16 @@
 import { User, ShoppingCart, Heart } from 'lucide-react';
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import logoImg from '../../assets/products/WhatsApp_Image_2026-06-19_at_11.31.57_AM.jpeg';
 import LocationSelector from './LocationSelector';
 import SearchBar from './SearchBar';
 import { useCart } from '../../context/CartContext';
 import { useWishlist } from '../../context/WishlistContext';
+import LanguageSelector from './LanguageSelector';
 
 export default function Header() {
+  const { t } = useTranslation();
   const { items, toggleCart } = useCart();
   const { items: wishlistItems } = useWishlist();
   const wishlistCount = wishlistItems.length;
@@ -40,11 +43,14 @@ export default function Header() {
 
           {/* Icons */}
           <div className="flex items-center gap-5 flex-shrink-0">
+            {/* Language Selector */}
+            <LanguageSelector />
+
             {/* Profile */}
-            <button className="flex flex-col items-center gap-0.5 text-gray-600 hover:text-green-600 transition-colors">
+            <Link to="/login" className="flex flex-col items-center gap-0.5 text-gray-600 hover:text-green-600 transition-colors">
               <User className="w-5 h-5" />
-              <span className="text-[10px] font-medium hidden sm:block">Profile</span>
-            </button>
+              <span className="text-[10px] font-medium hidden sm:block">{t('header.profile')}</span>
+            </Link>
 
             {/* Cart */}
             <button 
@@ -59,7 +65,7 @@ export default function Header() {
                   </span>
                 )}
               </div>
-              <span className="text-[10px] font-medium hidden sm:block">Cart</span>
+              <span className="text-[10px] font-medium hidden sm:block">{t('header.cart')}</span>
             </button>
 
             {/* Wishlist */}
@@ -75,7 +81,7 @@ export default function Header() {
                   </span>
                 )}
               </div>
-              <span className="text-[10px] font-medium hidden sm:block">Wishlist</span>
+              <span className="text-[10px] font-medium hidden sm:block">{t('header.wishlist')}</span>
             </Link>
           </div>
         </div>
