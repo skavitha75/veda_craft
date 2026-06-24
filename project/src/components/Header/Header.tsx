@@ -14,11 +14,10 @@ export default function Header() {
   const { t } = useTranslation();
   const { items, toggleCart } = useCart();
   const { items: wishlistItems } = useWishlist();
-  const { user } = useAuth();
+  const { user, logout } = useAuth();
   const wishlistCount = wishlistItems.length;
 
   const cartCount = items.reduce((acc, item) => acc + item.quantity, 0);
-  const profileHref = user ? '/profile' : '/login';
 
   return (
     <header className="bg-white border-b border-gray-200 sticky top-0 z-50 shadow-sm">
@@ -50,10 +49,32 @@ export default function Header() {
             <LanguageSelector />
 
             {/* Profile */}
-            <Link to={profileHref} className="flex flex-col items-center gap-0.5 text-gray-600 hover:text-green-600 transition-colors">
-              <User className="w-5 h-5" />
-              <span className="text-[10px] font-medium hidden sm:block">{t('header.profile')}</span>
-            </Link>
+            {!user ? (
+              <Link to="/login" className="flex items-center justify-center px-4 py-2 bg-green-600 text-white text-sm font-semibold rounded-lg hover:bg-green-700 transition-colors">
+                Sign In
+              </Link>
+            ) : (
+              <div className="relative group py-2">
+                <Link to="/profile" className="flex items-center gap-2 text-gray-600 hover:text-green-600 transition-colors">
+                  <div className="w-8 h-8 rounded-full bg-green-100 flex items-center justify-center text-green-700 font-bold text-sm">
+                    {user.name.charAt(0).toUpperCase()}
+                  </div>
+                  <div className="hidden sm:flex flex-col items-start leading-tight">
+                    <span className="text-[10px] text-gray-500">Welcome,</span>
+                    <span className="text-xs font-bold text-gray-800 line-clamp-1 max-w-[80px]">{user.name}</span>
+                  </div>
+                </Link>
+                {/* Dropdown */}
+                <div className="absolute right-0 top-full w-48 bg-white border border-gray-100 shadow-xl rounded-xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50">
+                  <div className="p-2 space-y-1">
+                    <Link to="/profile" className="block px-3 py-2 text-sm text-gray-700 hover:bg-green-50 hover:text-green-700 rounded-lg">My Profile</Link>
+                    <Link to="/profile/orders" className="block px-3 py-2 text-sm text-gray-700 hover:bg-green-50 hover:text-green-700 rounded-lg">Orders</Link>
+                    <Link to="/wishlist" className="block px-3 py-2 text-sm text-gray-700 hover:bg-green-50 hover:text-green-700 rounded-lg">Wishlist</Link>
+                    <button onClick={logout} className="w-full text-left px-3 py-2 text-sm text-red-600 hover:bg-red-50 rounded-lg">Logout</button>
+                  </div>
+                </div>
+              </div>
+            )}
 
             {/* Cart */}
             <button 
