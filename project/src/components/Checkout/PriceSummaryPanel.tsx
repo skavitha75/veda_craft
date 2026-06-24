@@ -7,6 +7,7 @@ interface PriceSummaryPanelProps {
   currentStep: number;
   onContinue: () => void;
   canContinue: boolean;
+  isBuyNow?: boolean;
 }
 
 export default function PriceSummaryPanel({
@@ -14,6 +15,7 @@ export default function PriceSummaryPanel({
   currentStep,
   onContinue,
   canContinue,
+  isBuyNow = false,
 }: PriceSummaryPanelProps) {
   const { t } = useTranslation();
 
@@ -43,6 +45,30 @@ export default function PriceSummaryPanel({
             {t('checkout.priceDetails')}
           </h2>
         </div>
+
+        {/* Buy Now — Product Preview Card */}
+        {isBuyNow && items.length > 0 && (
+          <div className="px-5 pt-4 pb-2">
+            <div className="flex items-center gap-3 bg-amber-50 border border-amber-200 rounded-xl p-3">
+              <img
+                src={items[0].image}
+                alt={items[0].name}
+                className="w-14 h-14 rounded-lg object-cover flex-shrink-0 border border-amber-100"
+              />
+              <div className="flex-1 min-w-0">
+                <p className="text-xs font-semibold text-gray-800 line-clamp-2 leading-tight">
+                  {items[0].name}
+                </p>
+                <p className="text-sm font-bold text-gray-900 mt-1">
+                  &#8377;{items[0].price.toLocaleString('en-IN')}
+                </p>
+                <span className="inline-block text-[10px] bg-amber-500 text-white px-2 py-0.5 rounded-full font-semibold mt-1">
+                  ⚡ Buy Now
+                </span>
+              </div>
+            </div>
+          </div>
+        )}
 
         {/* Price Breakdown */}
         <div className="p-5 space-y-4 text-sm">

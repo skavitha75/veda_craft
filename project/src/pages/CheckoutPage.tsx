@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
-import { Link, useSearchParams } from 'react-router-dom';
+import { Link, useSearchParams, useLocation } from 'react-router-dom';
 import { ShoppingBag, ArrowLeft, CheckCircle2 } from 'lucide-react';
-import { useCart } from '../context/CartContext';
+import { useCart, type CartItem } from '../context/CartContext';
 import { useAuth } from '../context/AuthContext';
 import { useTranslation } from 'react-i18next';
 import CheckoutStepper from '../components/Checkout/CheckoutStepper';
@@ -15,22 +15,29 @@ import type { Address } from '../components/Checkout/AddAddressDrawer';
 const STEP_KEYS = ['address', 'summary', 'payment'] as const;
 
 export default function CheckoutPage() {
-  const { items, buyNowItem, setBuyNowItem } = useCart();
+  const { items } = useCart();
   const { t } = useTranslation();
   const { addresses, addAddress, selectedLocation, updateLocation } = useAuth();
   const [searchParams, setSearchParams] = useSearchParams();
+  const location = useLocation();
+
+  // Buy Now item comes from router state — guaranteed to be present immediately
+  const buyNowItem: CartItem | null = (location.state as { buyNowItem?: CartItem })?.buyNowItem ?? null;
 
   // Determine checkout items: Buy Now single item or full cart
   const isBuyNow = !!buyNowItem;
-  const checkoutItems = isBuyNow ? [buyNowItem] : items;
+  const checkoutItems: CartItem[] = isBuyNow ? [buyNowItem] : items;
 
   // Step management (1=address, 2=summary, 3=payment)
   const stepFromUrl = STEP_KEYS.indexOf(
     searchParams.get('step') as (typeof STEP_KEYS)[number]
   );
-  const [currentStep, setCurrentStep] = useState(
-    stepFromUrl >= 0 ? stepFromUrl + 1 : 1
-  );
+  const [currentStep, setCurrentStep] = useState(() => {
+    if (stepFromUrl >= 0) return stepFromUrl + 1;
+    // For Buy Now, if user already has an address, go straight to order summary (step 2)
+    if (isBuyNow && addresses.length > 0) return 2;
+    return 1;
+  });
 
   // Selected address
   const [selectedAddressId, setSelectedAddressId] = useState<string>(() => {
@@ -66,13 +73,6 @@ export default function CheckoutPage() {
       setSelectedAddressId(addresses[0].id);
     }
   }, [addresses, selectedAddressId]);
-
-  // Cleanup buyNowItem on unmount
-  useEffect(() => {
-    return () => {
-      setBuyNowItem(null);
-    };
-  }, [setBuyNowItem]);
 
   const selectedAddress = addresses.find((a) => a.id === selectedAddressId);
 
@@ -242,6 +242,7 @@ export default function CheckoutPage() {
             currentStep={currentStep}
             onContinue={handleContinue}
             canContinue={canContinue}
+            isBuyNow={isBuyNow}
           />
         </div>
       </div>

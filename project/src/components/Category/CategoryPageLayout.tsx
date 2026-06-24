@@ -1,6 +1,6 @@
 import { useState, useMemo } from 'react';
-import { Star, ShoppingCart, Heart, SlidersHorizontal, ChevronDown, ChevronUp, X } from 'lucide-react';
-import { Link } from 'react-router-dom';
+import { Star, ShoppingCart, Heart, SlidersHorizontal, ChevronDown, ChevronUp, X, Zap } from 'lucide-react';
+import { Link, useNavigate } from 'react-router-dom';
 import { Product } from '../../data/products';
 import { useCart } from '../../context/CartContext';
 import { useWishlist } from '../../context/WishlistContext';
@@ -57,6 +57,7 @@ function FilterSection({
 function ProductCard({ product, badgeIcon: BadgeIcon, badgeText, badgeColorClass }: { product: Product, badgeIcon: React.ElementType, badgeText: string, badgeColorClass: string }) {
   const { addToCart } = useCart();
   const { isInWishlist, toggleWishlist } = useWishlist();
+  const navigate = useNavigate();
   const wished = isInWishlist(product.id);
   const [added, setAdded] = useState(false);
 
@@ -72,6 +73,22 @@ function ProductCard({ product, badgeIcon: BadgeIcon, badgeText, badgeColorClass
     });
     setAdded(true);
     setTimeout(() => setAdded(false), 1200);
+  };
+
+  const handleBuyNow = (e: React.MouseEvent) => {
+    e.preventDefault();
+    navigate('/checkout', {
+      state: {
+        buyNowItem: {
+          id: product.id,
+          name: product.name,
+          price: product.price,
+          image: product.image,
+          quantity: 1,
+          rating: product.rating,
+        }
+      }
+    });
   };
 
   return (
@@ -118,6 +135,7 @@ function ProductCard({ product, badgeIcon: BadgeIcon, badgeText, badgeColorClass
           </div>
         </div>
 
+        {/* Add to Cart */}
         <button
           onClick={handleAdd}
           className={`mt-2 w-full flex items-center justify-center gap-1.5 text-xs font-semibold py-2 rounded-lg transition-all duration-200 active:scale-95 ${
@@ -128,6 +146,15 @@ function ProductCard({ product, badgeIcon: BadgeIcon, badgeText, badgeColorClass
         >
           <ShoppingCart className="w-3 h-3" />
           {added ? 'Added!' : 'Add'}
+        </button>
+
+        {/* Buy Now */}
+        <button
+          onClick={handleBuyNow}
+          className="w-full flex items-center justify-center gap-1.5 text-xs font-semibold py-2 rounded-lg bg-amber-500 hover:bg-amber-600 text-white transition-all duration-200 active:scale-95"
+        >
+          <Zap className="w-3 h-3" />
+          Buy Now
         </button>
       </div>
     </div>
@@ -165,6 +192,7 @@ export default function CategoryPageLayout({
     outOfStock: false,
   });
   const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false);
+  const [sortBy, setSortBy] = useState<'featured' | 'price-asc' | 'price-desc' | 'best-rated'>('featured');
 
   const toggleFilter = (key: keyof Pick<Filters, 'categories' | 'features' | 'discounts'>, item: string) => {
     setFilters((f) => ({
@@ -181,7 +209,7 @@ export default function CategoryPageLayout({
     (filters.inStock ? 1 : 0) + (filters.outOfStock ? 1 : 0);
 
   const filteredProducts = useMemo(() => {
-    return products.filter((product) => {
+    const filtered = products.filter((product) => {
       // 1. Category
       if (filters.categories.length > 0 && !filters.categories.includes(product.category)) {
         return false;
@@ -199,26 +227,35 @@ export default function CategoryPageLayout({
 
       // 4. Features
       if (filters.features.length > 0) {
-        // Assign 1-2 consistent pseudo-random features to each product based on ID
         const feature1 = features[product.id % features.length];
         const feature2 = features[(product.id * 2) % features.length];
         const productFeatures = [feature1, feature2];
-        
-        // Product must have at least ONE of the selected features
         const hasFeature = filters.features.some(f => productFeatures.includes(f));
         if (!hasFeature) return false;
       }
 
       // 5. Discount
       if (filters.discounts.length > 0) {
-        // Assign a consistent pseudo-random discount based on ID
         const productDiscount = discounts[product.id % discounts.length];
         if (!filters.discounts.includes(productDiscount)) return false;
       }
 
       return true;
     });
-  }, [products, filters, features, discounts]);
+
+    // Apply sorting
+    const sorted = [...filtered];
+    if (sortBy === 'price-asc') {
+      sorted.sort((a, b) => a.price - b.price);
+    } else if (sortBy === 'price-desc') {
+      sorted.sort((a, b) => b.price - a.price);
+    } else if (sortBy === 'best-rated') {
+      sorted.sort((a, b) => b.rating - a.rating);
+    }
+    // 'featured' keeps original order
+
+    return sorted;
+  }, [products, filters, features, discounts, sortBy]);
 
   const FilterPanel = () => (
     <aside className="w-full space-y-1">
@@ -341,11 +378,15 @@ export default function CategoryPageLayout({
             <p className="text-sm text-gray-600">
               Showing <span className="font-semibold text-gray-800">{filteredProducts.length}</span> products
             </p>
-            <select className="text-sm border border-gray-200 rounded-lg px-3 py-1.5 text-gray-700 focus:outline-none focus:ring-2 focus:ring-green-400">
-              <option>Sort: Featured</option>
-              <option>Price: Low to High</option>
-              <option>Price: High to Low</option>
-              <option>Best Rated</option>
+            <select
+              value={sortBy}
+              onChange={(e) => setSortBy(e.target.value as typeof sortBy)}
+              className="text-sm border border-gray-200 rounded-lg px-3 py-1.5 text-gray-700 focus:outline-none focus:ring-2 focus:ring-green-400 cursor-pointer"
+            >
+              <option value="featured">Sort: Featured</option>
+              <option value="price-asc">Price: Low to High</option>
+              <option value="price-desc">Price: High to Low</option>
+              <option value="best-rated">Best Rated</option>
             </select>
           </div>
 
