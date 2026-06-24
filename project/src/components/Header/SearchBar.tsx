@@ -184,6 +184,13 @@ export default function SearchBar() {
     }
   };
 
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'Enter' && query.trim() !== '') {
+      setIsDropdownOpen(false);
+      navigate(`/search?q=${encodeURIComponent(query.trim())}`);
+    }
+  };
+
   return (
     <div className="flex-1 max-w-2xl relative" ref={dropdownRef}>
       <div className="flex items-center bg-white border border-gray-300 rounded-full px-4 py-2 shadow-sm hover:border-green-400 focus-within:border-green-500 focus-within:ring-2 focus-within:ring-green-100 transition-all">
@@ -192,6 +199,7 @@ export default function SearchBar() {
           type="text"
           value={query}
           onChange={handleInputChange}
+          onKeyDown={handleKeyDown}
           onFocus={() => {
             if (query.trim() !== '') setIsDropdownOpen(true);
           }}

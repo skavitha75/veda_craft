@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom';
 import { Category } from '../../data/categories';
 
 interface CategoryCardProps {
@@ -6,7 +7,7 @@ interface CategoryCardProps {
 
 export default function CategoryCard({ category }: CategoryCardProps) {
   return (
-    <div className="flex flex-col items-center gap-3 group cursor-pointer">
+    <Link to={`/${category.slug}`} className="flex flex-col items-center gap-3 group cursor-pointer">
       <div className="w-20 h-20 md:w-24 md:h-24 rounded-full overflow-hidden border-2 border-gray-200 group-hover:border-green-400 transition-all duration-200 shadow-sm group-hover:shadow-md group-hover:scale-105">
         <img
           src={category.image}
@@ -17,6 +18,6 @@ export default function CategoryCard({ category }: CategoryCardProps) {
       <span className="text-sm font-medium text-gray-700 group-hover:text-green-600 transition-colors text-center">
         {category.name}
       </span>
-    </div>
+    </Link>
   );
 }

@@ -11,14 +11,14 @@ interface ProfileFormData {
   location: string;
 }
 
-// Mock user profile data (no backend yet)
-const mockProfileData: ProfileFormData = {
-  fullName: 'Aarav Sharma',
-  email: 'aarav.sharma@gmail.com',
-  phone: '+91 9856732431',
-  gender: 'Male',
-  dateOfBirth: '1995-04-12',
-  location: 'Tirunelveli, Tamil Nadu',
+// Empty initial profile data
+const initialProfileData: ProfileFormData = {
+  fullName: '',
+  email: '',
+  phone: '',
+  gender: '',
+  dateOfBirth: '',
+  location: '',
 };
 
 function FormField({
@@ -58,10 +58,13 @@ function FormField({
 export default function MyProfile() {
   const { user } = useAuth();
 
+  const isEmail = user?.email?.includes('@');
+
   const [formData, setFormData] = useState<ProfileFormData>({
-    ...mockProfileData,
-    fullName: user?.name ?? mockProfileData.fullName,
-    email: user?.email ?? mockProfileData.email,
+    ...initialProfileData,
+    fullName: user?.name && user.name !== user?.email && !user.name.includes('@') ? user.name : '',
+    email: isEmail ? user?.email || '' : '',
+    phone: !isEmail ? user?.email || '' : '',
   });
 
   const [draft, setDraft] = useState<ProfileFormData>(formData);
@@ -97,7 +100,9 @@ export default function MyProfile() {
                           flex items-center justify-center text-white text-3xl font-bold
                           shadow-md select-none overflow-hidden"
             >
-              {formData.fullName.charAt(0).toUpperCase()}
+              {formData.fullName 
+                ? formData.fullName.charAt(0).toUpperCase() 
+                : (formData.email || formData.phone || 'U').charAt(0).toUpperCase()}
             </div>
             <button
               className="absolute bottom-0 right-0 w-6 h-6 bg-white border border-gray-200

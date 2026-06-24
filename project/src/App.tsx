@@ -13,6 +13,7 @@ import Footer from './components/Footer/Footer';
 import WishlistPage from './pages/WishlistPage';
 import CheckoutPage from './pages/CheckoutPage';
 import LoginPage from './pages/LoginPage';
+import SearchResultsPage from './pages/SearchResultsPage';
 import ProfilePage from './pages/profile/ProfilePage';
 import MyProfile from './pages/profile/MyProfile';
 import MyOrders from './pages/profile/MyOrders';
@@ -48,6 +49,7 @@ function App() {
                 <Route path="/wishlist" element={<WishlistPage />} />
                 <Route path="/checkout" element={<CheckoutPage />} />
                 <Route path="/login" element={<LoginPage />} />
+                <Route path="/search" element={<SearchResultsPage />} />
 
                 {/* Profile routes - protected */}
                 <Route

@@ -47,56 +47,24 @@ export default function Header() {
             {/* Language Selector */}
             <LanguageSelector />
 
-            {/* Wishlist */}
-            <Link
-              to="/wishlist"
-              className="flex flex-col items-center gap-0.5 text-gray-600 hover:text-green-600 transition-colors"
-            >
-              <div className="relative w-9 h-9 rounded-full bg-gray-100 hover:bg-green-50 flex items-center justify-center transition-colors">
-                <Heart className="w-5 h-5" />
-                {wishlistCount > 0 && (
-                  <span className="absolute -top-1 -right-1 bg-red-500 text-white text-[9px] font-bold w-4 h-4 rounded-full flex items-center justify-center">
-                    {wishlistCount}
-                  </span>
-                )}
-              </div>
-              <span className="text-[10px] font-medium hidden sm:block">{t('header.wishlist')}</span>
-            </Link>
-
-            {/* Cart */}
-            <button
-              onClick={() => toggleCart(true)}
-              className="flex flex-col items-center gap-0.5 text-gray-600 hover:text-green-600 transition-colors"
-            >
-              <div className="relative w-9 h-9 rounded-full bg-gray-100 hover:bg-green-50 flex items-center justify-center transition-colors">
-                <ShoppingCart className="w-5 h-5" />
-                {cartCount > 0 && (
-                  <span className="absolute -top-1 -right-1 bg-green-500 text-white text-[9px] font-bold w-4 h-4 rounded-full flex items-center justify-center">
-                    {cartCount}
-                  </span>
-                )}
-              </div>
-              <span className="text-[10px] font-medium hidden sm:block">{t('header.cart')}</span>
-            </button>
-
             {/* Profile */}
             {!user ? (
               <Link
                 to="/login"
-                className="flex flex-col items-center gap-0.5 text-gray-600 hover:text-green-600 transition-colors"
+                className="flex flex-col items-center gap-1 text-gray-600 hover:text-green-600 transition-colors"
               >
-                <div className="w-9 h-9 rounded-full bg-gray-100 hover:bg-green-50 flex items-center justify-center transition-colors">
+                <div className="relative flex items-center justify-center transition-colors">
                   <User className="w-5 h-5" />
                 </div>
                 <span className="text-[10px] font-medium hidden sm:block">Profile</span>
               </Link>
             ) : (
               <div className="relative group">
-                <Link to="/profile" className="flex flex-col items-center gap-0.5 text-gray-600 hover:text-green-600 transition-colors">
-                  <div className="w-9 h-9 rounded-full bg-green-100 hover:bg-green-200 flex items-center justify-center text-green-700 font-bold text-sm transition-colors">
-                    {user.name.charAt(0).toUpperCase()}
+                <Link to="/profile" className="flex flex-col items-center gap-1 text-gray-600 hover:text-green-600 transition-colors">
+                  <div className="relative flex items-center justify-center transition-colors">
+                    <User className="w-5 h-5 text-green-600" />
                   </div>
-                  <span className="text-[10px] font-medium hidden sm:block">Profile</span>
+                  <span className="text-[10px] font-medium hidden sm:block text-green-600">Profile</span>
                 </Link>
                 {/* Dropdown */}
                 <div className="absolute right-0 top-full mt-2 w-48 bg-white border border-gray-100 shadow-xl rounded-xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50">
@@ -113,6 +81,38 @@ export default function Header() {
                 </div>
               </div>
             )}
+
+            {/* Cart */}
+            <button
+              onClick={() => toggleCart(true)}
+              className="flex flex-col items-center gap-1 text-gray-600 hover:text-green-600 transition-colors"
+            >
+              <div className="relative flex items-center justify-center transition-colors">
+                <ShoppingCart className="w-5 h-5" />
+                {cartCount > 0 && (
+                  <span className="absolute -top-1.5 -right-2 bg-green-500 text-white text-[9px] font-bold w-4 h-4 rounded-full flex items-center justify-center">
+                    {cartCount}
+                  </span>
+                )}
+              </div>
+              <span className="text-[10px] font-medium hidden sm:block">{t('header.cart')}</span>
+            </button>
+
+            {/* Wishlist */}
+            <Link
+              to="/wishlist"
+              className="flex flex-col items-center gap-1 text-gray-600 hover:text-green-600 transition-colors"
+            >
+              <div className="relative flex items-center justify-center transition-colors">
+                <Heart className="w-5 h-5" />
+                {wishlistCount > 0 && (
+                  <span className="absolute -top-1.5 -right-2 bg-red-500 text-white text-[9px] font-bold w-4 h-4 rounded-full flex items-center justify-center">
+                    {wishlistCount}
+                  </span>
+                )}
+              </div>
+              <span className="text-[10px] font-medium hidden sm:block">{t('header.wishlist')}</span>
+            </Link>
           </div>
 
         </div>
