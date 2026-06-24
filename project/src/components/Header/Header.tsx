@@ -8,14 +8,17 @@ import SearchBar from './SearchBar';
 import { useCart } from '../../context/CartContext';
 import { useWishlist } from '../../context/WishlistContext';
 import LanguageSelector from './LanguageSelector';
+import { useAuth } from '../../context/AuthContext';
 
 export default function Header() {
   const { t } = useTranslation();
   const { items, toggleCart } = useCart();
   const { items: wishlistItems } = useWishlist();
+  const { user } = useAuth();
   const wishlistCount = wishlistItems.length;
 
   const cartCount = items.reduce((acc, item) => acc + item.quantity, 0);
+  const profileHref = user ? '/profile' : '/login';
 
   return (
     <header className="bg-white border-b border-gray-200 sticky top-0 z-50 shadow-sm">
@@ -47,7 +50,7 @@ export default function Header() {
             <LanguageSelector />
 
             {/* Profile */}
-            <Link to="/login" className="flex flex-col items-center gap-0.5 text-gray-600 hover:text-green-600 transition-colors">
+            <Link to={profileHref} className="flex flex-col items-center gap-0.5 text-gray-600 hover:text-green-600 transition-colors">
               <User className="w-5 h-5" />
               <span className="text-[10px] font-medium hidden sm:block">{t('header.profile')}</span>
             </Link>

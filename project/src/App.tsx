@@ -13,6 +13,13 @@ import Footer from './components/Footer/Footer';
 import WishlistPage from './pages/WishlistPage';
 import CheckoutPage from './pages/CheckoutPage';
 import LoginPage from './pages/LoginPage';
+import ProfilePage from './pages/profile/ProfilePage';
+import MyProfile from './pages/profile/MyProfile';
+import MyOrders from './pages/profile/MyOrders';
+import Notifications from './pages/profile/Notifications';
+import AddressPage from './pages/profile/AddressPage';
+import HelpSupport from './pages/profile/HelpSupport';
+import ProtectedRoute from './components/ProtectedRoute';
 
 import { CartProvider } from './context/CartContext';
 import { WishlistProvider } from './context/WishlistContext';
@@ -41,6 +48,22 @@ function App() {
                 <Route path="/wishlist" element={<WishlistPage />} />
                 <Route path="/checkout" element={<CheckoutPage />} />
                 <Route path="/login" element={<LoginPage />} />
+
+                {/* Profile routes - protected */}
+                <Route
+                  path="/profile"
+                  element={
+                    <ProtectedRoute>
+                      <ProfilePage />
+                    </ProtectedRoute>
+                  }
+                >
+                  <Route index element={<MyProfile />} />
+                  <Route path="orders" element={<MyOrders />} />
+                  <Route path="notifications" element={<Notifications />} />
+                  <Route path="address" element={<AddressPage />} />
+                  <Route path="help" element={<HelpSupport />} />
+                </Route>
               </Routes>
             </div>
             <Footer />
@@ -54,3 +77,4 @@ function App() {
 }
 
 export default App;
+
