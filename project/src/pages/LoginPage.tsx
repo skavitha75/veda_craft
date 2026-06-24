@@ -3,7 +3,7 @@ import { Mail, Phone, ChevronRight, CheckCircle2, Leaf, ShieldCheck, Heart } fro
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import logoImg from '../assets/products/WhatsApp_Image_2026-06-19_at_11.31.57_AM.jpeg';
-import bgImg from '../assets/products/product1.jpeg'; // Use as generic eco image
+import bgImg from '../assets/products/login_eco_bg.png'; // New eco products collage
 
 type LoginMethod = 'mobile' | 'email';
 type Step = 'input' | 'verify';
@@ -69,66 +69,95 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="min-h-[calc(100vh-140px)] bg-white flex relative overflow-hidden">
-      {/* Left Section - Brand (Hidden on Mobile) */}
+    <div className="min-h-[calc(100vh-140px)] bg-white flex flex-col lg:flex-row relative overflow-hidden">
+
+      {/* Mobile/Tablet Top Banner (visible below lg) */}
+      <div className="lg:hidden w-full relative overflow-hidden" style={{ height: '200px' }}>
+        <img src={bgImg} alt="Eco Friendly" className="w-full h-full object-cover object-center" />
+        <div className="absolute inset-0 bg-green-900/50" />
+        <div className="absolute inset-0 flex flex-col items-center justify-center gap-3 p-4">
+          <img src={logoImg} alt="Vedha Craft" className="h-14 bg-white/90 rounded-xl px-3 py-1 object-contain" />
+          <h1 className="text-2xl sm:text-3xl font-extrabold text-white text-center leading-tight">
+            Welcome to Veda Craft
+          </h1>
+          <p className="text-xs sm:text-sm text-white/80 text-center max-w-xs">
+            Eco-friendly products for a healthy you and a happy planet.
+          </p>
+          {/* Mini feature badges */}
+          <div className="flex gap-4 mt-1">
+            <div className="flex items-center gap-1 bg-white/20 backdrop-blur-sm rounded-full px-3 py-1 border border-white/30">
+              <Leaf className="w-3 h-3 text-white" />
+              <span className="text-[10px] text-white font-semibold">Eco</span>
+            </div>
+            <div className="flex items-center gap-1 bg-white/20 backdrop-blur-sm rounded-full px-3 py-1 border border-white/30">
+              <Heart className="w-3 h-3 text-white" />
+              <span className="text-[10px] text-white font-semibold">Handcrafted</span>
+            </div>
+            <div className="flex items-center gap-1 bg-white/20 backdrop-blur-sm rounded-full px-3 py-1 border border-white/30">
+              <ShieldCheck className="w-3 h-3 text-white" />
+              <span className="text-[10px] text-white font-semibold">Trusted</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Desktop Left Section - Brand (lg and above) */}
       <div className="hidden lg:flex w-1/2 relative bg-green-50 flex-col p-12 justify-between border-r border-green-100">
-        <div className="absolute inset-0 overflow-hidden opacity-30 mix-blend-multiply">
+        <div className="absolute inset-0 overflow-hidden">
           <img src={bgImg} alt="Eco Friendly" className="w-full h-full object-cover" />
+          <div className="absolute inset-0 bg-green-900/40" />
         </div>
         
         <div className="relative z-10">
-          <img src={logoImg} alt="Vedha Craft" className="h-20 mb-12 mix-blend-multiply" />
+          <img src={logoImg} alt="Vedha Craft" className="h-20 mb-12 bg-white/90 rounded-xl px-3 py-1" />
           
-          <h1 className="text-5xl font-extrabold text-green-900 leading-tight mb-4">
-            Welcome Back<br />to Vedha Craft
+          <h1 className="text-5xl font-extrabold text-white leading-tight mb-4">
+            Welcome Back<br />to Veda Craft
           </h1>
-          <div className="w-16 h-1 bg-[#1c6b32] mb-6"></div>
-          <p className="text-lg text-green-900/80 max-w-md font-medium">
+          <div className="w-16 h-1 bg-white/70 mb-6"></div>
+          <p className="text-lg text-white/85 max-w-md font-medium">
             Discover sustainable products and support eco-friendly living.
           </p>
         </div>
         
         <div className="relative z-10 flex gap-8">
           <div className="flex flex-col items-center gap-3">
-            <div className="w-14 h-14 rounded-full bg-white flex items-center justify-center text-[#1c6b32] shadow-sm border border-green-100">
+            <div className="w-14 h-14 rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center text-white shadow-sm border border-white/30">
               <Leaf className="w-6 h-6" />
             </div>
             <div className="text-center">
-              <p className="text-sm font-bold text-green-900">Eco Friendly</p>
-              <p className="text-xs text-[#1c6b32] font-medium">Sustainable & Natural</p>
+              <p className="text-sm font-bold text-white">Eco Friendly</p>
+              <p className="text-xs text-white/80 font-medium">Sustainable & Natural</p>
             </div>
           </div>
           
           <div className="flex flex-col items-center gap-3">
-            <div className="w-14 h-14 rounded-full bg-white flex items-center justify-center text-[#1c6b32] shadow-sm border border-green-100">
+            <div className="w-14 h-14 rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center text-white shadow-sm border border-white/30">
               <Heart className="w-6 h-6" />
             </div>
             <div className="text-center">
-              <p className="text-sm font-bold text-green-900">Handcrafted</p>
-              <p className="text-xs text-[#1c6b32] font-medium">Made with Care</p>
+              <p className="text-sm font-bold text-white">Handcrafted</p>
+              <p className="text-xs text-white/80 font-medium">Made with Care</p>
             </div>
           </div>
           
           <div className="flex flex-col items-center gap-3">
-            <div className="w-14 h-14 rounded-full bg-white flex items-center justify-center text-[#1c6b32] shadow-sm border border-green-100">
+            <div className="w-14 h-14 rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center text-white shadow-sm border border-white/30">
               <ShieldCheck className="w-6 h-6" />
             </div>
             <div className="text-center">
-              <p className="text-sm font-bold text-green-900">Better Future</p>
-              <p className="text-xs text-[#1c6b32] font-medium">For Our Planet</p>
+              <p className="text-sm font-bold text-white">Better Future</p>
+              <p className="text-xs text-white/80 font-medium">For Our Planet</p>
             </div>
           </div>
         </div>
       </div>
 
       {/* Right Section - Login Card */}
-      <div className="w-full lg:w-1/2 flex items-center justify-center p-6 bg-gray-50 lg:bg-white relative z-10">
-        <div className="w-full max-w-md bg-white rounded-3xl p-8 sm:p-12 shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-gray-100 lg:border-none lg:shadow-none">
+      <div className="w-full lg:w-1/2 flex items-center justify-center p-4 sm:p-6 bg-gray-50 lg:bg-white relative z-10">
+        <div className="w-full max-w-md bg-white rounded-3xl p-6 sm:p-10 shadow-[0_8px_30px_rgb(0,0,0,0.06)] border border-gray-100 lg:border-none lg:shadow-none">
           
-          {/* Mobile Logo Fallback */}
-          <div className="flex lg:hidden justify-center mb-8">
-             <img src={logoImg} alt="Vedha Craft" className="h-16 mix-blend-multiply" />
-          </div>
+
 
           {step === 'input' ? (
             <>

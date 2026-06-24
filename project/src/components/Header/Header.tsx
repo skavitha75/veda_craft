@@ -1,5 +1,4 @@
 import { User, ShoppingCart, Heart } from 'lucide-react';
-import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import logoImg from '../../assets/products/WhatsApp_Image_2026-06-19_at_11.31.57_AM.jpeg';
@@ -43,29 +42,68 @@ export default function Header() {
           {/* Search Bar */}
           <SearchBar />
 
-          {/* Icons */}
-          <div className="flex items-center gap-5 flex-shrink-0">
+          {/* Language + Icons */}
+          <div className="flex items-center gap-4 flex-shrink-0">
             {/* Language Selector */}
             <LanguageSelector />
 
+            {/* Wishlist */}
+            <Link
+              to="/wishlist"
+              className="flex flex-col items-center gap-0.5 text-gray-600 hover:text-green-600 transition-colors"
+            >
+              <div className="relative w-9 h-9 rounded-full bg-gray-100 hover:bg-green-50 flex items-center justify-center transition-colors">
+                <Heart className="w-5 h-5" />
+                {wishlistCount > 0 && (
+                  <span className="absolute -top-1 -right-1 bg-red-500 text-white text-[9px] font-bold w-4 h-4 rounded-full flex items-center justify-center">
+                    {wishlistCount}
+                  </span>
+                )}
+              </div>
+              <span className="text-[10px] font-medium hidden sm:block">{t('header.wishlist')}</span>
+            </Link>
+
+            {/* Cart */}
+            <button
+              onClick={() => toggleCart(true)}
+              className="flex flex-col items-center gap-0.5 text-gray-600 hover:text-green-600 transition-colors"
+            >
+              <div className="relative w-9 h-9 rounded-full bg-gray-100 hover:bg-green-50 flex items-center justify-center transition-colors">
+                <ShoppingCart className="w-5 h-5" />
+                {cartCount > 0 && (
+                  <span className="absolute -top-1 -right-1 bg-green-500 text-white text-[9px] font-bold w-4 h-4 rounded-full flex items-center justify-center">
+                    {cartCount}
+                  </span>
+                )}
+              </div>
+              <span className="text-[10px] font-medium hidden sm:block">{t('header.cart')}</span>
+            </button>
+
             {/* Profile */}
             {!user ? (
-              <Link to="/login" className="flex items-center justify-center px-4 py-2 bg-green-600 text-white text-sm font-semibold rounded-lg hover:bg-green-700 transition-colors">
-                Sign In
+              <Link
+                to="/login"
+                className="flex flex-col items-center gap-0.5 text-gray-600 hover:text-green-600 transition-colors"
+              >
+                <div className="w-9 h-9 rounded-full bg-gray-100 hover:bg-green-50 flex items-center justify-center transition-colors">
+                  <User className="w-5 h-5" />
+                </div>
+                <span className="text-[10px] font-medium hidden sm:block">Profile</span>
               </Link>
             ) : (
-              <div className="relative group py-2">
-                <Link to="/profile" className="flex items-center gap-2 text-gray-600 hover:text-green-600 transition-colors">
-                  <div className="w-8 h-8 rounded-full bg-green-100 flex items-center justify-center text-green-700 font-bold text-sm">
+              <div className="relative group">
+                <Link to="/profile" className="flex flex-col items-center gap-0.5 text-gray-600 hover:text-green-600 transition-colors">
+                  <div className="w-9 h-9 rounded-full bg-green-100 hover:bg-green-200 flex items-center justify-center text-green-700 font-bold text-sm transition-colors">
                     {user.name.charAt(0).toUpperCase()}
                   </div>
-                  <div className="hidden sm:flex flex-col items-start leading-tight">
-                    <span className="text-[10px] text-gray-500">Welcome,</span>
-                    <span className="text-xs font-bold text-gray-800 line-clamp-1 max-w-[80px]">{user.name}</span>
-                  </div>
+                  <span className="text-[10px] font-medium hidden sm:block">Profile</span>
                 </Link>
                 {/* Dropdown */}
-                <div className="absolute right-0 top-full w-48 bg-white border border-gray-100 shadow-xl rounded-xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50">
+                <div className="absolute right-0 top-full mt-2 w-48 bg-white border border-gray-100 shadow-xl rounded-xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50">
+                  <div className="px-3 py-2 border-b border-gray-100">
+                    <p className="text-xs text-gray-500">Signed in as</p>
+                    <p className="text-sm font-bold text-gray-800 truncate">{user.name}</p>
+                  </div>
                   <div className="p-2 space-y-1">
                     <Link to="/profile" className="block px-3 py-2 text-sm text-gray-700 hover:bg-green-50 hover:text-green-700 rounded-lg">My Profile</Link>
                     <Link to="/profile/orders" className="block px-3 py-2 text-sm text-gray-700 hover:bg-green-50 hover:text-green-700 rounded-lg">Orders</Link>
@@ -75,39 +113,8 @@ export default function Header() {
                 </div>
               </div>
             )}
-
-            {/* Cart */}
-            <button 
-              onClick={() => toggleCart(true)}
-              className="flex flex-col items-center gap-0.5 text-gray-600 hover:text-green-600 transition-colors"
-            >
-              <div className="relative">
-                <ShoppingCart className="w-5 h-5" />
-                {cartCount > 0 && (
-                  <span className="absolute -top-1.5 -right-1.5 bg-green-500 text-white text-[9px] font-bold w-4 h-4 rounded-full flex items-center justify-center">
-                    {cartCount}
-                  </span>
-                )}
-              </div>
-              <span className="text-[10px] font-medium hidden sm:block">{t('header.cart')}</span>
-            </button>
-
-            {/* Wishlist */}
-            <Link 
-              to="/wishlist" 
-              className="flex flex-col items-center gap-0.5 text-gray-600 hover:text-green-600 transition-colors"
-            >
-              <div className="relative">
-                <Heart className="w-5 h-5" />
-                {wishlistCount > 0 && (
-                  <span className="absolute -top-1.5 -right-1.5 bg-red-500 text-white text-[9px] font-bold w-4 h-4 rounded-full flex items-center justify-center">
-                    {wishlistCount}
-                  </span>
-                )}
-              </div>
-              <span className="text-[10px] font-medium hidden sm:block">{t('header.wishlist')}</span>
-            </Link>
           </div>
+
         </div>
       </div>
     </header>
