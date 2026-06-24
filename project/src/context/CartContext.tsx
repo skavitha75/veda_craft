@@ -12,11 +12,13 @@ export interface CartItem {
 interface CartContextType {
   items: CartItem[];
   isOpen: boolean;
+  buyNowItem: CartItem | null;
   addToCart: (item: CartItem) => void;
   removeFromCart: (id: number) => void;
   updateQuantity: (id: number, quantity: number) => void;
   toggleCart: (isOpen?: boolean) => void;
   clearCart: () => void;
+  setBuyNowItem: (item: CartItem | null) => void;
 }
 
 const CartContext = createContext<CartContextType | undefined>(undefined);
@@ -28,6 +30,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
   });
   
   const [isOpen, setIsOpen] = useState(false);
+  const [buyNowItem, setBuyNowItem] = useState<CartItem | null>(null);
 
   useEffect(() => {
     localStorage.setItem('cart', JSON.stringify(items));
@@ -74,11 +77,13 @@ export function CartProvider({ children }: { children: ReactNode }) {
       value={{
         items,
         isOpen,
+        buyNowItem,
         addToCart,
         removeFromCart,
         updateQuantity,
         toggleCart,
         clearCart,
+        setBuyNowItem,
       }}
     >
       {children}

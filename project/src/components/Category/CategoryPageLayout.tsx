@@ -149,9 +149,6 @@ export interface CategoryPageLayoutProps {
 
 export default function CategoryPageLayout({
   title,
-  description,
-  tags,
-  heroGradient,
   icon: Icon,
   badgeColorClass,
   products,
@@ -299,30 +296,12 @@ export default function CategoryPageLayout({
 
   return (
     <div className="min-h-screen bg-gray-50">
-      <div className={`bg-gradient-to-r ${heroGradient} text-white py-10`}>
-        <div className="w-full px-4 sm:px-6 lg:px-8 xl:px-12">
-          <nav className="flex items-center gap-2 text-white/80 text-xs mb-4">
-            <Link to="/" className="hover:text-white transition-colors">Home</Link>
-            <span>›</span>
-            <span className="text-white font-medium">{title}</span>
-          </nav>
-          <div className="flex items-center gap-3 mb-2">
-            <div className="w-10 h-10 bg-white/20 rounded-full flex items-center justify-center">
-              <Icon className="w-5 h-5 text-white" />
-            </div>
-            <h1 className="text-3xl font-extrabold">{title}</h1>
-          </div>
-          <p className="text-white/90 text-sm max-w-lg">
-            {description}
-          </p>
-          <div className="flex flex-wrap gap-2 mt-4">
-            {tags.map((tag) => (
-              <span key={tag} className="bg-white/20 text-white text-xs font-medium px-3 py-1 rounded-full border border-white/30">
-                {tag}
-              </span>
-            ))}
-          </div>
-        </div>
+      <div className="w-full px-4 sm:px-6 lg:px-8 xl:px-12 pt-6 pb-2">
+        <nav className="flex items-center gap-2 text-gray-500 text-sm">
+          <Link to="/" className="hover:text-green-600 transition-colors">Home</Link>
+          <span>›</span>
+          <span className="text-gray-900 font-medium">{title}</span>
+        </nav>
       </div>
 
       <div className="md:hidden sticky top-0 z-20 bg-white border-b border-gray-200 px-4 py-2 flex items-center justify-between shadow-sm">

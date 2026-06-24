@@ -1,4 +1,4 @@
-import { useParams, Link } from 'react-router-dom';
+import { useParams, Link, useNavigate } from 'react-router-dom';
 import { ChevronRight, Star, Leaf, HeartPulse, Sparkles, Sprout, Minus, Plus } from 'lucide-react';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -68,7 +68,8 @@ export default function ProductDetailsPage() {
   const product = allProducts.find((p) => p.id === Number(id));
   const { t } = useTranslation();
 
-  const { addToCart } = useCart();
+  const { addToCart, setBuyNowItem } = useCart();
+  const navigate = useNavigate();
   const [quantity, setQuantity] = useState(1);
   const [pincode, setPincode] = useState('');
 
@@ -180,7 +181,20 @@ export default function ProductDetailsPage() {
               >
                 {t('product.addToCart')}
               </button>
-              <button className="bg-white hover:bg-gray-50 text-gray-800 border border-gray-300 font-semibold py-3 px-6 rounded-md transition-colors shadow-sm">
+              <button 
+                onClick={() => {
+                  setBuyNowItem({
+                    id: product.id,
+                    name: product.name,
+                    price: product.price,
+                    image: product.image,
+                    quantity: quantity,
+                    rating: product.rating,
+                  });
+                  navigate('/checkout');
+                }}
+                className="bg-white hover:bg-gray-50 text-gray-800 border border-gray-300 font-semibold py-3 px-6 rounded-md transition-colors shadow-sm"
+              >
                 {t('product.buyNow')}
               </button>
             </div>
