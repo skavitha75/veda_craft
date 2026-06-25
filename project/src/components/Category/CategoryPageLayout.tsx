@@ -1,6 +1,6 @@
 import { useState, useMemo } from 'react';
-import { Star, ShoppingCart, Heart, SlidersHorizontal, ChevronDown, ChevronUp, X, Zap } from 'lucide-react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Star, ShoppingCart, Heart, SlidersHorizontal, ChevronDown, ChevronUp, X } from 'lucide-react';
+import { Link } from 'react-router-dom';
 import { Product } from '../../data/products';
 import { useCart } from '../../context/CartContext';
 import { useWishlist } from '../../context/WishlistContext';
@@ -57,7 +57,6 @@ function FilterSection({
 function ProductCard({ product, badgeIcon: BadgeIcon, badgeText, badgeColorClass }: { product: Product, badgeIcon: React.ElementType, badgeText: string, badgeColorClass: string }) {
   const { addToCart } = useCart();
   const { isInWishlist, toggleWishlist } = useWishlist();
-  const navigate = useNavigate();
   const wished = isInWishlist(product.id);
   const [added, setAdded] = useState(false);
 
@@ -75,21 +74,7 @@ function ProductCard({ product, badgeIcon: BadgeIcon, badgeText, badgeColorClass
     setTimeout(() => setAdded(false), 1200);
   };
 
-  const handleBuyNow = (e: React.MouseEvent) => {
-    e.preventDefault();
-    navigate('/checkout', {
-      state: {
-        buyNowItem: {
-          id: product.id,
-          name: product.name,
-          price: product.price,
-          image: product.image,
-          quantity: 1,
-          rating: product.rating,
-        }
-      }
-    });
-  };
+
 
   return (
     <div className="bg-white rounded-2xl border border-gray-100 overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 hover:-translate-y-1 group flex flex-col">
@@ -148,14 +133,7 @@ function ProductCard({ product, badgeIcon: BadgeIcon, badgeText, badgeColorClass
           {added ? 'Added!' : 'Add'}
         </button>
 
-        {/* Buy Now */}
-        <button
-          onClick={handleBuyNow}
-          className="w-full flex items-center justify-center gap-1.5 text-xs font-semibold py-2 rounded-lg bg-amber-500 hover:bg-amber-600 text-white transition-all duration-200 active:scale-95"
-        >
-          <Zap className="w-3 h-3" />
-          Buy Now
-        </button>
+
       </div>
     </div>
   );

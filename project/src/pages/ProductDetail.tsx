@@ -463,6 +463,23 @@ export default function ProductDetailsPage() {
   const navigate = useNavigate();
   const [quantity, setQuantity] = useState(1);
   const [pincode, setPincode] = useState('');
+  const [deliveryChecked, setDeliveryChecked] = useState(false);
+
+  const handleApplyPincode = () => {
+    if (pincode.trim().length === 6 && /^\d{6}$/.test(pincode.trim())) {
+      setDeliveryChecked(true);
+    } else {
+      setDeliveryChecked(false);
+      alert('Please enter a valid 6-digit pincode.');
+    }
+  };
+
+  // Compute estimated delivery date (3 days from today)
+  const deliveryDate = (() => {
+    const d = new Date();
+    d.setDate(d.getDate() + 3);
+    return d.toLocaleDateString('en-IN', { weekday: 'long', day: 'numeric', month: 'short' });
+  })();
 
   if (!product) {
     return (
@@ -587,7 +604,7 @@ export default function ProductDetailsPage() {
                     }
                   });
                 }}
-                className="bg-white hover:bg-gray-50 text-gray-800 border border-gray-300 font-semibold py-3 px-6 rounded-md transition-colors shadow-sm"
+                className="bg-amber-400 hover:bg-amber-500 text-white font-semibold py-3 px-6 rounded-md transition-colors shadow-sm"
               >
                 {t('product.buyNow')}
               </button>
@@ -597,18 +614,65 @@ export default function ProductDetailsPage() {
             <div className="border-t border-gray-100 pt-6">
               <h3 className="font-semibold text-gray-900 mb-2">{t('product.deliveryLocation')}</h3>
               <p className="text-sm text-gray-600 mb-4">{t('product.deliveryLocationDesc')}</p>
+              {/* Pincode Input Row */}
               <div className="flex">
-                <input 
-                  type="text" 
+                <input
+                  type="text"
                   placeholder={t('product.enterPincode')}
                   value={pincode}
-                  onChange={(e) => setPincode(e.target.value)}
+                  maxLength={6}
+                  onChange={(e) => {
+                    setPincode(e.target.value);
+                    if (deliveryChecked) setDeliveryChecked(false);
+                  }}
+                  onKeyDown={(e) => e.key === 'Enter' && handleApplyPincode()}
                   className="border border-gray-300 rounded-l-md px-4 py-2.5 flex-1 focus:outline-none focus:ring-1 focus:ring-green-500 focus:border-green-500"
                 />
-                <button className="bg-gray-50 border border-l-0 border-gray-300 text-gray-700 font-medium px-6 py-2.5 rounded-r-md hover:bg-gray-100 transition-colors">
+                <button
+                  onClick={handleApplyPincode}
+                  className="bg-gray-50 border border-l-0 border-gray-300 text-gray-700 font-medium px-6 py-2.5 rounded-r-md hover:bg-gray-100 transition-colors"
+                >
                   {t('product.apply')}
                 </button>
               </div>
+
+              {/* Flipkart-style Delivery Info — shown after pincode applied */}
+              {deliveryChecked && (
+                <div className="mt-4 border border-gray-100 rounded-lg overflow-hidden divide-y divide-gray-100">
+                  {/* Option 1 — Free Delivery */}
+                  <div className="flex items-start gap-3 px-4 py-3 bg-white">
+                    <span className="mt-0.5 text-green-600 flex-shrink-0">
+                      <svg xmlns="http://www.w3.org/2000/svg" className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                        <rect x="1" y="3" width="15" height="13" rx="1"/>
+                        <path d="M16 8h4l3 4v4h-7V8z"/>
+                        <circle cx="5.5" cy="18.5" r="2.5"/>
+                        <circle cx="18.5" cy="18.5" r="2.5"/>
+                      </svg>
+                    </span>
+                    <div>
+                      <p className="text-sm font-semibold text-gray-900">
+                        Delivery by <span className="text-green-700">{deliveryDate}</span>
+                        <span className="ml-2 text-green-600 font-bold">Free</span>
+                      </p>
+                      <p className="text-xs text-gray-500 mt-0.5">If ordered before 4 PM today</p>
+                    </div>
+                  </div>
+
+                  {/* Option 2 — Pay on Delivery */}
+                  <div className="flex items-start gap-3 px-4 py-3 bg-white">
+                    <span className="mt-0.5 text-blue-500 flex-shrink-0">
+                      <svg xmlns="http://www.w3.org/2000/svg" className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                        <rect x="2" y="5" width="20" height="14" rx="2"/>
+                        <line x1="2" y1="10" x2="22" y2="10"/>
+                      </svg>
+                    </span>
+                    <div>
+                      <p className="text-sm font-semibold text-gray-900">Pay on Delivery <span className="text-blue-600 font-semibold">Available</span></p>
+                      <p className="text-xs text-gray-500 mt-0.5">Cash / UPI on delivery for this pincode</p>
+                    </div>
+                  </div>
+                </div>
+              )}
             </div>
 
           </div>

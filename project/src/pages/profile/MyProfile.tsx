@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import { Pencil, Save, X, Camera } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 
@@ -69,6 +69,8 @@ export default function MyProfile() {
 
   const [draft, setDraft] = useState<ProfileFormData>(formData);
   const [isEditing, setIsEditing] = useState(false);
+  const [profilePhoto, setProfilePhoto] = useState<string | null>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   const handleEdit = () => {
     setDraft({ ...formData });
@@ -100,11 +102,35 @@ export default function MyProfile() {
                           flex items-center justify-center text-white text-3xl font-bold
                           shadow-md select-none overflow-hidden"
             >
-              {formData.fullName 
-                ? formData.fullName.charAt(0).toUpperCase() 
-                : (formData.email || formData.phone || 'U').charAt(0).toUpperCase()}
+              {profilePhoto ? (
+                <img src={profilePhoto} alt="Profile" className="w-full h-full object-cover" />
+              ) : (
+                formData.fullName
+                  ? formData.fullName.charAt(0).toUpperCase()
+                  : (formData.email || formData.phone || 'U').charAt(0).toUpperCase()
+              )}
             </div>
+            {/* Hidden file input */}
+            <input
+              ref={fileInputRef}
+              type="file"
+              accept="image/*"
+              className="hidden"
+              onChange={(e) => {
+                const file = e.target.files?.[0];
+                if (file) {
+                  const reader = new FileReader();
+                  reader.onload = (ev) => {
+                    setProfilePhoto(ev.target?.result as string);
+                  };
+                  reader.readAsDataURL(file);
+                }
+                // Reset so same file can be re-selected
+                e.target.value = '';
+              }}
+            />
             <button
+              onClick={() => fileInputRef.current?.click()}
               className="absolute bottom-0 right-0 w-6 h-6 bg-white border border-gray-200
                          rounded-full flex items-center justify-center shadow-sm
                          hover:bg-gray-50 transition-colors"
@@ -113,6 +139,7 @@ export default function MyProfile() {
               <Camera className="w-3.5 h-3.5 text-gray-500" />
             </button>
           </div>
+
 
           {/* Info */}
           <div>
