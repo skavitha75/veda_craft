@@ -201,5 +201,38 @@
     "errNoSpeech": "No speech detected. Try again.",
     "errMicUnavailable": "Microphone is unavailable",
     "errUnsupported": "Voice search not supported in this browser"
+  },
+  "profile": {
+    "personalInfo": "Personal Information",
+    "edit": "Edit",
+    "save": "Save",
+    "cancel": "Cancel",
+    "fullName": "Full Name",
+    "email": "Email",
+    "phone": "Phone",
+    "gender": "Gender",
+    "dateOfBirth": "Date of Birth",
+    "location": "Location"
+  },
+  "filter": {
+    "filter": "Filter",
+    "clearAll": "Clear All",
+    "price": "Price",
+    "category": "Category",
+    "features": "Features",
+    "discount": "Discount",
+    "availability": "Availability",
+    "inStock": "In Stock",
+    "outOfStock": "Out of Stock",
+    "filters": "Filters",
+    "sortFeatured": "Sort: Featured",
+    "sortPriceLow": "Price: Low to High",
+    "sortPriceHigh": "Price: High to Low",
+    "sortBestRated": "Best Rated",
+    "showing": "Showing",
+    "products": "products",
+    "noProducts": "No products found",
+    "clearFilters": "Clear filters",
+    "home": "Home"
   }
 }

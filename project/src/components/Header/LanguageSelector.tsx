@@ -12,7 +12,7 @@ const languages = [
 ];
 
 export default function LanguageSelector() {
-  const { i18n } = useTranslation();
+  const { i18n, t } = useTranslation();
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
 
@@ -57,7 +57,7 @@ export default function LanguageSelector() {
           
           <div className="relative bg-white pt-3 pb-2">
             <div className="px-4 pb-2 mb-2 border-b border-gray-100 text-sm font-medium text-gray-700">
-              Change Language
+              {t('header.changeLanguage')}
             </div>
             <ul className="max-h-80 overflow-y-auto">
               {languages.map((lang) => (
