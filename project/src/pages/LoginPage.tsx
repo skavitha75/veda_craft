@@ -4,6 +4,7 @@ import { useNavigate, useSearchParams } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import logoImg from '../assets/products/WhatsApp_Image_2026-06-19_at_11.31.57_AM.jpeg';
 import bgImg from '../assets/products/login_eco_bg.png'; // New eco products collage
+import { supabase } from '../lib/supabase';
 
 type LoginMethod = 'mobile' | 'email';
 type Step = 'input' | 'verify';
@@ -233,7 +234,17 @@ export default function LoginPage() {
               <div className="space-y-3">
                 <button 
                   type="button"
-                  onClick={() => { login('Google User'); navigate(redirect); }}
+                  onClick={async () => { 
+                    const { error } = await supabase.auth.signInWithOAuth({
+                      provider: 'google',
+                      options: {
+                        redirectTo: `${window.location.origin}${redirect}`
+                      }
+                    });
+                    if (error) {
+                      setError(error.message);
+                    }
+                  }}
                   className="w-full flex items-center justify-center gap-3 px-4 py-3 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors text-[13px] font-bold text-gray-800 bg-white"
                 >
                   <svg className="w-5 h-5" viewBox="0 0 24 24">

@@ -1,4 +1,5 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
+import { supabase } from '../lib/supabase';
 
 export interface Address {
   id: string;
@@ -59,6 +60,49 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     return saved ? JSON.parse(saved) : null;
   });
 
+  // Listen to Supabase auth state changes
+  useEffect(() => {
+    // Check active session on mount
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      if (session?.user) {
+        const newUser = {
+          name: session.user.user_metadata?.full_name || session.user.email?.split('@')[0] || 'User',
+          email: session.user.email || '',
+        };
+        setUser(newUser);
+        localStorage.setItem('vc_user', JSON.stringify(newUser));
+        
+        // Setup default mock addresses if empty
+        const savedAddrs = localStorage.getItem('deliveryAddresses');
+        if (!savedAddrs || JSON.parse(savedAddrs).length === 0) {
+          setAddresses(defaultAddresses);
+        }
+      }
+    });
+
+    // Listen for auth events (e.g. successful login)
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
+      if (session?.user) {
+        const newUser = {
+          name: session.user.user_metadata?.full_name || session.user.email?.split('@')[0] || 'User',
+          email: session.user.email || '',
+        };
+        setUser(newUser);
+        localStorage.setItem('vc_user', JSON.stringify(newUser));
+        
+        const savedAddrs = localStorage.getItem('deliveryAddresses');
+        if (!savedAddrs || JSON.parse(savedAddrs).length === 0) {
+          setAddresses(defaultAddresses);
+        }
+      } else {
+        setUser(null);
+        localStorage.removeItem('vc_user');
+      }
+    });
+
+    return () => subscription.unsubscribe();
+  }, []);
+
   // Addresses state
   const [addresses, setAddresses] = useState<Address[]>(() => {
     const saved = localStorage.getItem('deliveryAddresses');
@@ -101,7 +145,8 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     }
   };
 
-  const logout = () => {
+  const logout = async () => {
+    await supabase.auth.signOut();
     setUser(null);
     localStorage.removeItem('vc_user');
     setAddresses([]);
