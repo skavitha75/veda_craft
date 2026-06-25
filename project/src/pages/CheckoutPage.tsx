@@ -60,9 +60,9 @@ export default function CheckoutPage() {
   useEffect(() => {
     const key = STEP_KEYS[currentStep - 1];
     if (key) {
-      setSearchParams({ step: key }, { replace: true });
+      setSearchParams({ step: key }, { replace: true, state: location.state });
     }
-  }, [currentStep, setSearchParams]);
+  }, [currentStep, setSearchParams, location.state]);
 
   // Keep selectedAddressId valid
   useEffect(() => {
