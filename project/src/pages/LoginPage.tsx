@@ -13,7 +13,7 @@ export default function LoginPage() {
   const [method, setMethod] = useState<LoginMethod>('mobile');
   const [step, setStep] = useState<Step>('input');
   const [inputValue, setInputValue] = useState('');
-  const [otp, setOtp] = useState(['', '', '', '']);
+  const [otp, setOtp] = useState(['', '', '', '', '', '']);
   const [error, setError] = useState('');
   
   const { login } = useAuth();
@@ -21,7 +21,7 @@ export default function LoginPage() {
   const [searchParams] = useSearchParams();
   const redirect = searchParams.get('redirect') || '/';
 
-  const handleRequestOtp = (e: React.FormEvent) => {
+  const handleRequestOtp = async (e: React.FormEvent) => {
     e.preventDefault();
     setError('');
     
@@ -37,24 +37,55 @@ export default function LoginPage() {
         setError('Please enter a valid email address.');
         return;
       }
+      
+      const { error: signInError } = await supabase.auth.signInWithOtp({
+        email: inputValue,
+        options: {
+          shouldCreateUser: true,
+        }
+      });
+      
+      if (signInError) {
+        setError(signInError.message);
+        return;
+      }
     }
     
     // Proceed to OTP step
     setStep('verify');
   };
 
-  const handleVerifyOtp = (e: React.FormEvent) => {
+  const handleVerifyOtp = async (e: React.FormEvent) => {
     e.preventDefault();
     setError('');
     const code = otp.join('');
-    if (code.length !== 4) {
-      setError('Please enter a valid 4-digit OTP.');
-      return;
-    }
     
-    // Success: Mock login with inputValue
-    login(inputValue);
-    navigate(redirect);
+    if (method === 'email') {
+      if (code.length !== 6) {
+        setError('Please enter a valid 6-digit OTP.');
+        return;
+      }
+      
+      const { error: verifyError } = await supabase.auth.verifyOtp({
+        email: inputValue,
+        token: code,
+        type: 'email'
+      });
+      
+      if (verifyError) {
+        setError(verifyError.message);
+        return;
+      }
+      navigate(redirect);
+    } else {
+      if (code.length !== 6 && code.length !== 4) {
+        setError('Please enter a valid OTP.');
+        return;
+      }
+      // Success: Mock login with inputValue for mobile
+      login(inputValue);
+      navigate(redirect);
+    }
   };
 
   const handleOtpChange = (index: number, value: string) => {
@@ -63,7 +94,7 @@ export default function LoginPage() {
     newOtp[index] = value;
     setOtp(newOtp);
     
-    if (value && index < 3) {
+    if (value && index < 5) {
       const nextInput = document.getElementById(`otp-${index + 1}`);
       if (nextInput) nextInput.focus();
     }
