@@ -20,8 +20,13 @@ export interface SelectedLocation {
 }
 
 interface User {
+  id: string;
   name: string;
   email: string;
+  phone_number?: string;
+  gender?: string;
+  dob?: string;
+  is_profile_complete: boolean;
 }
 
 interface AuthContextType {
@@ -60,40 +65,60 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     return saved ? JSON.parse(saved) : null;
   });
 
+  const fetchProfile = async (sessionUser: any) => {
+    try {
+      const { data } = await supabase
+        .from('profiles')
+        .select('*')
+        .eq('id', sessionUser.id)
+        .single();
+        
+      if (data) {
+        const fullUser: User = {
+          id: sessionUser.id,
+          name: data.full_name || sessionUser.user_metadata?.full_name || sessionUser.email?.split('@')[0] || 'User',
+          email: sessionUser.email || '',
+          phone_number: data.phone_number || '',
+          gender: data.gender || '',
+          dob: data.dob || '',
+          is_profile_complete: data.is_profile_complete || false,
+        };
+        setUser(fullUser);
+        localStorage.setItem('vc_user', JSON.stringify(fullUser));
+      } else {
+        // Fallback if profile doesn't exist yet (e.g. trigger hasn't fired or failed)
+        const partialUser: User = {
+          id: sessionUser.id,
+          name: sessionUser.user_metadata?.full_name || sessionUser.email?.split('@')[0] || 'User',
+          email: sessionUser.email || '',
+          is_profile_complete: false,
+        };
+        setUser(partialUser);
+        localStorage.setItem('vc_user', JSON.stringify(partialUser));
+      }
+      
+      const savedAddrs = localStorage.getItem('deliveryAddresses');
+      if (!savedAddrs || JSON.parse(savedAddrs).length === 0) {
+        setAddresses(defaultAddresses);
+      }
+    } catch (err) {
+      console.error("Error fetching profile:", err);
+    }
+  };
+
   // Listen to Supabase auth state changes
   useEffect(() => {
     // Check active session on mount
     supabase.auth.getSession().then(({ data: { session } }) => {
       if (session?.user) {
-        const newUser = {
-          name: session.user.user_metadata?.full_name || session.user.email?.split('@')[0] || 'User',
-          email: session.user.email || '',
-        };
-        setUser(newUser);
-        localStorage.setItem('vc_user', JSON.stringify(newUser));
-        
-        // Setup default mock addresses if empty
-        const savedAddrs = localStorage.getItem('deliveryAddresses');
-        if (!savedAddrs || JSON.parse(savedAddrs).length === 0) {
-          setAddresses(defaultAddresses);
-        }
+        fetchProfile(session.user);
       }
     });
 
     // Listen for auth events (e.g. successful login)
     const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
       if (session?.user) {
-        const newUser = {
-          name: session.user.user_metadata?.full_name || session.user.email?.split('@')[0] || 'User',
-          email: session.user.email || '',
-        };
-        setUser(newUser);
-        localStorage.setItem('vc_user', JSON.stringify(newUser));
-        
-        const savedAddrs = localStorage.getItem('deliveryAddresses');
-        if (!savedAddrs || JSON.parse(savedAddrs).length === 0) {
-          setAddresses(defaultAddresses);
-        }
+        fetchProfile(session.user);
       } else {
         setUser(null);
         localStorage.removeItem('vc_user');
@@ -131,10 +156,15 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     localStorage.setItem('deliveryAddresses', JSON.stringify(addresses));
   }, [addresses]);
 
-  // Sync user state
+  // Keep login for mock functionality, but recommend using Supabase auth directly
   const login = (email: string, name?: string) => {
     const defaultName = name || email.split('@')[0];
-    const newUser = { name: defaultName, email };
+    const newUser: User = { 
+      id: `mock-${Date.now()}`,
+      name: defaultName, 
+      email, 
+      is_profile_complete: false 
+    };
     setUser(newUser);
     localStorage.setItem('vc_user', JSON.stringify(newUser));
 

@@ -21,6 +21,8 @@ import Notifications from './pages/profile/Notifications';
 import AddressPage from './pages/profile/AddressPage';
 import HelpSupport from './pages/profile/HelpSupport';
 import ProtectedRoute from './components/ProtectedRoute';
+import ProfileGuard from './components/ProfileGuard';
+import ProfileCompletion from './pages/ProfileCompletion';
 
 import { CartProvider } from './context/CartContext';
 import { WishlistProvider } from './context/WishlistContext';
@@ -38,34 +40,43 @@ function App() {
             <Navbar />
             <div className="flex-1">
               <Routes>
-                <Route path="/" element={<Home />} />
-                <Route path="/eco" element={<EcoPage />} />
-                <Route path="/wellness" element={<WellnessPage />} />
-                <Route path="/food" element={<FoodPage />} />
-                <Route path="/craft" element={<CraftPage />} />
-                <Route path="/fashion" element={<FashionPage />} />
-                <Route path="/decor" element={<DecorItemsPage />} />
-                <Route path="/product/:id" element={<ProductDetail />} />
-                <Route path="/wishlist" element={<WishlistPage />} />
-                <Route path="/checkout" element={<CheckoutPage />} />
                 <Route path="/login" element={<LoginPage />} />
-                <Route path="/search" element={<SearchResultsPage />} />
+                <Route path="/profile-completion" element={<ProfileCompletion />} />
+                
+                {/* All main app routes are protected by ProfileGuard */}
+                <Route path="/*" element={
+                  <ProfileGuard>
+                    <Routes>
+                      <Route path="/" element={<Home />} />
+                      <Route path="/eco" element={<EcoPage />} />
+                      <Route path="/wellness" element={<WellnessPage />} />
+                      <Route path="/food" element={<FoodPage />} />
+                      <Route path="/craft" element={<CraftPage />} />
+                      <Route path="/fashion" element={<FashionPage />} />
+                      <Route path="/decor" element={<DecorItemsPage />} />
+                      <Route path="/product/:id" element={<ProductDetail />} />
+                      <Route path="/wishlist" element={<WishlistPage />} />
+                      <Route path="/checkout" element={<CheckoutPage />} />
+                      <Route path="/search" element={<SearchResultsPage />} />
 
-                {/* Profile routes - protected */}
-                <Route
-                  path="/profile"
-                  element={
-                    <ProtectedRoute>
-                      <ProfilePage />
-                    </ProtectedRoute>
-                  }
-                >
-                  <Route index element={<MyProfile />} />
-                  <Route path="orders" element={<MyOrders />} />
-                  <Route path="notifications" element={<Notifications />} />
-                  <Route path="address" element={<AddressPage />} />
-                  <Route path="help" element={<HelpSupport />} />
-                </Route>
+                      {/* Profile routes - additionally protected by ProtectedRoute */}
+                      <Route
+                        path="/profile"
+                        element={
+                          <ProtectedRoute>
+                            <ProfilePage />
+                          </ProtectedRoute>
+                        }
+                      >
+                        <Route index element={<MyProfile />} />
+                        <Route path="orders" element={<MyOrders />} />
+                        <Route path="notifications" element={<Notifications />} />
+                        <Route path="address" element={<AddressPage />} />
+                        <Route path="help" element={<HelpSupport />} />
+                      </Route>
+                    </Routes>
+                  </ProfileGuard>
+                } />
               </Routes>
             </div>
             <Footer />
