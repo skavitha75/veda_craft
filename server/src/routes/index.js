@@ -8,15 +8,18 @@
 import { Router } from 'express';
 import healthRouter from './health.js';
 import authRouter from './auth.js';
+import addressRouter from './addressRoutes.js';
+import productRouter from './productRoutes.js';
 
 const router = Router();
 
 // ─── Core Routes ─────────────────────────────────────────────────────────────
 router.use('/health', healthRouter);
 router.use('/auth', authRouter);
+router.use('/addresses', addressRouter);
+router.use('/products', productRouter);
 
 // ─── Future Feature Routes (add here when ready) ─────────────────────────────
-// router.use('/products',  productsRouter);
 // router.use('/categories', categoriesRouter);
 // router.use('/cart',      cartRouter);
 // router.use('/wishlist',  wishlistRouter);

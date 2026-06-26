@@ -1,8 +1,27 @@
+import { useState } from 'react';
 import { MapPin, Plus, Home, Briefcase, Trash2 } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
+import AddAddressDrawer from '../../components/Checkout/AddAddressDrawer';
+import type { Address } from '../../components/Checkout/AddAddressDrawer';
 
 export default function AddressPage() {
-  const { addresses } = useAuth();
+  const { addresses, addAddress, deleteAddress, updateLocation } = useAuth();
+  const [isAddressDrawerOpen, setIsAddressDrawerOpen] = useState(false);
+
+  const handleSaveAddress = async (newAddress: Address) => {
+    try {
+      const { id, ...addressDataToSave } = newAddress;
+      const created = await addAddress(addressDataToSave);
+      updateLocation({
+        type: 'address',
+        value: created.id,
+        text: `${created.city} - ${created.pincode}`,
+      });
+      setIsAddressDrawerOpen(false);
+    } catch (error) {
+      console.error('Failed to add address:', error);
+    }
+  };
 
   return (
     <div className="flex flex-col gap-4">
@@ -13,6 +32,7 @@ export default function AddressPage() {
             <h3 className="text-base font-semibold text-gray-900">Saved Addresses</h3>
           </div>
           <button
+            onClick={() => setIsAddressDrawerOpen(true)}
             className="flex items-center gap-1.5 px-4 py-1.5 rounded-md border border-[#2d6a2d]
                        text-[#2d6a2d] text-sm font-medium hover:bg-[#f0f5ec] transition-colors"
           >
@@ -56,7 +76,10 @@ export default function AddressPage() {
                   </p>
                   <p className="text-xs text-gray-400 mt-0.5">📞 {addr.phoneNumber}</p>
                 </div>
-                <button className="p-1.5 text-gray-400 hover:text-red-500 transition-colors">
+                <button 
+                  onClick={() => deleteAddress(addr.id)}
+                  className="p-1.5 text-gray-400 hover:text-red-500 transition-colors"
+                >
                   <Trash2 className="w-4 h-4" />
                 </button>
               </div>
@@ -64,6 +87,11 @@ export default function AddressPage() {
           </div>
         )}
       </div>
+      <AddAddressDrawer
+        isOpen={isAddressDrawerOpen}
+        onClose={() => setIsAddressDrawerOpen(false)}
+        onSave={handleSaveAddress}
+      />
     </div>
   );
 }

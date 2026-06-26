@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { ArrowLeft } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 
@@ -18,23 +18,39 @@ interface AddAddressDrawerProps {
   isOpen: boolean;
   onClose: () => void;
   onSave: (address: Address) => void;
+  initialAddress?: Address | null;
 }
 
-export default function AddAddressDrawer({ isOpen, onClose, onSave }: AddAddressDrawerProps) {
+const emptyAddressForm: Omit<Address, 'id'> = {
+  fullName: '',
+  phoneNumber: '',
+  address: '',
+  city: '',
+  state: '',
+  pincode: '',
+  landmark: '',
+  addressType: 'Home',
+};
+
+export default function AddAddressDrawer({ isOpen, onClose, onSave, initialAddress }: AddAddressDrawerProps) {
   const { t } = useTranslation();
 
-  const [formData, setFormData] = useState<Omit<Address, 'id'>>({
-    fullName: '',
-    phoneNumber: '',
-    address: '',
-    city: '',
-    state: '',
-    pincode: '',
-    landmark: '',
-    addressType: 'Home',
-  });
+  const [formData, setFormData] = useState<Omit<Address, 'id'>>(emptyAddressForm);
 
   const [errors, setErrors] = useState<Partial<Record<keyof Address, string>>>({});
+
+  useEffect(() => {
+    if (!isOpen) return;
+
+    if (initialAddress) {
+      const { id, ...addressData } = initialAddress;
+      setFormData(addressData);
+    } else {
+      setFormData(emptyAddressForm);
+    }
+
+    setErrors({});
+  }, [initialAddress, isOpen]);
 
   if (!isOpen) return null;
 
@@ -56,19 +72,10 @@ export default function AddAddressDrawer({ isOpen, onClose, onSave }: AddAddress
     if (validateForm()) {
       onSave({
         ...formData,
-        id: Date.now().toString(),
+        id: initialAddress?.id || Date.now().toString(),
       });
       // Reset form
-      setFormData({
-        fullName: '',
-        phoneNumber: '',
-        address: '',
-        city: '',
-        state: '',
-        pincode: '',
-        landmark: '',
-        addressType: 'Home',
-      });
+      setFormData(emptyAddressForm);
       setErrors({});
     }
   };
@@ -101,7 +108,9 @@ export default function AddAddressDrawer({ isOpen, onClose, onSave }: AddAddress
           >
             <ArrowLeft className="w-5 h-5" />
           </button>
-          <h2 className="text-xl font-medium text-gray-900">{t('address.title')}</h2>
+          <h2 className="text-xl font-medium text-gray-900">
+            {initialAddress ? 'Edit Address' : t('address.title')}
+          </h2>
         </div>
 
         {/* Form Content */}

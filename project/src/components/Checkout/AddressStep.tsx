@@ -1,4 +1,4 @@
-import { MapPin, Plus } from 'lucide-react';
+import { Edit2, MapPin, Plus, Trash2 } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { useAuth } from '../../context/AuthContext';
 import type { Address } from '../../context/AuthContext';
@@ -7,6 +7,8 @@ interface AddressStepProps {
   selectedAddressId: string;
   onSelectAddress: (id: string) => void;
   onAddAddress: () => void;
+  onEditAddress: (address: Address) => void;
+  onDeleteAddress: (id: string) => void;
   onContinue: () => void;
 }
 
@@ -14,6 +16,8 @@ export default function AddressStep({
   selectedAddressId,
   onSelectAddress,
   onAddAddress,
+  onEditAddress,
+  onDeleteAddress,
   onContinue,
 }: AddressStepProps) {
   const { t } = useTranslation();
@@ -54,8 +58,9 @@ export default function AddressStep({
         ) : (
           <div className="space-y-3">
             {addresses.map((addr: Address) => (
-              <label
+              <div
                 key={addr.id}
+                onClick={() => onSelectAddress(addr.id)}
                 className={`flex gap-4 p-4 border rounded cursor-pointer transition-all duration-200 ${
                   selectedAddressId === addr.id
                     ? 'border-green-500 bg-green-50/40 shadow-sm shadow-green-100'
@@ -90,7 +95,33 @@ export default function AddressStep({
                     {t('checkout.mobile')} {addr.phoneNumber}
                   </p>
                 </div>
-              </label>
+                <div className="flex flex-col gap-2 justify-center pl-2">
+                  <button
+                    type="button"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      onEditAddress(addr);
+                    }}
+                    className="p-2 text-gray-400 hover:text-green-600 hover:bg-white rounded transition-colors"
+                    aria-label="Edit address"
+                    title="Edit address"
+                  >
+                    <Edit2 className="w-4 h-4" />
+                  </button>
+                  <button
+                    type="button"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      onDeleteAddress(addr.id);
+                    }}
+                    className="p-2 text-gray-400 hover:text-red-500 hover:bg-white rounded transition-colors"
+                    aria-label="Delete address"
+                    title="Delete address"
+                  >
+                    <Trash2 className="w-4 h-4" />
+                  </button>
+                </div>
+              </div>
             ))}
           </div>
         )}

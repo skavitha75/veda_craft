@@ -1,7 +1,7 @@
-import { useState, useMemo } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { Star, ShoppingCart, Heart, SlidersHorizontal, ChevronDown, ChevronUp, X } from 'lucide-react';
 import { Link } from 'react-router-dom';
-import { Product } from '../../data/products';
+import { getProducts, type Product } from '../../services/productApi';
 import { useCart } from '../../context/CartContext';
 import { useWishlist } from '../../context/WishlistContext';
 
@@ -146,7 +146,8 @@ export interface CategoryPageLayoutProps {
   heroGradient: string;
   icon: React.ElementType;
   badgeColorClass: string;
-  products: Product[];
+  products?: Product[];
+  apiCategory?: string;
   categories: string[];
   features: string[];
   discounts: string[];
@@ -156,11 +157,14 @@ export default function CategoryPageLayout({
   title,
   icon: Icon,
   badgeColorClass,
-  products,
+  products: initialProducts,
+  apiCategory,
   categories,
   features,
   discounts,
 }: CategoryPageLayoutProps) {
+  const [products, setProducts] = useState<Product[]>(initialProducts || []);
+  const [isLoading, setIsLoading] = useState(!initialProducts);
   const [filters, setFilters] = useState<Filters>({
     categories: [],
     features: [],
@@ -171,6 +175,41 @@ export default function CategoryPageLayout({
   });
   const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false);
   const [sortBy, setSortBy] = useState<'featured' | 'price-asc' | 'price-desc' | 'best-rated'>('featured');
+
+  useEffect(() => {
+    if (initialProducts) {
+      setProducts(initialProducts);
+      setIsLoading(false);
+      return;
+    }
+
+    let mounted = true;
+
+    const loadProducts = async () => {
+      try {
+        setIsLoading(true);
+        const { products: fetchedProducts } = await getProducts({
+          category: apiCategory || title,
+          limit: 100,
+          sortBy: 'created_at',
+          sortOrder: 'desc',
+        });
+
+        if (mounted) setProducts(fetchedProducts);
+      } catch (error) {
+        console.error('Failed to load category products:', error);
+        if (mounted) setProducts([]);
+      } finally {
+        if (mounted) setIsLoading(false);
+      }
+    };
+
+    loadProducts();
+
+    return () => {
+      mounted = false;
+    };
+  }, [apiCategory, initialProducts, title]);
 
   const toggleFilter = (key: keyof Pick<Filters, 'categories' | 'features' | 'discounts'>, item: string) => {
     setFilters((f) => ({
@@ -368,7 +407,11 @@ export default function CategoryPageLayout({
             </select>
           </div>
 
-          {filteredProducts.length === 0 ? (
+          {isLoading ? (
+            <div className="flex flex-col items-center justify-center py-24 text-gray-400">
+              <p className="text-base font-medium">Loading products...</p>
+            </div>
+          ) : filteredProducts.length === 0 ? (
             <div className="flex flex-col items-center justify-center py-24 text-gray-400">
               <Icon className="w-12 h-12 mb-3 text-gray-300" />
               <p className="text-base font-medium">No products found</p>

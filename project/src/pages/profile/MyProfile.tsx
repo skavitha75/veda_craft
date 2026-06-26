@@ -1,6 +1,7 @@
-import { useState, useRef } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { Pencil, Save, X, Camera } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
+import { supabase } from '../../lib/supabase';
 
 interface ProfileFormData {
   fullName: string;
@@ -64,22 +65,114 @@ export default function MyProfile() {
     ...initialProfileData,
     fullName: user?.name && user.name !== user?.email && !user.name.includes('@') ? user.name : '',
     email: isEmail ? user?.email || '' : '',
-    phone: !isEmail ? user?.email || '' : '',
+    phone: user?.phone_number || (!isEmail ? user?.email || '' : ''),
+    gender: user?.gender || '',
+    dateOfBirth: user?.dob || '',
   });
 
   const [draft, setDraft] = useState<ProfileFormData>(formData);
   const [isEditing, setIsEditing] = useState(false);
-  const [profilePhoto, setProfilePhoto] = useState<string | null>(null);
+  const [profilePhoto, setProfilePhoto] = useState<string | null>(user?.avatar_url || null);
+  const [avatarFile, setAvatarFile] = useState<File | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
+
+  // Sync state if user context updates after component mount
+  useEffect(() => {
+    if (user) {
+      const isEmail = user?.email?.includes('@');
+      const newFormData = {
+        fullName: user?.name && user.name !== user?.email && !user.name.includes('@') ? user.name : '',
+        email: isEmail ? user?.email || '' : '',
+        phone: user?.phone_number || (!isEmail ? user?.email || '' : ''),
+        gender: user?.gender || '',
+        dateOfBirth: user?.dob || '',
+        location: formData.location || '',
+      };
+      setFormData(newFormData);
+      setDraft(newFormData);
+      setProfilePhoto(user?.avatar_url || null);
+    }
+  }, [user]);
 
   const handleEdit = () => {
     setDraft({ ...formData });
     setIsEditing(true);
   };
 
-  const handleSave = () => {
+  const handleSave = async () => {
+    if (user) {
+      try {
+        const { error } = await supabase.from('profiles').upsert({
+          id: user.id,
+          full_name: draft.fullName,
+          phone_number: draft.phone,
+          gender: draft.gender,
+          dob: draft.dateOfBirth,
+          avatar_url: profilePhoto, // Preserve existing avatar URL
+          updated_at: new Date().toISOString()
+        });
+        if (error) throw error;
+        
+        const saved = localStorage.getItem('vc_user');
+        if (saved) {
+           const parsed = JSON.parse(saved);
+           parsed.name = draft.fullName;
+           parsed.phone_number = draft.phone;
+           parsed.gender = draft.gender;
+           parsed.dob = draft.dateOfBirth;
+           localStorage.setItem('vc_user', JSON.stringify(parsed));
+        }
+      } catch (err) {
+        console.error("Error updating profile", err);
+      }
+    }
+    
     setFormData({ ...draft });
     setIsEditing(false);
+  };
+
+  const handleAvatarUpload = async (file: File) => {
+    if (!user) return;
+    try {
+      const fileExt = file.name.split('.').pop();
+      const fileName = `${user.id}-${Math.random()}.${fileExt}`;
+
+      const { error: uploadError } = await supabase.storage
+        .from('avatars')
+        .upload(fileName, file, { upsert: true });
+
+      if (uploadError) {
+        alert("Upload failed. Make sure 'avatars' bucket is public and allows INSERT.");
+        throw uploadError;
+      }
+
+      const { data: { publicUrl } } = supabase.storage
+        .from('avatars')
+        .getPublicUrl(fileName);
+
+      // Save to database
+      const { error: dbError } = await supabase.from('profiles').upsert({
+        id: user.id,
+        avatar_url: publicUrl,
+        updated_at: new Date().toISOString()
+      });
+
+      if (dbError) throw dbError;
+
+      setProfilePhoto(publicUrl);
+
+      // Update local storage
+      const saved = localStorage.getItem('vc_user');
+      if (saved) {
+         const parsed = JSON.parse(saved);
+         parsed.avatar_url = publicUrl;
+         localStorage.setItem('vc_user', JSON.stringify(parsed));
+      }
+      
+      alert("Profile picture updated successfully!");
+    } catch (err) {
+      console.error("Error uploading avatar", err);
+    }
   };
 
   const handleCancel = () => {
@@ -119,11 +212,14 @@ export default function MyProfile() {
               onChange={(e) => {
                 const file = e.target.files?.[0];
                 if (file) {
+                  // Show preview immediately
                   const reader = new FileReader();
                   reader.onload = (ev) => {
                     setProfilePhoto(ev.target?.result as string);
                   };
                   reader.readAsDataURL(file);
+                  // Trigger upload
+                  handleAvatarUpload(file);
                 }
                 // Reset so same file can be re-selected
                 e.target.value = '';

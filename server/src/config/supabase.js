@@ -40,6 +40,25 @@ export const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY, {
 });
 
 /**
+ * Creates a Supabase client scoped to a specific user's JWT.
+ * Use this in backend services to execute queries as the authenticated user,
+ * ensuring Row Level Security (RLS) policies are properly evaluated.
+ */
+export const createScopedClient = (token) => {
+  return createClient(SUPABASE_URL, SUPABASE_ANON_KEY, {
+    auth: {
+      autoRefreshToken: false,
+      persistSession: false,
+    },
+    global: {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    },
+  });
+};
+
+/**
  * Admin client — uses service role key, bypasses Row Level Security (RLS).
  * Use ONLY for server-side administrative operations.
  */

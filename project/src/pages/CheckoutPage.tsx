@@ -17,7 +17,14 @@ const STEP_KEYS = ['address', 'summary', 'payment'] as const;
 export default function CheckoutPage() {
   const { items } = useCart();
   const { t } = useTranslation();
-  const { addresses, addAddress, selectedLocation, updateLocation } = useAuth();
+  const {
+    addresses,
+    addAddress,
+    updateAddress,
+    deleteAddress,
+    selectedLocation,
+    updateLocation,
+  } = useAuth();
   const [searchParams, setSearchParams] = useSearchParams();
   const location = useLocation();
 
@@ -52,6 +59,7 @@ export default function CheckoutPage() {
 
   // Address drawer
   const [isAddressDrawerOpen, setIsAddressDrawerOpen] = useState(false);
+  const [editingAddress, setEditingAddress] = useState<Address | null>(null);
 
   // Order placed state
   const [orderPlaced, setOrderPlaced] = useState(false);
@@ -76,15 +84,73 @@ export default function CheckoutPage() {
 
   const selectedAddress = addresses.find((a) => a.id === selectedAddressId);
 
-  const handleSaveAddress = (newAddress: Omit<Address, 'id'>) => {
-    const created = addAddress(newAddress);
-    setSelectedAddressId(created.id);
-    updateLocation({
-      type: 'address',
-      value: created.id,
-      text: `${created.city} - ${created.pincode}`,
-    });
+  const handleOpenAddAddress = () => {
+    setEditingAddress(null);
+    setIsAddressDrawerOpen(true);
+  };
+
+  const handleOpenEditAddress = (address: Address) => {
+    setEditingAddress(address);
+    setIsAddressDrawerOpen(true);
+  };
+
+  const handleCloseAddressDrawer = () => {
     setIsAddressDrawerOpen(false);
+    setEditingAddress(null);
+  };
+
+  const handleSaveAddress = async (newAddress: Address) => {
+    try {
+      if (editingAddress) {
+        await updateAddress(newAddress);
+        setSelectedAddressId(newAddress.id);
+        updateLocation({
+          type: 'address',
+          value: newAddress.id,
+          text: `${newAddress.city} - ${newAddress.pincode}`,
+        });
+        handleCloseAddressDrawer();
+        return;
+      }
+
+      const { id, ...addressDataToSave } = newAddress;
+      const created = await addAddress(addressDataToSave);
+      updateLocation({
+        type: 'address',
+        value: created.id,
+        text: `${created.city} - ${created.pincode}`,
+      });
+      setSelectedAddressId(created.id);
+      handleCloseAddressDrawer();
+    } catch (e) {
+      console.error("Failed to save address", e);
+    }
+  };
+
+  const handleDeleteAddress = async (id: string) => {
+    const shouldDelete = window.confirm('Delete this address?');
+    if (!shouldDelete) return;
+
+    try {
+      await deleteAddress(id);
+
+      if (selectedAddressId === id) {
+        const nextAddress = addresses.find((address) => address.id !== id);
+        if (nextAddress) {
+          setSelectedAddressId(nextAddress.id);
+          updateLocation({
+            type: 'address',
+            value: nextAddress.id,
+            text: `${nextAddress.city} - ${nextAddress.pincode}`,
+          });
+        } else {
+          setSelectedAddressId('');
+          updateLocation({ type: 'pincode', value: '627002', text: 'Tirunelveli - 627002' });
+        }
+      }
+    } catch (e) {
+      console.error("Failed to delete address", e);
+    }
   };
 
   const handleSelectAddress = (id: string) => {
@@ -207,7 +273,9 @@ export default function CheckoutPage() {
               <AddressStep
                 selectedAddressId={selectedAddressId}
                 onSelectAddress={handleSelectAddress}
-                onAddAddress={() => setIsAddressDrawerOpen(true)}
+                onAddAddress={handleOpenAddAddress}
+                onEditAddress={handleOpenEditAddress}
+                onDeleteAddress={handleDeleteAddress}
                 onContinue={() => goToStep(2)}
               />
             )}
@@ -250,8 +318,9 @@ export default function CheckoutPage() {
       {/* Address Drawer */}
       <AddAddressDrawer
         isOpen={isAddressDrawerOpen}
-        onClose={() => setIsAddressDrawerOpen(false)}
+        onClose={handleCloseAddressDrawer}
         onSave={handleSaveAddress}
+        initialAddress={editingAddress}
       />
     </div>
   );

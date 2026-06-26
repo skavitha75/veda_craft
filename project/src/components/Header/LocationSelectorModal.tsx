@@ -31,6 +31,8 @@ export default function LocationSelectorModal({ isOpen, onClose }: LocationSelec
   const [isAdding, setIsAdding] = useState(false);
   const [editAddressData, setEditAddressData] = useState<Partial<Address>>({});
   const [addressErrors, setAddressErrors] = useState<Partial<Record<keyof Address, string>>>({});
+  const [saveError, setSaveError] = useState('');
+  const [isSavingAddress, setIsSavingAddress] = useState(false);
 
   if (!isOpen) return null;
 
@@ -121,8 +123,12 @@ export default function LocationSelectorModal({ isOpen, onClose }: LocationSelec
     onClose();
   };
 
-  const handleSaveAddress = (e: React.FormEvent) => {
+  const handleSaveAddress = async (e: React.FormEvent) => {
     e.preventDefault();
+    setSaveError('');
+
+    if (isSavingAddress) return;
+
     const errors: Partial<Record<keyof Address, string>> = {};
     if (!editAddressData.fullName?.trim()) errors.fullName = 'Full Name is required';
     if (!editAddressData.phoneNumber?.trim()) errors.phoneNumber = 'Phone Number is required';
@@ -149,37 +155,54 @@ export default function LocationSelectorModal({ isOpen, onClose }: LocationSelec
       addressType: editAddressData.addressType || 'Home',
     };
 
-    if (isEditing && editAddressData.id) {
-      updateAddress({
-        ...finalAddr,
-        id: editAddressData.id,
-      });
-    } else {
-      const created = addAddress(finalAddr);
-      // Auto select the new address
-      updateLocation({
-        type: 'address',
-        value: created.id,
-        text: `${created.city} - ${created.pincode}`
-      });
-    }
+    setIsSavingAddress(true);
 
-    setIsEditing(false);
-    setIsAdding(false);
-    setEditAddressData({});
-    setAddressErrors({});
+    try {
+      if (isEditing && editAddressData.id) {
+        await updateAddress({
+          ...finalAddr,
+          id: editAddressData.id,
+        });
+
+        updateLocation({
+          type: 'address',
+          value: editAddressData.id,
+          text: `${finalAddr.city} - ${finalAddr.pincode}`
+        });
+      } else {
+        const created = await addAddress(finalAddr);
+        // Auto select the new address
+        updateLocation({
+          type: 'address',
+          value: created.id,
+          text: `${created.city} - ${created.pincode}`
+        });
+      }
+
+      setIsEditing(false);
+      setIsAdding(false);
+      setEditAddressData({});
+      setAddressErrors({});
+    } catch (error) {
+      console.error('Failed to save address:', error);
+      setSaveError(error instanceof Error ? error.message : 'Failed to save address');
+    } finally {
+      setIsSavingAddress(false);
+    }
   };
 
   const startEditAddress = (addr: Address) => {
     setEditAddressData(addr);
     setIsEditing(true);
     setIsAdding(false);
+    setSaveError('');
   };
 
   const startAddAddress = () => {
     setEditAddressData({ addressType: 'Home' });
     setIsAdding(true);
     setIsEditing(false);
+    setSaveError('');
   };
 
   return (
@@ -317,18 +340,23 @@ export default function LocationSelectorModal({ isOpen, onClose }: LocationSelec
                   onClick={() => {
                     setIsAdding(false);
                     setIsEditing(false);
+                    setSaveError('');
                   }}
+                  disabled={isSavingAddress}
                   className="flex-1 py-2 border border-gray-300 rounded text-sm text-gray-700 hover:bg-gray-50 transition-colors"
                 >
                   Cancel
                 </button>
                 <button 
                   type="submit" 
-                  className="flex-1 py-2 bg-[#f5b027] hover:bg-[#e09e20] text-white font-bold rounded text-sm transition-colors"
+                  disabled={isSavingAddress}
+                  className="flex-1 py-2 bg-[#f5b027] hover:bg-[#e09e20] disabled:bg-gray-300 disabled:cursor-not-allowed text-white font-bold rounded text-sm transition-colors flex items-center justify-center gap-2"
                 >
-                  Save Address
+                  {isSavingAddress && <Loader2 className="w-4 h-4 animate-spin" />}
+                  {isSavingAddress ? 'Saving...' : 'Save Address'}
                 </button>
               </div>
+              {saveError && <p className="text-red-500 text-xs">{saveError}</p>}
             </form>
           ) : (
             <>

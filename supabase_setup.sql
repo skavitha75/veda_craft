@@ -21,6 +21,43 @@ create policy "Users can insert their own profile." on public.profiles
 create policy "Users can update own profile." on public.profiles
   for update using (auth.uid() = id);
 
+-- Create a table for saved delivery addresses
+create table if not exists public.addresses (
+  id uuid default gen_random_uuid() primary key,
+  user_id uuid references auth.users(id) on delete cascade not null,
+  full_name text not null,
+  phone_number text not null,
+  address text not null,
+  city text not null,
+  state text not null,
+  pincode text not null,
+  landmark text,
+  address_type text not null default 'Home' check (address_type in ('Home', 'Work')),
+  is_default boolean default false,
+  created_at timestamp with time zone default timezone('utc'::text, now()),
+  updated_at timestamp with time zone default timezone('utc'::text, now())
+);
+
+-- Set up Row Level Security (RLS)
+alter table public.addresses enable row level security;
+
+drop policy if exists "Users can view own addresses." on public.addresses;
+drop policy if exists "Users can insert own addresses." on public.addresses;
+drop policy if exists "Users can update own addresses." on public.addresses;
+drop policy if exists "Users can delete own addresses." on public.addresses;
+
+create policy "Users can view own addresses." on public.addresses
+  for select using (auth.uid() = user_id);
+
+create policy "Users can insert own addresses." on public.addresses
+  for insert with check (auth.uid() = user_id);
+
+create policy "Users can update own addresses." on public.addresses
+  for update using (auth.uid() = user_id) with check (auth.uid() = user_id);
+
+create policy "Users can delete own addresses." on public.addresses
+  for delete using (auth.uid() = user_id);
+
 -- Function to handle new user signup
 create or replace function public.handle_new_user()
 returns trigger as $$

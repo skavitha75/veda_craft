@@ -1,5 +1,5 @@
 import { Heart } from 'lucide-react';
-import { Product } from '../../data/products';
+import { Product } from '../../services/productApi';
 import { useWishlist } from '../../context/WishlistContext';
 
 interface WishlistButtonProps {
