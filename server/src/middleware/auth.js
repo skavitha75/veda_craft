@@ -14,7 +14,6 @@
  */
 
 import { supabase } from '../config/supabase.js';
-import { ensureUserProfile } from '../services/profileService.js';
 
 /**
  * Strict authentication — rejects the request if no valid token is provided.
@@ -45,8 +44,6 @@ export const authenticate = async (req, res, next) => {
 
     // Attach the authenticated user to the request object
     req.user = data.user;
-    req.accessToken = token;
-    req.profile = await ensureUserProfile(data.user);
 
     return next();
   } catch (err) {
@@ -71,8 +68,6 @@ export const optionalAuth = async (req, res, next) => {
     const { data } = await supabase.auth.getUser(token);
 
     req.user = data?.user ?? null;
-    req.accessToken = req.user ? token : null;
-    req.profile = req.user ? await ensureUserProfile(req.user) : null;
 
     return next();
   } catch {
