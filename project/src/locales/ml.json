@@ -186,6 +186,11 @@
     "event": "ഇവന്റ്",
     "whoCanJoin": "ആർക്ക് ചേരാം",
     "community": "കമ്മ്യൂണിറ്റി",
+    "customerPolicy": "ഉപഭോക്തൃ നയം",
+    "cancellationReturns": "റദ്ദാക്കൽ & റിട്ടേൺസ്",
+    "security": "സുരക്ഷ",
+    "privacy": "സ്വകാര്യത",
+    "termsConditions": "നിബന്ധനകളും വ്യവസ്ഥകളും",
     "allRightsReserved": "എല്ലാ അവകാശങ്ങളും നിക്ഷിപ്തം."
   },
   "productCard": {

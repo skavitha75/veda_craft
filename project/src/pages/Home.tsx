@@ -1,46 +1,30 @@
-import { useEffect, useState } from 'react';
 import HeroBanner from '../components/Hero/HeroBanner';
 import CategorySection from '../components/Categories/CategorySection';
 import ProductSection from '../components/Products/ProductSection';
 import { useTranslation } from 'react-i18next';
-import { getProducts, type Product } from '../services/productApi';
+import type { Product } from '../services/productApi';
+import { allProducts } from '../data/allProducts';
+
+const toApiProduct = (product: (typeof allProducts)[number]): Product => ({
+  ...product,
+  slug: product.name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, ''),
+  stock: 20,
+  images: [product.image],
+  total_reviews: 0,
+  specifications: {},
+  is_featured: product.section === 'bestsellers',
+  created_at: new Date().toISOString(),
+  updated_at: new Date().toISOString(),
+});
+
+const homeSectionProducts = {
+  bestSellers: allProducts.filter((product) => product.section === 'bestsellers').map(toApiProduct),
+  newArrivals: allProducts.filter((product) => product.section === 'newarrivals').map(toApiProduct),
+  trending: allProducts.filter((product) => product.section === 'trending').map(toApiProduct),
+};
 
 export default function Home() {
   const { t } = useTranslation();
-  const [bestSellers, setBestSellers] = useState<Product[]>([]);
-  const [newArrivals, setNewArrivals] = useState<Product[]>([]);
-  const [trending, setTrending] = useState<Product[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
-
-  useEffect(() => {
-    let mounted = true;
-
-    const loadProducts = async () => {
-      try {
-        const [featuredResult, latestResult, ratedResult] = await Promise.all([
-          getProducts({ featured: true, limit: 10, sortBy: 'created_at', sortOrder: 'desc' }),
-          getProducts({ limit: 10, sortBy: 'created_at', sortOrder: 'desc' }),
-          getProducts({ limit: 10, sortBy: 'rating', sortOrder: 'desc' }),
-        ]);
-
-        if (!mounted) return;
-
-        setBestSellers(featuredResult.products);
-        setNewArrivals(latestResult.products);
-        setTrending(ratedResult.products);
-      } catch (error) {
-        console.error('Failed to load home products:', error);
-      } finally {
-        if (mounted) setIsLoading(false);
-      }
-    };
-
-    loadProducts();
-
-    return () => {
-      mounted = false;
-    };
-  }, []);
 
   return (
     <main className="bg-white">
@@ -51,19 +35,13 @@ export default function Home() {
         <CategorySection />
       </div>
 
-      {isLoading ? (
-        <div className="py-16 text-center text-sm text-gray-500">Loading products...</div>
-      ) : (
-        <>
-          <ProductSection title={t('home.bestSellers')} products={bestSellers} />
+      <ProductSection title={t('home.bestSellers')} products={homeSectionProducts.bestSellers} />
 
-          <div className="bg-gray-50">
-            <ProductSection title={t('home.newArrivals')} products={newArrivals} />
-          </div>
+      <div className="bg-gray-50">
+        <ProductSection title={t('home.newArrivals')} products={homeSectionProducts.newArrivals} />
+      </div>
 
-          <ProductSection title={t('home.trending')} products={trending} />
-        </>
-      )}
+      <ProductSection title={t('home.trending')} products={homeSectionProducts.trending} />
 
       {/* Spacer before footer */}
       <div className="h-8" />

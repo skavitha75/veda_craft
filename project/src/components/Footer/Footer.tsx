@@ -1,4 +1,5 @@
 import { Phone, Mail, Instagram, Facebook, Youtube } from 'lucide-react';
+import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import logoImg from '../../assets/products/WhatsApp_Image_2026-06-19_at_11.31.57_AM.jpeg';
 
@@ -8,7 +9,7 @@ export default function Footer() {
   return (
     <footer className="bg-gray-950 text-gray-300">
       <div className="w-full px-4 sm:px-6 lg:px-8 xl:px-12 py-12">
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-10">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-10">
           {/* Column 1 - Brand */}
           <div className="md:col-span-2">
             <div className="bg-white rounded-xl p-3 inline-block mb-4">
@@ -44,9 +45,31 @@ export default function Footer() {
             <h3 className="text-amber-400 font-semibold text-base mb-4">{t('footer.explore')}</h3>
             <ul className="flex flex-col gap-3">
               {[
-                { key: 'footer.about', label: t('footer.about') },
-                { key: 'footer.event', label: t('footer.event') },
-                { key: 'footer.whoCanJoin', label: t('footer.whoCanJoin') },
+                { key: 'nav.eco', label: t('nav.eco'), to: '/eco' },
+                { key: 'nav.wellness', label: t('nav.wellness'), to: '/wellness' },
+                { key: 'nav.food', label: t('nav.food'), to: '/food' },
+                { key: 'nav.craft', label: t('nav.craft'), to: '/craft' },
+                { key: 'nav.fashion', label: t('nav.fashion'), to: '/fashion' },
+                { key: 'nav.decor', label: t('nav.decor'), to: '/decor' },
+              ].map((item) => (
+                <li key={item.key}>
+                  <Link to={item.to} className="text-sm text-gray-400 hover:text-white transition-colors">
+                    {item.label}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          {/* Column 3 - Customer Policy */}
+          <div>
+            <h3 className="text-amber-400 font-semibold text-base mb-4">{t('footer.customerPolicy')}</h3>
+            <ul className="flex flex-col gap-3">
+              {[
+                { key: 'footer.cancellationReturns', label: t('footer.cancellationReturns') },
+                { key: 'footer.security', label: t('footer.security') },
+                { key: 'footer.privacy', label: t('footer.privacy') },
+                { key: 'footer.termsConditions', label: t('footer.termsConditions') },
               ].map((item) => (
                 <li key={item.key}>
                   <a href="#" className="text-sm text-gray-400 hover:text-white transition-colors">
@@ -57,7 +80,7 @@ export default function Footer() {
             </ul>
           </div>
 
-          {/* Column 3 - Contact */}
+          {/* Column 4 - Contact */}
           <div>
             <h3 className="text-amber-400 font-semibold text-base mb-4">{t('footer.contact')}</h3>
             <ul className="flex flex-col gap-3">

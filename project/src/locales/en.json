@@ -186,6 +186,11 @@
     "event": "Event",
     "whoCanJoin": "Who Can Join",
     "community": "Community",
+    "customerPolicy": "Customer Policy",
+    "cancellationReturns": "Cancellation & Returns",
+    "security": "Security",
+    "privacy": "Privacy",
+    "termsConditions": "Terms and Conditions",
     "allRightsReserved": "All rights reserved."
   },
   "productCard": {

@@ -2,5 +2,5 @@
   "watch": ["src"],
   "ext": "js,json",
   "ignore": ["node_modules"],
-  "exec": "node --env-file=.env src/index.js"
+  "exec": "node -r dotenv/config src/index.js"
 }

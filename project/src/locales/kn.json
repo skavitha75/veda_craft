@@ -186,6 +186,11 @@
     "event": "ಕಾರ್ಯಕ್ರಮ",
     "whoCanJoin": "ಯಾರು ಸೇರಬಹುದು",
     "community": "ಸಮುದಾಯ",
+    "customerPolicy": "ಗ್ರಾಹಕ ನೀತಿ",
+    "cancellationReturns": "ರದ್ದು & ಮರಳಿಕೆ",
+    "security": "ಭದ್ರತೆ",
+    "privacy": "ಗೌಪ್ಯತೆ",
+    "termsConditions": "ನಿಯಮಗಳು ಮತ್ತು ಷರತ್ತುಗಳು",
     "allRightsReserved": "ಎಲ್ಲ ಹಕ್ಕುಗಳು ಕಾಯ್ದಿರಿಸಲಾಗಿದೆ."
   },
   "productCard": {
