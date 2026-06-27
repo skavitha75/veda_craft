@@ -31,7 +31,6 @@ export const validateProductQuery = (req, _res, next) => {
     maxPrice,
     minRating,
     category,
-    brand,
     search,
     q,
     sortBy = 'created_at',
@@ -55,7 +54,6 @@ export const validateProductQuery = (req, _res, next) => {
     page: toPositiveInt(page, 1, 10000),
     limit: toPositiveInt(limit, 20, 100),
     category: category ? String(category).trim() : undefined,
-    brand: brand ? String(brand).trim() : undefined,
     search: search || q ? String(search || q).trim() : undefined,
     minPrice: toNumber(minPrice),
     maxPrice: toNumber(maxPrice),
@@ -64,7 +62,6 @@ export const validateProductQuery = (req, _res, next) => {
     featured: toBoolean(featured),
     sortBy: normalizedSortBy,
     sortOrder: normalizedSortOrder,
-    specifications: {},
   };
 
   if (
@@ -82,13 +79,6 @@ export const validateProductQuery = (req, _res, next) => {
   ) {
     return next(new AppError('minPrice cannot be greater than maxPrice', 400));
   }
-
-  Object.entries(req.query).forEach(([key, value]) => {
-    if (key.startsWith('spec_') && value !== undefined && value !== '') {
-      filters.specifications[key.replace(/^spec_/, '')] = value;
-    }
-  });
-
   req.productQuery = filters;
   return next();
 };

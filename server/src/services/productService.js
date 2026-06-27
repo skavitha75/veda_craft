@@ -3,67 +3,107 @@ import { AppError } from '../utils/apiResponse.js';
 
 const PRODUCT_COLUMNS = `
   id,
+  category_id,
   name,
   slug,
   description,
-  category,
-  brand,
   price,
   discount_price,
   stock,
-  images,
   rating,
   total_reviews,
-  specifications,
   is_featured,
+  is_active,
+  image_url,
+  image_path,
   created_at,
-  updated_at
+  updated_at,
+  category:categories!inner (
+    id,
+    name,
+    slug
+  )
 `;
 
-const PRODUCT_IMAGES_BUCKET = process.env.PRODUCT_IMAGES_BUCKET || 'product-images';
-
-const isAbsoluteUrl = (value) => /^https?:\/\//i.test(value);
-
-const publicImageUrl = (imagePath) => {
-  if (!imagePath || isAbsoluteUrl(imagePath)) return imagePath;
-
-  const { data } = supabase.storage
-    .from(PRODUCT_IMAGES_BUCKET)
-    .getPublicUrl(imagePath);
-
-  return data.publicUrl;
-};
-
-const mapProduct = (product) => {
+const toProductDto = (product) => {
   if (!product) return null;
 
-  const images = Array.isArray(product.images)
-    ? product.images.filter(Boolean).map(publicImageUrl)
-    : [];
-
   return {
-    ...product,
-    images,
+    id: product.id,
+    category_id: product.category_id,
+    category: product.category?.name || null,
+    category_slug: product.category?.slug || null,
+    name: product.name,
+    slug: product.slug,
+    description: product.description,
+    price: Number(product.price || 0),
+    discount_price: product.discount_price === null ? null : Number(product.discount_price),
+    stock: product.stock,
+    rating: Number(product.rating || 0),
+    total_reviews: product.total_reviews,
+    is_featured: product.is_featured,
+    is_active: product.is_active,
+    image_url: product.image_url,
+    image_path: product.image_path,
+    image: product.image_url,
+    images: product.image_url ? [product.image_url] : [],
+    created_at: product.created_at,
+    updated_at: product.updated_at,
   };
 };
 
-const applyFilters = (query, filters) => {
+const paginationMeta = ({ page, limit, count }) => {
+  const totalPages = Math.ceil((count || 0) / limit);
+  return {
+    page,
+    limit,
+    total: count || 0,
+    totalPages,
+    hasNextPage: page < totalPages,
+    hasPrevPage: page > 1,
+  };
+};
+
+const getCategoryId = async (category) => {
+  const value = String(category || '').trim();
+  if (!value) return undefined;
+
+  const { data: slugMatch, error: slugError } = await supabase
+    .from('categories')
+    .select('id')
+    .eq('slug', value.toLowerCase())
+    .limit(1)
+    .maybeSingle();
+
+  if (slugError) throw new AppError(slugError.message, 500);
+  if (slugMatch?.id) return slugMatch.id;
+
+  const { data: nameMatch, error: nameError } = await supabase
+    .from('categories')
+    .select('id')
+    .ilike('name', value)
+    .limit(1)
+    .maybeSingle();
+
+  if (nameError) throw new AppError(nameError.message, 500);
+  return nameMatch?.id;
+};
+
+const applyFilters = async (query, filters) => {
   let nextQuery = query.eq('is_active', true);
 
   if (filters.category) {
-    nextQuery = nextQuery.ilike('category', filters.category);
-  }
-
-  if (filters.brand) {
-    nextQuery = nextQuery.ilike('brand', filters.brand);
+    const categoryId = await getCategoryId(filters.category);
+    if (!categoryId) {
+      return { query: nextQuery.eq('category_id', -1) };
+    }
+    nextQuery = nextQuery.eq('category_id', categoryId);
   }
 
   if (filters.search) {
     const term = filters.search.replaceAll('%', '').replaceAll(',', ' ').trim();
     if (term) {
-      nextQuery = nextQuery.or(
-        `name.ilike.%${term}%,slug.ilike.%${term}%,description.ilike.%${term}%,category.ilike.%${term}%,brand.ilike.%${term}%`
-      );
+      nextQuery = nextQuery.or(`name.ilike.%${term}%,slug.ilike.%${term}%,description.ilike.%${term}%`);
     }
   }
 
@@ -89,23 +129,7 @@ const applyFilters = (query, filters) => {
     nextQuery = nextQuery.eq('is_featured', filters.featured);
   }
 
-  if (filters.specifications && Object.keys(filters.specifications).length > 0) {
-    nextQuery = nextQuery.contains('specifications', filters.specifications);
-  }
-
-  return nextQuery;
-};
-
-const paginationMeta = ({ page, limit, count }) => {
-  const totalPages = Math.ceil((count || 0) / limit);
-  return {
-    page,
-    limit,
-    total: count || 0,
-    totalPages,
-    hasNextPage: page < totalPages,
-    hasPrevPage: page > 1,
-  };
+  return { query: nextQuery };
 };
 
 export const getProducts = async (filters) => {
@@ -116,7 +140,9 @@ export const getProducts = async (filters) => {
     .from('products')
     .select(PRODUCT_COLUMNS, { count: 'exact' });
 
-  query = applyFilters(query, filters)
+  const filtered = await applyFilters(query, filters);
+
+  query = filtered.query
     .order(filters.sortBy, { ascending: filters.sortOrder === 'asc' })
     .range(from, to);
 
@@ -125,7 +151,7 @@ export const getProducts = async (filters) => {
   if (error) throw new AppError(error.message, 500);
 
   return {
-    products: (data || []).map(mapProduct),
+    products: (data || []).map(toProductDto),
     meta: paginationMeta({ page: filters.page, limit: filters.limit, count }),
   };
 };
@@ -145,7 +171,7 @@ export const getProductByIdOrSlug = async (idOrSlug) => {
   const { data, error } = await query.maybeSingle();
 
   if (error) throw new AppError(error.message, 500);
-  return mapProduct(data);
+  return toProductDto(data);
 };
 
 export const getProductsByCategory = async (category, filters) => {
