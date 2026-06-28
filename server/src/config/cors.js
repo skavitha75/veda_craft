@@ -5,7 +5,7 @@
 
 const allowedOrigins = process.env.ALLOWED_ORIGINS
   ? process.env.ALLOWED_ORIGINS.split(',').map((o) => o.trim())
-  : ['http://localhost:5173', 'http://localhost:3000'];
+  : ['http://localhost:5173', 'http://localhost:3000', 'http://127.0.0.1:5173', 'http://127.0.0.1:3000'];
 
 export const corsOptions = {
   origin: (origin, callback) => {
@@ -13,6 +13,10 @@ export const corsOptions = {
     if (!origin) return callback(null, true);
 
     if (allowedOrigins.includes(origin)) {
+      return callback(null, true);
+    }
+
+    if (origin?.startsWith('http://localhost:') || origin?.startsWith('http://127.0.0.1:')) {
       return callback(null, true);
     }
 

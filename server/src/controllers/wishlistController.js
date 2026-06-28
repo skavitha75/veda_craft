@@ -1,29 +1,32 @@
-import { sendError, sendSuccess } from '../utils/apiResponse.js';
+import { AppError, sendError, sendSuccess } from '../utils/apiResponse.js';
 import * as wishlistService from '../services/wishlistService.js';
 
-export const getWishlist = (req, res) => {
+export const getWishlist = async (req, res) => {
   try {
-    const wishlist = wishlistService.getWishlist(req.user.id);
+    const wishlist = await wishlistService.getWishlist(req.user.id);
     return sendSuccess(res, wishlist, 'Wishlist retrieved successfully');
   } catch (error) {
-    return sendError(res, 500, error.message || 'Failed to fetch wishlist');
+    const statusCode = error instanceof AppError ? error.statusCode : 500;
+    return sendError(res, statusCode, error.message || 'Failed to fetch wishlist');
   }
 };
 
-export const toggleWishlistItem = (req, res) => {
+export const toggleWishlistItem = async (req, res) => {
   try {
-    const wishlist = wishlistService.toggleItem(req.user.id, req.body);
+    const wishlist = await wishlistService.toggleItem(req.user.id, req.body);
     return sendSuccess(res, wishlist, 'Wishlist updated');
   } catch (error) {
-    return sendError(res, 500, error.message || 'Failed to update wishlist');
+    const statusCode = error instanceof AppError ? error.statusCode : 500;
+    return sendError(res, statusCode, error.message || 'Failed to update wishlist');
   }
 };
 
-export const removeWishlistItem = (req, res) => {
+export const removeWishlistItem = async (req, res) => {
   try {
-    const wishlist = wishlistService.removeItem(req.user.id, Number(req.params.id));
+    const wishlist = await wishlistService.removeItem(req.user.id, Number(req.params.id));
     return sendSuccess(res, wishlist, 'Item removed from wishlist');
   } catch (error) {
-    return sendError(res, 500, error.message || 'Failed to remove wishlist item');
+    const statusCode = error instanceof AppError ? error.statusCode : 500;
+    return sendError(res, statusCode, error.message || 'Failed to remove wishlist item');
   }
 };

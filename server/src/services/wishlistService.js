@@ -1,33 +1,124 @@
-const wishlistStore = new Map();
+import { supabase } from '../config/supabase.js';
+import { AppError } from '../utils/apiResponse.js';
 
-const ensureWishlist = (userId) => {
-  if (!wishlistStore.has(userId)) {
-    wishlistStore.set(userId, []);
+const PRODUCT_COLUMNS = 'id, name, slug, description, price, discount_price, stock, rating, total_reviews, is_featured, is_active, created_at, updated_at';
+
+const toProductDto = (product) => {
+  if (!product) return null;
+
+  return {
+    id: product.id,
+    name: product.name,
+    slug: product.slug,
+    description: product.description,
+    price: Number(product.price || 0),
+    discount_price: product.discount_price === null ? null : Number(product.discount_price),
+    stock: product.stock,
+    rating: Number(product.rating || 0),
+    total_reviews: product.total_reviews,
+    is_featured: product.is_featured,
+    is_active: product.is_active,
+    created_at: product.created_at,
+    updated_at: product.updated_at,
+    image: product.image_url || '',
+    images: product.image_url ? [product.image_url] : [],
+  };
+};
+
+const getProductsByIds = async (productIds) => {
+  if (!productIds.length) return [];
+
+  const { data, error } = await supabase
+    .from('products')
+    .select(PRODUCT_COLUMNS)
+    .in('id', productIds)
+    .eq('is_active', true);
+
+  if (error) throw new AppError(error.message, 500);
+
+  return (data || []).map(toProductDto).filter(Boolean);
+};
+
+const buildWishlistResponse = async (rows) => {
+  if (!rows?.length) return [];
+
+  const productIds = [...new Set(rows.map((row) => row.product_id).filter(Boolean))];
+  const products = await getProductsByIds(productIds);
+  const productMap = new Map(products.map((product) => [product.id, product]));
+
+  return rows
+    .map((row) => ({
+      id: row.id,
+      product_id: row.product_id,
+      created_at: row.created_at,
+      product: productMap.get(row.product_id) || null,
+    }))
+    .filter((entry) => entry.product);
+};
+
+export const getWishlist = async (userId) => {
+  const { data, error } = await supabase
+    .from('wishlists')
+    .select('id, product_id, created_at')
+    .eq('user_id', userId)
+    .order('created_at', { ascending: false });
+
+  if (error) throw new AppError(error.message, 500);
+
+  const wishlistRows = await buildWishlistResponse(data || []);
+  return wishlistRows.map((entry) => entry.product);
+};
+
+export const toggleItem = async (userId, product) => {
+  const productId = Number(product?.id ?? product?.product_id);
+
+  if (!Number.isFinite(productId) || productId <= 0) {
+    throw new AppError('Product id is required', 400);
   }
-  return wishlistStore.get(userId);
+
+  const { data: existing, error: lookupError } = await supabase
+    .from('wishlists')
+    .select('id')
+    .eq('user_id', userId)
+    .eq('product_id', productId)
+    .maybeSingle();
+
+  if (lookupError) throw new AppError(lookupError.message, 500);
+  if (existing) throw new AppError('Product already in wishlist', 409);
+
+  const { error: insertError } = await supabase
+    .from('wishlists')
+    .insert({ user_id: userId, product_id: productId });
+
+  if (insertError) throw new AppError(insertError.message, 500);
+
+  return getWishlist(userId);
 };
 
-export const getWishlist = (userId) => {
-  return ensureWishlist(userId);
-};
+export const removeItem = async (userId, productId) => {
+  const normalizedProductId = Number(productId);
 
-export const toggleItem = (userId, product) => {
-  const wishlist = ensureWishlist(userId);
-  const existing = wishlist.find((entry) => entry.id === product.id);
-
-  if (existing) {
-    const next = wishlist.filter((entry) => entry.id !== product.id);
-    wishlistStore.set(userId, next);
-    return next;
+  if (!Number.isFinite(normalizedProductId) || normalizedProductId <= 0) {
+    throw new AppError('Product id is required', 400);
   }
 
-  wishlist.push(product);
-  return wishlist;
-};
+  const { data: existing, error: lookupError } = await supabase
+    .from('wishlists')
+    .select('id')
+    .eq('user_id', userId)
+    .eq('product_id', normalizedProductId)
+    .maybeSingle();
 
-export const removeItem = (userId, productId) => {
-  const wishlist = ensureWishlist(userId);
-  const nextWishlist = wishlist.filter((entry) => entry.id !== productId);
-  wishlistStore.set(userId, nextWishlist);
-  return nextWishlist;
+  if (lookupError) throw new AppError(lookupError.message, 500);
+  if (!existing) throw new AppError('Wishlist item not found', 404);
+
+  const { error: deleteError } = await supabase
+    .from('wishlists')
+    .delete()
+    .eq('user_id', userId)
+    .eq('product_id', normalizedProductId);
+
+  if (deleteError) throw new AppError(deleteError.message, 500);
+
+  return getWishlist(userId);
 };
