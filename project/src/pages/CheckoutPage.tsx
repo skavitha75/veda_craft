@@ -11,13 +11,15 @@ import PaymentStep from '../components/Checkout/PaymentStep';
 import PriceSummaryPanel from '../components/Checkout/PriceSummaryPanel';
 import AddAddressDrawer from '../components/Checkout/AddAddressDrawer';
 import type { Address } from '../components/Checkout/AddAddressDrawer';
+import { saveOrder } from '../services/orderStorage';
 
 const STEP_KEYS = ['address', 'summary', 'payment'] as const;
 
 export default function CheckoutPage() {
-  const { items } = useCart();
+  const { items, clearCart } = useCart();
   const { t } = useTranslation();
   const {
+    user,
     addresses,
     addAddress,
     updateAddress,
@@ -170,9 +172,32 @@ export default function CheckoutPage() {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
-  const handleContinue = () => {
+  const handleContinue = async () => {
     if (currentStep === 3) {
-      // Place order
+      const total = checkoutItems.reduce(
+        (acc, item) => acc + item.price * item.quantity,
+        0
+      );
+      const itemCount = checkoutItems.reduce((acc, item) => acc + item.quantity, 0);
+      const firstProduct = checkoutItems[0]?.name || 'Vedha Craft Order';
+
+      await saveOrder({
+        userId: user?.id,
+        items: checkoutItems,
+        address: selectedAddress,
+        paymentMethod: selectedPayment,
+        total,
+        itemCount,
+        product:
+          checkoutItems.length > 1
+            ? `${firstProduct} + ${checkoutItems.length - 1} more`
+            : firstProduct,
+      });
+
+      if (!isBuyNow) {
+        clearCart();
+      }
+
       setOrderPlaced(true);
       return;
     }
