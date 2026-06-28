@@ -1,6 +1,6 @@
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import { ChevronRight, Star, Leaf, HeartPulse, Sparkles, Sprout, Minus, Plus, ShieldCheck, Flame, Droplets, Wind, Gem, Palette, Recycle, Sun, Package, Coffee, Flower2, Zap, Award, HandHeart } from 'lucide-react';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { ecoProducts } from '../data/ecoProducts';
 import { foodProducts } from '../data/foodProducts';
@@ -12,6 +12,8 @@ import ProductTabs from '../components/Products/ProductTabs';
 import ReviewCard from '../components/Products/ReviewCard';
 import ProductSection from '../components/Products/ProductSection';
 import { useCart } from '../context/CartContext';
+import { getProductBySlug } from '../services/productApi';
+import { mapApiProductToProduct, mapLocalProductToProduct, Product, ApiProduct } from '../types/product';
 
 // Combine all products to find the one we need
 const allProducts = [
@@ -454,16 +456,82 @@ const mockReviews = [
   },
 ];
 
+const getProductSlug = (name: string): string => {
+  return name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
+};
+
 export default function ProductDetailsPage() {
   const { id } = useParams<{ id: string }>();
-  const product = allProducts.find((p) => p.id === Number(id));
   const { t } = useTranslation();
-
   const { addToCart } = useCart();
   const navigate = useNavigate();
+
+  const [product, setProduct] = useState<Product | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [similarProducts, setSimilarProducts] = useState<Product[]>([]);
   const [quantity, setQuantity] = useState(1);
   const [pincode, setPincode] = useState('');
   const [deliveryChecked, setDeliveryChecked] = useState(false);
+
+  useEffect(() => {
+    let mounted = true;
+    setLoading(true);
+
+    const load = async () => {
+      const isNumeric = id && !isNaN(Number(id));
+
+      // Resolve local product for fallback and local image
+      const localProduct = isNumeric
+        ? allProducts.find((p) => p.id === Number(id))
+        : allProducts.find((p) => getProductSlug(p.name) === id);
+
+      // Determine slug for backend lookup
+      const slug = isNumeric && localProduct
+        ? getProductSlug(localProduct.name)
+        : id;
+
+      try {
+        const backendProduct = await getProductBySlug(slug!);
+        const mapped = mapApiProductToProduct(backendProduct as unknown as ApiProduct);
+
+        if (mounted) {
+          const resolved: Product = {
+            ...mapped,
+            // Prefer backend image, fallback to local image during migration
+            image: mapped.image || localProduct?.image || '',
+            images: mapped.images?.length ? mapped.images : (localProduct ? [localProduct.image] : []),
+          };
+          setProduct(resolved);
+
+          // Related products: local lookup by category, mapped to domain model
+          const related = allProducts
+            .filter((p) => p.category === resolved.category && getProductSlug(p.name) !== resolved.slug)
+            .slice(0, 5)
+            .map(mapLocalProductToProduct);
+          setSimilarProducts(related);
+        }
+      } catch (error) {
+        console.warn('Backend unavailable, using local product data:', error);
+        if (mounted) {
+          const fallback = localProduct ? mapLocalProductToProduct(localProduct) : null;
+          setProduct(fallback);
+
+          if (fallback) {
+            const related = allProducts
+              .filter((p) => p.category === fallback.category && getProductSlug(p.name) !== fallback.slug)
+              .slice(0, 5)
+              .map(mapLocalProductToProduct);
+            setSimilarProducts(related);
+          }
+        }
+      } finally {
+        if (mounted) setLoading(false);
+      }
+    };
+
+    load();
+    return () => { mounted = false; };
+  }, [id]);
 
   const handleApplyPincode = () => {
     if (pincode.trim().length === 6 && /^\d{6}$/.test(pincode.trim())) {
@@ -481,6 +549,14 @@ export default function ProductDetailsPage() {
     return d.toLocaleDateString('en-IN', { weekday: 'long', day: 'numeric', month: 'short' });
   })();
 
+  if (loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-gray-50 text-gray-800">
+        <p className="text-gray-500 font-medium">Loading product...</p>
+      </div>
+    );
+  }
+
   if (!product) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-gray-50 text-gray-800">
@@ -494,11 +570,6 @@ export default function ProductDetailsPage() {
       </div>
     );
   }
-
-  // Get some similar products (mock logic: same category)
-  const similarProducts = allProducts
-    .filter((p) => p.category === product.category && p.id !== product.id)
-    .slice(0, 5);
 
   return (
     <div className="bg-white min-h-screen pt-4 pb-12">

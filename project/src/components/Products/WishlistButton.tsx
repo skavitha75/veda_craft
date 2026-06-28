@@ -1,9 +1,9 @@
 import { Heart } from 'lucide-react';
-import { Product } from '../../services/productApi';
+import { Product as DomainProduct } from '../../types/product';
 import { useWishlist } from '../../context/WishlistContext';
 
 interface WishlistButtonProps {
-  product: Product;
+  product: DomainProduct;
 }
 
 export default function WishlistButton({ product }: WishlistButtonProps) {

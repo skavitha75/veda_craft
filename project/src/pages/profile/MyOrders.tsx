@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { ShoppingBag, ChevronRight, Package } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 import { getOrders, type SavedOrder } from '../../services/orderStorage';
@@ -20,6 +21,7 @@ function formatOrderDate(date: string) {
 
 export default function MyOrders() {
   const { user } = useAuth();
+  const navigate = useNavigate();
   const [orders, setOrders] = useState<SavedOrder[]>([]);
 
   useEffect(() => {
@@ -58,8 +60,18 @@ export default function MyOrders() {
             {orders.map((order) => (
               <div
                 key={order.id}
+                role="button"
+                tabIndex={0}
+                onClick={() => navigate(`/profile/orders/${encodeURIComponent(order.id)}`)}
+                onKeyDown={(event) => {
+                  if (event.key === 'Enter' || event.key === ' ') {
+                    event.preventDefault();
+                    navigate(`/profile/orders/${encodeURIComponent(order.id)}`);
+                  }
+                }}
                 className="flex items-center justify-between p-4 rounded-lg border border-gray-100
-                           hover:border-gray-200 hover:shadow-sm transition-all cursor-pointer"
+                           hover:border-gray-200 hover:shadow-sm transition-all cursor-pointer focus:outline-none
+                           focus:ring-2 focus:ring-[#2d6a2d]/20"
               >
                 <div className="flex items-center gap-4 min-w-0">
                   <div className="w-10 h-10 rounded-lg bg-[#f0f5ec] flex items-center justify-center flex-shrink-0">

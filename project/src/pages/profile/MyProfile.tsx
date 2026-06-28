@@ -73,7 +73,6 @@ export default function MyProfile() {
   const [draft, setDraft] = useState<ProfileFormData>(formData);
   const [isEditing, setIsEditing] = useState(false);
   const [profilePhoto, setProfilePhoto] = useState<string | null>(user?.avatar_url || null);
-  const [avatarFile, setAvatarFile] = useState<File | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   // Sync state if user context updates after component mount
@@ -100,35 +99,41 @@ export default function MyProfile() {
   };
 
   const handleSave = async () => {
-    if (user) {
-      try {
-        const { error } = await supabase.from('profiles').upsert({
-          id: user.id,
-          full_name: draft.fullName,
-          phone_number: draft.phone,
-          gender: draft.gender,
-          dob: draft.dateOfBirth,
-          avatar_url: profilePhoto, // Preserve existing avatar URL
-          updated_at: new Date().toISOString()
-        });
-        if (error) throw error;
-        
-        const saved = localStorage.getItem('vc_user');
-        if (saved) {
-           const parsed = JSON.parse(saved);
-           parsed.name = draft.fullName;
-           parsed.phone_number = draft.phone;
-           parsed.gender = draft.gender;
-           parsed.dob = draft.dateOfBirth;
-           localStorage.setItem('vc_user', JSON.stringify(parsed));
-        }
-      } catch (err) {
-        console.error("Error updating profile", err);
-      }
+    if (!user) {
+      setFormData({ ...draft });
+      setIsEditing(false);
+      return;
     }
-    
-    setFormData({ ...draft });
-    setIsEditing(false);
+
+    try {
+      const { error } = await supabase.from('profiles').upsert({
+        id: user.id,
+        full_name: draft.fullName,
+        phone_number: draft.phone,
+        gender: draft.gender,
+        dob: draft.dateOfBirth,
+        avatar_url: profilePhoto,
+        updated_at: new Date().toISOString(),
+      });
+
+      if (error) throw error;
+
+      const updatedUser = {
+        ...user,
+        name: draft.fullName,
+        phone_number: draft.phone,
+        gender: draft.gender,
+        dob: draft.dateOfBirth,
+        avatar_url: profilePhoto || user.avatar_url || '',
+      };
+
+      localStorage.setItem('vc_user', JSON.stringify(updatedUser));
+      setFormData({ ...draft });
+      setIsEditing(false);
+    } catch (err) {
+      console.error('Error updating profile', err);
+      setIsEditing(false);
+    }
   };
 
   const handleAvatarUpload = async (file: File) => {

@@ -108,8 +108,27 @@ export const getProducts = async (query?: ProductQuery) => {
   };
 };
 
-export const getProductById = async (id: number | string) => {
+/**
+ * Fetch a single product by its numeric database ID.
+ * Calls: GET /products/:id  (backend detects numeric and queries by id column)
+ */
+export const getProductById = async (id: number) => {
   const payload = await request<Omit<Product, 'image'> & { image?: string }>(`/products/${id}`);
+  return normalizeProduct(payload.data);
+};
+
+/**
+ * Fetch a single product by its URL slug.
+ * Calls: GET /products/:slug  (backend detects non-numeric and queries by slug column)
+ *
+ * NOTE: The backend exposes a single route GET /products/:id which internally
+ * resolves by numeric ID or slug (see server/src/services/productService.js:
+ * getProductByIdOrSlug). A dedicated GET /products/slug/:slug endpoint would
+ * be the ideal long-term solution to separate these concerns at the routing
+ * level. Document this as a backend TODO.
+ */
+export const getProductBySlug = async (slug: string) => {
+  const payload = await request<Omit<Product, 'image'> & { image?: string }>(`/products/${encodeURIComponent(slug)}`);
   return normalizeProduct(payload.data);
 };
 

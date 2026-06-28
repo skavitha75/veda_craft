@@ -105,6 +105,48 @@ export async function getOrders(userId?: string): Promise<SavedOrder[]> {
   return sortOrders(visibleLocalOrders);
 }
 
+export async function getOrderById(orderId: string, userId?: string): Promise<SavedOrder | null> {
+  const orders = await getOrders(userId);
+  return orders.find((order) => order.id === orderId) ?? null;
+}
+
+export async function updateOrderStatus(
+  orderId: string,
+  status: SavedOrder['status'],
+  userId?: string
+): Promise<SavedOrder | null> {
+  const localOrders = readAllOrders();
+  const localOrder = localOrders.find((order) => order.id === orderId);
+  const updatedLocalOrder = localOrder ? { ...localOrder, status } : null;
+
+  if (updatedLocalOrder) {
+    writeAllOrders(
+      localOrders.map((order) => (order.id === orderId ? updatedLocalOrder : order))
+    );
+  }
+
+  const resolvedUserId = await resolveUserId();
+  const { data, error } = await supabase
+    .from('orders')
+    .update({ status, updated_at: new Date().toISOString() })
+    .eq('id', orderId)
+    .eq('user_id', resolvedUserId)
+    .select()
+    .single();
+
+  if (error) {
+    console.error('Failed to update order status:', error.message);
+    return updatedLocalOrder ?? getOrderById(orderId, userId);
+  }
+
+  const savedOrder = normalizeOrder(data, resolvedUserId);
+  writeAllOrders([
+    savedOrder,
+    ...localOrders.filter((existing) => existing.id !== orderId),
+  ]);
+  return savedOrder;
+}
+
 export async function saveOrder(order: Omit<SavedOrder, 'id' | 'createdAt' | 'status'>): Promise<SavedOrder> {
   const localOrders = readAllOrders();
   const nextOrder: SavedOrder = {

@@ -1,7 +1,8 @@
 import { useEffect, useMemo, useState } from 'react';
 import { Star, ShoppingCart, Heart, SlidersHorizontal, ChevronDown, ChevronUp, X } from 'lucide-react';
 import { Link } from 'react-router-dom';
-import { getProducts, type Product } from '../../services/productApi';
+import { getProductsByCategory } from '../../services/productApi';
+import { LocalProduct, Product as DomainProduct, ApiProduct, mapApiProductToProduct, mapLocalProductToProduct } from '../../types/product';
 import { useCart } from '../../context/CartContext';
 import { useWishlist } from '../../context/WishlistContext';
 
@@ -54,7 +55,7 @@ function FilterSection({
   );
 }
 
-function ProductCard({ product, badgeIcon: BadgeIcon, badgeText, badgeColorClass }: { product: Product, badgeIcon: React.ElementType, badgeText: string, badgeColorClass: string }) {
+function ProductCard({ product, badgeIcon: BadgeIcon, badgeText, badgeColorClass }: { product: DomainProduct, badgeIcon: React.ElementType, badgeText: string, badgeColorClass: string }) {
   const { addToCart } = useCart();
   const { isInWishlist, toggleWishlist } = useWishlist();
   const wished = isInWishlist(product.id);
@@ -79,7 +80,7 @@ function ProductCard({ product, badgeIcon: BadgeIcon, badgeText, badgeColorClass
   return (
     <div className="bg-white rounded-2xl border border-gray-100 overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 hover:-translate-y-1 group flex flex-col">
       <div className="relative overflow-hidden bg-gray-50 aspect-square">
-        <Link to={`/product/${product.id}`} className="block w-full h-full">
+        <Link to={`/product/${product.slug || product.id}`} className="block w-full h-full">
           <img
             src={product.image}
             alt={product.name}
@@ -107,7 +108,7 @@ function ProductCard({ product, badgeIcon: BadgeIcon, badgeText, badgeColorClass
       </div>
 
       <div className="p-3 flex flex-col gap-1 flex-1">
-        <Link to={`/product/${product.id}`} className="hover:text-green-600 transition-colors">
+        <Link to={`/product/${product.slug || product.id}`} className="hover:text-green-600 transition-colors">
           <h3 className="text-xs font-semibold text-gray-800 leading-tight line-clamp-2">{product.name}</h3>
         </Link>
         <p className="text-[10px] text-green-600 font-medium">{product.category}</p>
@@ -146,7 +147,7 @@ export interface CategoryPageLayoutProps {
   heroGradient: string;
   icon: React.ElementType;
   badgeColorClass: string;
-  products?: Product[];
+  products?: Array<DomainProduct | LocalProduct>;
   apiCategory?: string;
   categories: string[];
   features: string[];
@@ -163,7 +164,13 @@ export default function CategoryPageLayout({
   features,
   discounts,
 }: CategoryPageLayoutProps) {
-  const [products, setProducts] = useState<Product[]>(initialProducts || []);
+  const normalizeProduct = (product: DomainProduct | LocalProduct): DomainProduct => {
+    return 'slug' in product && 'stock' in product ? product : mapLocalProductToProduct(product);
+  };
+
+  const [products, setProducts] = useState<DomainProduct[]>(() =>
+    initialProducts ? initialProducts.map(normalizeProduct) : []
+  );
   const [isLoading, setIsLoading] = useState(!initialProducts);
   const [filters, setFilters] = useState<Filters>({
     categories: [],
@@ -177,28 +184,51 @@ export default function CategoryPageLayout({
   const [sortBy, setSortBy] = useState<'featured' | 'price-asc' | 'price-desc' | 'best-rated'>('featured');
 
   useEffect(() => {
-    if (initialProducts) {
-      setProducts(initialProducts);
-      setIsLoading(false);
-      return;
-    }
-
     let mounted = true;
 
     const loadProducts = async () => {
       try {
         setIsLoading(true);
-        const { products: fetchedProducts } = await getProducts({
-          category: apiCategory || title,
-          limit: 100,
-          sortBy: 'created_at',
-          sortOrder: 'desc',
+
+        // Map the title of the category page to the backend category slug
+        const categoryMap: Record<string, string> = {
+          'Eco Products': 'eco',
+          'Wellness Products': 'wellness',
+          'Food Products': 'food',
+          'Craft Products': 'craft',
+          'Fashion Products': 'fashion',
+          'Decor Items': 'decor',
+        };
+        const categorySlug = apiCategory || categoryMap[title] || title.toLowerCase();
+
+        // Fetch products only for this category from the backend
+        const response = await getProductsByCategory(categorySlug);
+        const apiProducts = response.products;
+
+        // Map API products to frontend domain model (camelCase)
+        const domainApiProducts = apiProducts.map((p) => mapApiProductToProduct(p as unknown as ApiProduct));
+
+        // Create a lookup map of slug -> DomainProduct
+        const apiProductMap = new Map<string, DomainProduct>();
+        domainApiProducts.forEach((p) => {
+          if (p.slug) {
+            apiProductMap.set(p.slug, p);
+          }
         });
 
-        if (mounted) setProducts(fetchedProducts);
+        if (mounted) {
+          if (initialProducts) {
+            const mergedProducts = initialProducts.map((product) => normalizeProduct(product));
+            setProducts(mergedProducts);
+          } else {
+            setProducts(domainApiProducts);
+          }
+        }
       } catch (error) {
-        console.error('Failed to load category products:', error);
-        if (mounted) setProducts([]);
+        console.warn('Failed to load category products from backend, falling back to local data:', error);
+        if (mounted && initialProducts) {
+          setProducts(initialProducts.map(normalizeProduct));
+        }
       } finally {
         if (mounted) setIsLoading(false);
       }

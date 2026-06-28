@@ -10,6 +10,9 @@ import healthRouter from './health.js';
 import authRouter from './auth.js';
 import addressRouter from './addressRoutes.js';
 import productRouter from './productRoutes.js';
+import cartRouter from './cartRoutes.js';
+import wishlistRouter from './wishlistRoutes.js';
+import orderRouter from './orderRoutes.js';
 
 const router = Router();
 
@@ -18,6 +21,9 @@ router.use('/health', healthRouter);
 router.use('/auth', authRouter);
 router.use('/addresses', addressRouter);
 router.use('/products', productRouter);
+router.use('/cart', cartRouter);
+router.use('/wishlist', wishlistRouter);
+router.use('/orders', orderRouter);
 
 // ─── Future Feature Routes (add here when ready) ─────────────────────────────
 // router.use('/categories', categoriesRouter);

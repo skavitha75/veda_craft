@@ -1,6 +1,5 @@
-import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import { X, Trash2, Star, ChevronLeft, Minus, Plus } from 'lucide-react';
+import { Trash2, Star, ChevronLeft, Minus, Plus } from 'lucide-react';
 import { useCart } from '../../context/CartContext';
 import { useTranslation } from 'react-i18next';
 

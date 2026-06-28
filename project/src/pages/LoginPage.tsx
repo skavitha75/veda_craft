@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Mail, Phone, ChevronRight, CheckCircle2, Leaf, ShieldCheck, Heart } from 'lucide-react';
+import { Mail, Phone, ChevronRight, CheckCircle2, ShieldCheck } from 'lucide-react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import logoImg from '../assets/products/WhatsApp_Image_2026-06-19_at_11.31.57_AM.jpeg';
@@ -82,7 +82,19 @@ export default function LoginPage() {
         setError('Please enter a valid OTP.');
         return;
       }
-      // Success: Mock login with inputValue for mobile
+
+      const { error: signInError } = await supabase.auth.signInWithOtp({
+        phone: inputValue,
+        options: {
+          shouldCreateUser: true,
+        }
+      });
+
+      if (signInError) {
+        setError(signInError.message);
+        return;
+      }
+
       login(inputValue);
       navigate(redirect);
     }

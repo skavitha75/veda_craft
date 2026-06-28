@@ -1,9 +1,9 @@
-import { Product } from '../../services/productApi';
+import { Product as DomainProduct } from '../../types/product';
 import ProductCard from './ProductCard';
 
 interface ProductSectionProps {
   title: string;
-  products: Product[];
+  products: DomainProduct[];
 }
 
 export default function ProductSection({ title, products }: ProductSectionProps) {

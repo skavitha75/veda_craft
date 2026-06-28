@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { Globe } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 

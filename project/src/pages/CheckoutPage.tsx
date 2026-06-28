@@ -12,8 +12,58 @@ import PriceSummaryPanel from '../components/Checkout/PriceSummaryPanel';
 import AddAddressDrawer from '../components/Checkout/AddAddressDrawer';
 import type { Address } from '../components/Checkout/AddAddressDrawer';
 import { saveOrder } from '../services/orderStorage';
+import { supabase } from '../lib/supabase';
 
 const STEP_KEYS = ['address', 'summary', 'payment'] as const;
+
+type BrowserAudioContext = typeof AudioContext;
+type AudioWindow = Window & {
+  AudioContext?: BrowserAudioContext;
+  webkitAudioContext?: BrowserAudioContext;
+};
+
+function createOrderPlacedSound() {
+  const audioWindow = window as AudioWindow;
+  const AudioContextClass: BrowserAudioContext | undefined =
+    audioWindow.AudioContext || audioWindow.webkitAudioContext;
+
+  if (!AudioContextClass) return null;
+
+  const audioContext = new AudioContextClass();
+
+  return async () => {
+    try {
+      if (audioContext.state === 'suspended') {
+        await audioContext.resume();
+      }
+
+      const now = audioContext.currentTime;
+      const notes = [
+        { frequency: 523.25, start: 0 },
+        { frequency: 659.25, start: 0.11 },
+        { frequency: 783.99, start: 0.22 },
+      ];
+
+      notes.forEach(({ frequency, start }) => {
+        const oscillator = audioContext.createOscillator();
+        const gain = audioContext.createGain();
+
+        oscillator.type = 'sine';
+        oscillator.frequency.setValueAtTime(frequency, now + start);
+        gain.gain.setValueAtTime(0.0001, now + start);
+        gain.gain.exponentialRampToValueAtTime(0.18, now + start + 0.02);
+        gain.gain.exponentialRampToValueAtTime(0.0001, now + start + 0.24);
+
+        oscillator.connect(gain);
+        gain.connect(audioContext.destination);
+        oscillator.start(now + start);
+        oscillator.stop(now + start + 0.26);
+      });
+    } catch (error) {
+      console.error('Failed to play order sound', error);
+    }
+  };
+}
 
 export default function CheckoutPage() {
   const { items, clearCart } = useCart();
@@ -174,12 +224,16 @@ export default function CheckoutPage() {
 
   const handleContinue = async () => {
     if (currentStep === 3) {
+      const playOrderPlacedSound = createOrderPlacedSound();
       const total = checkoutItems.reduce(
         (acc, item) => acc + item.price * item.quantity,
         0
       );
       const itemCount = checkoutItems.reduce((acc, item) => acc + item.quantity, 0);
       const firstProduct = checkoutItems[0]?.name || 'Vedha Craft Order';
+
+      const { data: { session } } = await supabase.auth.getSession();
+      const token = session?.access_token;
 
       await saveOrder({
         userId: user?.id,
@@ -194,11 +248,37 @@ export default function CheckoutPage() {
             : firstProduct,
       });
 
+      if (token) {
+        try {
+          await fetch('http://localhost:5000/api/v1/orders', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              Authorization: `Bearer ${token}`,
+            },
+            body: JSON.stringify({
+              items: checkoutItems,
+              address: selectedAddress,
+              paymentMethod: selectedPayment,
+              total,
+              itemCount,
+              product:
+                checkoutItems.length > 1
+                  ? `${firstProduct} + ${checkoutItems.length - 1} more`
+                  : firstProduct,
+            }),
+          });
+        } catch (error) {
+          console.warn('Order backend sync failed', error);
+        }
+      }
+
       if (!isBuyNow) {
         clearCart();
       }
 
       setOrderPlaced(true);
+      void playOrderPlacedSound?.();
       return;
     }
     goToStep(currentStep + 1);

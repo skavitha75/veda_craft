@@ -1,7 +1,9 @@
 import { useEffect, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
+import { searchProducts } from '../services/productApi';
 import { allProducts, SearchProduct } from '../data/allProducts';
 import ProductCard from '../components/Products/ProductCard';
+import { Product, mapApiProductToProduct, ApiProduct } from '../types/product';
 
 const getProductDescriptionKeywords = (p: SearchProduct): string => {
   if (p.mainCategory.toLowerCase() === 'eco') {
@@ -28,25 +30,63 @@ const getProductDescriptionKeywords = (p: SearchProduct): string => {
 export default function SearchResultsPage() {
   const [searchParams] = useSearchParams();
   const query = searchParams.get('q') || '';
-  const [results, setResults] = useState<SearchProduct[]>([]);
+  const [results, setResults] = useState<Product[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    if (query.trim() === '') {
-      setResults([]);
-      return;
-    }
+    let mounted = true;
 
-    const lowerQuery = query.toLowerCase();
-    const filtered = allProducts.filter(p => {
-      const descKeywords = getProductDescriptionKeywords(p);
-      return (
-        p.name.toLowerCase().includes(lowerQuery) ||
-        p.category.toLowerCase().includes(lowerQuery) ||
-        p.mainCategory.toLowerCase().includes(lowerQuery) ||
-        descKeywords.toLowerCase().includes(lowerQuery)
-      );
-    });
-    setResults(filtered);
+    const fetchResults = async () => {
+      if (query.trim() === '') {
+        setResults([]);
+        setIsLoading(false);
+        return;
+      }
+
+      try {
+        setIsLoading(true);
+        const response = await searchProducts(query, { limit: 100 });
+        if (mounted) {
+          const mapped = response.products.map((p) => mapApiProductToProduct(p as unknown as ApiProduct));
+          setResults(mapped);
+        }
+      } catch (error) {
+        console.warn('Backend search API failed, falling back to local search:', error);
+        if (mounted) {
+          // Local Search fallback (identical to original logic)
+          const lowerQuery = query.toLowerCase();
+          const filtered = allProducts.filter(p => {
+            const descKeywords = getProductDescriptionKeywords(p);
+            return (
+              p.name.toLowerCase().includes(lowerQuery) ||
+              p.category.toLowerCase().includes(lowerQuery) ||
+              p.mainCategory.toLowerCase().includes(lowerQuery) ||
+              descKeywords.toLowerCase().includes(lowerQuery)
+            );
+          });
+          
+          setResults(filtered.map((p) => ({
+            ...p,
+            slug: p.name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, ''),
+            stock: 20,
+            images: [p.image],
+            totalReviews: 0,
+            specifications: {},
+            isFeatured: false,
+            createdAt: new Date().toISOString(),
+            updatedAt: new Date().toISOString(),
+          })));
+        }
+      } finally {
+        if (mounted) setIsLoading(false);
+      }
+    };
+
+    fetchResults();
+
+    return () => {
+      mounted = false;
+    };
   }, [query]);
 
   return (
@@ -56,7 +96,11 @@ export default function SearchResultsPage() {
           Search Results for "{query}"
         </h1>
 
-        {results.length > 0 ? (
+        {isLoading ? (
+          <div className="flex justify-center py-20">
+            <p className="text-gray-500 font-medium">Searching...</p>
+          </div>
+        ) : results.length > 0 ? (
           <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4">
             {results.map((product) => (
               <ProductCard key={product.id} product={product} />

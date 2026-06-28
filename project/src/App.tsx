@@ -17,6 +17,7 @@ import SearchResultsPage from './pages/SearchResultsPage';
 import ProfilePage from './pages/profile/ProfilePage';
 import MyProfile from './pages/profile/MyProfile';
 import MyOrders from './pages/profile/MyOrders';
+import OrderTrackingPage from './pages/profile/OrderTrackingPage';
 import Notifications from './pages/profile/Notifications';
 import AddressPage from './pages/profile/AddressPage';
 import HelpSupport from './pages/profile/HelpSupport';
@@ -70,6 +71,7 @@ function App() {
                       >
                         <Route index element={<MyProfile />} />
                         <Route path="orders" element={<MyOrders />} />
+                        <Route path="orders/:orderId" element={<OrderTrackingPage />} />
                         <Route path="notifications" element={<Notifications />} />
                         <Route path="address" element={<AddressPage />} />
                         <Route path="help" element={<HelpSupport />} />
