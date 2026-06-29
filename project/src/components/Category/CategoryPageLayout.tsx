@@ -192,12 +192,12 @@ export default function CategoryPageLayout({
 
         // Map the title of the category page to the backend category slug
         const categoryMap: Record<string, string> = {
-          'Eco Products': 'eco',
+          'Eco-Friendly Products': 'eco',
           'Wellness Products': 'wellness',
-          'Food Products': 'food',
-          'Craft Products': 'craft',
-          'Fashion Products': 'fashion',
-          'Decor Items': 'decor',
+          'Organic Food': 'food',
+          'Artisan Crafts': 'craft',
+          'Sustainable Fashion': 'fashion',
+          'Home Decor Items': 'decor',
         };
         const categorySlug = apiCategory || categoryMap[title] || title.toLowerCase();
 

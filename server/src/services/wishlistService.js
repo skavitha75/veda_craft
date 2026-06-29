@@ -1,10 +1,17 @@
 import { createScopedClient } from '../config/supabase.js';
 import { AppError } from '../utils/apiResponse.js';
 
-const PRODUCT_COLUMNS = 'id, name, slug, description, price, discount_price, stock, rating, total_reviews, is_featured, is_active, created_at, updated_at';
+const PRODUCT_COLUMNS = 'id, name, slug, description, price, discount_price, stock, rating, total_reviews, is_featured, is_active, created_at, updated_at, image_url';
 
 const toProductDto = (product) => {
   if (!product) return null;
+
+  const imageUrl = product.image_url || product.image || '';
+  const images = Array.isArray(product.images)
+    ? product.images
+    : imageUrl
+    ? [imageUrl]
+    : [];
 
   return {
     id: product.id,
@@ -20,8 +27,8 @@ const toProductDto = (product) => {
     is_active: product.is_active,
     created_at: product.created_at,
     updated_at: product.updated_at,
-    image: Array.isArray(product.images) && product.images.length > 0 ? product.images[0] : '',
-    images: Array.isArray(product.images) ? product.images : [],
+    image: imageUrl,
+    images,
   };
 };
 
