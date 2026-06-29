@@ -218,7 +218,26 @@ export default function CategoryPageLayout({
 
         if (mounted) {
           if (initialProducts) {
-            const mergedProducts = initialProducts.map((product) => normalizeProduct(product));
+            // Merge backend data into local products using slug mapping
+            const mergeProduct = (localProd: DomainProduct | LocalProduct): DomainProduct => {
+              const normalizedLocal = normalizeProduct(localProd);
+              const backendProd = apiProductMap.get(normalizedLocal.slug);
+              if (backendProd) {
+                return {
+                  ...normalizedLocal,
+                  id: backendProd.id, // Use backend ID (1-61) instead of local ID (101+)
+                  price: backendProd.price,
+                  discountPrice: backendProd.discountPrice,
+                  stock: backendProd.stock,
+                  rating: backendProd.rating,
+                  totalReviews: backendProd.totalReviews,
+                  image: backendProd.image || normalizedLocal.image,
+                  images: backendProd.images?.length ? backendProd.images : normalizedLocal.images,
+                };
+              }
+              return normalizedLocal;
+            };
+            const mergedProducts = initialProducts.map(mergeProduct);
             setProducts(mergedProducts);
           } else {
             setProducts(domainApiProducts);

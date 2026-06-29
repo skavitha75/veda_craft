@@ -14,8 +14,6 @@ const PRODUCT_COLUMNS = `
   total_reviews,
   is_featured,
   is_active,
-  image_url,
-  image_path,
   created_at,
   updated_at,
   category:categories!inner (

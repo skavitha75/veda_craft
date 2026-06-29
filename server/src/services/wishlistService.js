@@ -20,8 +20,8 @@ const toProductDto = (product) => {
     is_active: product.is_active,
     created_at: product.created_at,
     updated_at: product.updated_at,
-    image: product.image || '',
-    images: product.image ? [product.image] : [],
+    image: Array.isArray(product.images) && product.images.length > 0 ? product.images[0] : '',
+    images: Array.isArray(product.images) ? product.images : [],
   };
 };
 
@@ -89,7 +89,9 @@ export const toggleItem = async (userId, product, token) => {
     .maybeSingle();
 
   if (lookupError) throw new AppError(lookupError.message, 500);
-  if (existing) throw new AppError('Product already in wishlist', 409);
+  if (existing) {
+    return getWishlist(userId, token);
+  }
 
   const { error: insertError } = await supabase
     .from('wishlists')

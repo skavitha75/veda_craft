@@ -48,6 +48,10 @@ export function WishlistProvider({ children }: { children: ReactNode }) {
   }, [user]);
 
   const addToWishlist = (product: Product) => {
+    if (!user) {
+      alert('Please log in to add items to your wishlist');
+      return;
+    }
     console.log('[TRACE] WishlistContext addToWishlist product.id =', product.id);
     // optimistic add
     setItems((currentItems) => {
@@ -71,6 +75,10 @@ export function WishlistProvider({ children }: { children: ReactNode }) {
   };
 
   const removeFromWishlist = (productId: number) => {
+    if (!user) {
+      alert('Please log in to manage your wishlist');
+      return;
+    }
     console.log('[TRACE] WishlistContext removeFromWishlist productId =', productId);
     // optimistic remove
     const prev = items;
