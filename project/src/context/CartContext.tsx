@@ -1,6 +1,6 @@
 import { createContext, useContext, useState, useEffect, ReactNode } from 'react';
 import { useAuth } from './AuthContext';
-import { supabase } from '../lib/supabase';
+import * as cartApi from '../services/cartApi';
 
 export interface CartItem {
   id: number;
@@ -25,12 +25,61 @@ interface CartContextType {
 
 const CartContext = createContext<CartContextType | undefined>(undefined);
 
+const normalizeCartItem = (item: Partial<CartItem>): CartItem | null => {
+  const id = Number(item.id);
+  const price = Number(item.price);
+  const quantity = Number(item.quantity ?? 1);
+
+  if (!Number.isFinite(id) || id <= 0) return null;
+  if (!Number.isFinite(price) || price < 0) return null;
+  if (!Number.isInteger(quantity) || quantity < 1) return null;
+
+  return {
+    id,
+    name: item.name || 'Product',
+    price,
+    image: item.image || '',
+    quantity,
+    rating: item.rating === undefined ? undefined : Number(item.rating),
+  };
+};
+
+const normalizeCartItems = (cartItems: Partial<CartItem>[]): CartItem[] => {
+  return cartItems
+    .map(normalizeCartItem)
+    .filter((item): item is CartItem => Boolean(item));
+};
+
+const parseStoredCart = () => {
+  try {
+    const savedCart = localStorage.getItem('cart');
+    const parsed = savedCart ? JSON.parse(savedCart) : [];
+    return Array.isArray(parsed) ? normalizeCartItems(parsed) : [];
+  } catch {
+    return [];
+  }
+};
+
+const mergeCartItems = (backendItems: CartItem[], fallbackItems: CartItem[]) => {
+  const fallbackMap = new Map(fallbackItems.map((item) => [item.id, item]));
+
+  return normalizeCartItems(
+    backendItems.map((item) => {
+      const fallback = fallbackMap.get(item.id);
+      return {
+        ...fallback,
+        ...item,
+        name: item.name || fallback?.name,
+        price: Number.isFinite(Number(item.price)) && Number(item.price) > 0 ? item.price : fallback?.price,
+        image: item.image || fallback?.image,
+      };
+    })
+  );
+};
+
 export function CartProvider({ children }: { children: ReactNode }) {
   const { user } = useAuth();
-  const [items, setItems] = useState<CartItem[]>(() => {
-    const savedCart = localStorage.getItem('cart');
-    return savedCart ? JSON.parse(savedCart) : [];
-  });
+  const [items, setItems] = useState<CartItem[]>(parseStoredCart);
   
   const [isOpen, setIsOpen] = useState(false);
   const [buyNowItem, setBuyNowItem] = useState<CartItem | null>(null);
@@ -39,59 +88,110 @@ export function CartProvider({ children }: { children: ReactNode }) {
     localStorage.setItem('cart', JSON.stringify(items));
   }, [items]);
 
-  const syncCartToBackend = async (method: 'POST' | 'PUT' | 'DELETE', payload?: CartItem | { quantity?: number }) => {
-    if (!user) return;
-    try {
-      const { data: { session } } = await supabase.auth.getSession();
-      const token = session?.access_token;
-      if (!token) return;
+  useEffect(() => {
+    let mounted = true;
 
-      const response = await fetch(`http://localhost:5000/api/v1/cart${method === 'DELETE' && payload ? '' : ''}`, {
-        method,
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${token}`,
-        },
-        body: payload ? JSON.stringify(payload) : undefined,
-      });
-
-      if (!response.ok) {
-        console.warn('Failed to sync cart to backend');
+    const loadCart = async () => {
+      if (!user) {
+        if (mounted) {
+          setItems(parseStoredCart());
+        }
+        return;
       }
-    } catch (error) {
-      console.warn('Cart backend sync failed', error);
-    }
-  };
+
+      try {
+        const backendItems = await cartApi.getCart();
+        if (mounted) {
+          setItems((currentItems) => mergeCartItems(backendItems, currentItems));
+        }
+      } catch (error) {
+        console.warn('Failed to load cart from backend', error);
+      }
+    };
+
+    void loadCart();
+
+    return () => {
+      mounted = false;
+    };
+  }, [user]);
 
   const addToCart = (newItem: CartItem) => {
+    if (!user) {
+      setItems((currentItems) => {
+        const existingItem = currentItems.find((item) => item.id === newItem.id);
+        return existingItem
+          ? currentItems.map((item) =>
+              item.id === newItem.id
+                ? { ...item, quantity: item.quantity + newItem.quantity }
+                : item
+            )
+          : [...currentItems, newItem];
+      });
+      setIsOpen(true);
+      return;
+    }
+
     setItems((currentItems) => {
       const existingItem = currentItems.find((item) => item.id === newItem.id);
-      const nextItems = existingItem
+      return existingItem
         ? currentItems.map((item) =>
             item.id === newItem.id
               ? { ...item, quantity: item.quantity + newItem.quantity }
               : item
           )
         : [...currentItems, newItem];
-      void syncCartToBackend('POST', newItem);
-      return nextItems;
     });
+
+    void (async () => {
+      try {
+        const updated = await cartApi.addToCart(newItem);
+        setItems((currentItems) => mergeCartItems(updated, [...currentItems, newItem]));
+      } catch (error) {
+        console.warn('Failed to add cart item', error);
+      }
+    })();
+
     setIsOpen(true);
   };
 
   const removeFromCart = (id: number) => {
+    const previousItems = items;
     setItems((currentItems) => currentItems.filter((item) => item.id !== id));
-    void syncCartToBackend('DELETE', { quantity: 0 });
+
+    if (!user) return;
+
+    void (async () => {
+      try {
+        const updated = await cartApi.removeFromCart(id);
+        setItems((currentItems) => mergeCartItems(updated, currentItems));
+      } catch (error) {
+        setItems(previousItems);
+        console.warn('Failed to remove cart item', error);
+      }
+    })();
   };
 
   const updateQuantity = (id: number, quantity: number) => {
     if (quantity < 1) return;
+    const previousItems = items;
     setItems((currentItems) =>
       currentItems.map((item) =>
         item.id === id ? { ...item, quantity } : item
       )
     );
-    void syncCartToBackend('PUT', { quantity });
+
+    if (!user) return;
+
+    void (async () => {
+      try {
+        const updated = await cartApi.updateQuantity(id, quantity);
+        setItems((currentItems) => mergeCartItems(updated, currentItems));
+      } catch (error) {
+        setItems(previousItems);
+        console.warn('Failed to update cart item', error);
+      }
+    })();
   };
 
   const toggleCart = (open?: boolean) => {
@@ -99,8 +199,20 @@ export function CartProvider({ children }: { children: ReactNode }) {
   };
 
   const clearCart = () => {
+    const previousItems = items;
     setItems([]);
-    void syncCartToBackend('DELETE');
+
+    if (!user) return;
+
+    void (async () => {
+      try {
+        const updated = await cartApi.clearCart();
+        setItems(normalizeCartItems(updated));
+      } catch (error) {
+        setItems(previousItems);
+        console.warn('Failed to clear cart', error);
+      }
+    })();
   };
 
   return (

@@ -1,47 +1,54 @@
 import { sendError, sendSuccess } from '../utils/apiResponse.js';
 import * as cartService from '../services/cartService.js';
 
-export const getCart = (req, res) => {
+const getStatusCode = (error) => error.statusCode || 500;
+
+export const getCart = async (req, res) => {
   try {
-    const cart = cartService.getCart(req.user.id);
+    const cart = await cartService.getCart(req.user.id, req.accessToken);
     return sendSuccess(res, cart, 'Cart retrieved successfully');
   } catch (error) {
-    return sendError(res, 500, error.message || 'Failed to fetch cart');
+    return sendError(res, getStatusCode(error), error.message || 'Failed to fetch cart');
   }
 };
 
-export const addToCart = (req, res) => {
+export const addToCart = async (req, res) => {
   try {
-    const cart = cartService.addItem(req.user.id, req.body);
+    const cart = await cartService.addItem(req.user.id, req.body, req.accessToken);
     return sendSuccess(res, cart, 'Item added to cart');
   } catch (error) {
-    return sendError(res, 500, error.message || 'Failed to add item to cart');
+    return sendError(res, getStatusCode(error), error.message || 'Failed to add item to cart');
   }
 };
 
-export const updateCartItem = (req, res) => {
+export const updateCartItem = async (req, res) => {
   try {
-    const cart = cartService.updateItemQuantity(req.user.id, Number(req.params.id), Number(req.body.quantity));
+    const cart = await cartService.updateItemQuantity(
+      req.user.id,
+      req.params.id,
+      req.body.quantity,
+      req.accessToken
+    );
     return sendSuccess(res, cart, 'Cart updated');
   } catch (error) {
-    return sendError(res, 500, error.message || 'Failed to update cart');
+    return sendError(res, getStatusCode(error), error.message || 'Failed to update cart');
   }
 };
 
-export const removeCartItem = (req, res) => {
+export const removeCartItem = async (req, res) => {
   try {
-    const cart = cartService.removeItem(req.user.id, Number(req.params.id));
+    const cart = await cartService.removeItem(req.user.id, req.params.id, req.accessToken);
     return sendSuccess(res, cart, 'Item removed from cart');
   } catch (error) {
-    return sendError(res, 500, error.message || 'Failed to remove cart item');
+    return sendError(res, getStatusCode(error), error.message || 'Failed to remove cart item');
   }
 };
 
-export const clearCart = (req, res) => {
+export const clearCart = async (req, res) => {
   try {
-    const cart = cartService.clearCart(req.user.id);
+    const cart = await cartService.clearCart(req.user.id, req.accessToken);
     return sendSuccess(res, cart, 'Cart cleared');
   } catch (error) {
-    return sendError(res, 500, error.message || 'Failed to clear cart');
+    return sendError(res, getStatusCode(error), error.message || 'Failed to clear cart');
   }
 };
