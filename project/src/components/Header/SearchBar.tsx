@@ -1,8 +1,16 @@
-import { Search, Mic, Loader2, AlertCircle } from 'lucide-react';
+import { Search, Mic, Loader2, AlertCircle, Clock, X } from 'lucide-react';
 import { useState, useRef, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { allProducts, SearchProduct } from '../../data/allProducts';
+import {
+  fetchRecentSearches,
+  saveRecentSearch,
+  deleteRecentSearch,
+  clearRecentSearches,
+  RecentSearchEntry,
+} from '../../services/recentSearchApi';
+import { useAuth } from '../../context/AuthContext';
 
 // Helper to get description keywords for searching product descriptions
 const getProductDescriptionKeywords = (p: SearchProduct): string => {
@@ -44,11 +52,14 @@ export default function SearchBar() {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [voiceState, setVoiceState] = useState<VoiceState>('idle');
   const [voiceError, setVoiceError] = useState<string | null>(null);
-  
+  // In-memory only — no localStorage. For logged-in users, synced with backend.
+  const [recentSearches, setRecentSearches] = useState<RecentSearchEntry[]>([]);
+
   const dropdownRef = useRef<HTMLDivElement>(null);
   const recognitionRef = useRef<any>(null);
   const navigate = useNavigate();
   const { t, i18n } = useTranslation();
+  const { user } = useAuth();
 
   // Close dropdown on click outside
   useEffect(() => {
@@ -70,13 +81,23 @@ export default function SearchBar() {
     };
   }, []);
 
+  const loadRecentSearches = async () => {
+    if (!user) {
+      setRecentSearches([]);
+      return;
+    }
+    const data = await fetchRecentSearches();
+    setRecentSearches(data);
+  };
+
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setQuery(e.target.value);
-    if (e.target.value.trim() !== '') {
-      setIsDropdownOpen(true);
-    } else {
-      setIsDropdownOpen(false);
-    }
+    setIsDropdownOpen(true);
+  };
+
+  const handleFocus = () => {
+    loadRecentSearches();
+    setIsDropdownOpen(true);
   };
 
   const handleProductClick = (productId: number) => {
@@ -85,23 +106,57 @@ export default function SearchBar() {
     setIsDropdownOpen(false);
   };
 
+  const persistRecentSearch = (term: string) => {
+    if (!user) return;
+    saveRecentSearch(term).catch((error) => {
+      console.error('Failed to save recent search', error);
+    });
+  };
+
+  const handleRecentClick = (term: string) => {
+    setIsDropdownOpen(false);
+    persistRecentSearch(term);
+    navigate(`/search?q=${encodeURIComponent(term)}`);
+  };
+
+  const handleRemoveRecent = async (e: React.MouseEvent, term: string) => {
+    e.stopPropagation();
+    if (user) {
+      await deleteRecentSearch(term);
+      await loadRecentSearches();
+    }
+  };
+
+  const handleClearAll = async (e: React.MouseEvent) => {
+    e.stopPropagation();
+    if (user) {
+      await clearRecentSearches();
+    }
+    setRecentSearches([]);
+  };
+
+  const submitSearch = (term: string) => {
+    setIsDropdownOpen(false);
+    persistRecentSearch(term);
+    navigate(`/search?q=${encodeURIComponent(term)}`);
+  };
+
   // Perform search matching
-  const filteredProducts: SearchProduct[] = query.trim() === '' 
-    ? [] 
+  const filteredProducts: SearchProduct[] = query.trim() === ''
+    ? []
     : allProducts.filter(p => {
         const lowerQuery = query.toLowerCase();
         const descKeywords = getProductDescriptionKeywords(p);
         return (
           p.name.toLowerCase().includes(lowerQuery) ||
-          p.category.toLowerCase().includes(lowerQuery) || // Subcategory
-          p.mainCategory.toLowerCase().includes(lowerQuery) || // Category
-          descKeywords.toLowerCase().includes(lowerQuery) // Description
+          p.category.toLowerCase().includes(lowerQuery) ||
+          p.mainCategory.toLowerCase().includes(lowerQuery) ||
+          descKeywords.toLowerCase().includes(lowerQuery)
         );
       });
 
   // Start Voice Speech Recognition
   const toggleVoiceSearch = () => {
-    // Check if active and stop it
     if (voiceState === 'listening') {
       if (recognitionRef.current) {
         recognitionRef.current.stop();
@@ -129,7 +184,6 @@ export default function SearchBar() {
       recognition.continuous = false;
       recognition.interimResults = false;
 
-      // Match recognition language with currently selected site language
       const currentLang = i18n.resolvedLanguage || i18n.language || 'en';
       recognition.lang = speechLocales[currentLang] || 'en-IN';
 
@@ -168,7 +222,6 @@ export default function SearchBar() {
       };
 
       recognition.onend = () => {
-        // If ended and didn't result in processing/error, return to idle
         setVoiceState(prev => prev === 'listening' ? 'idle' : prev);
       };
 
@@ -186,10 +239,12 @@ export default function SearchBar() {
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'Enter' && query.trim() !== '') {
-      setIsDropdownOpen(false);
-      navigate(`/search?q=${encodeURIComponent(query.trim())}`);
+      submitSearch(query.trim());
     }
   };
+
+  const showRecentSearches = isDropdownOpen && query.trim() === '' && user && recentSearches.length > 0;
+  const showProductResults = isDropdownOpen && query.trim() !== '';
 
   return (
     <div className="flex-1 max-w-2xl relative" ref={dropdownRef}>
@@ -200,19 +255,17 @@ export default function SearchBar() {
           value={query}
           onChange={handleInputChange}
           onKeyDown={handleKeyDown}
-          onFocus={() => {
-            if (query.trim() !== '') setIsDropdownOpen(true);
-          }}
+          onFocus={handleFocus}
           placeholder={t('search.placeholder')}
           className="flex-1 outline-none text-sm text-gray-700 bg-transparent placeholder-gray-400"
         />
-        
+
         {/* Voice Search Microphone Button */}
-        <button 
+        <button
           onClick={toggleVoiceSearch}
           className={`relative flex-shrink-0 ml-2 p-1.5 rounded-full transition-all duration-300 ${
-            voiceState === 'listening' 
-              ? 'bg-red-50 text-red-600 scale-110 shadow-md ring-4 ring-red-100' 
+            voiceState === 'listening'
+              ? 'bg-red-50 text-red-600 scale-110 shadow-md ring-4 ring-red-100'
               : voiceState === 'processing'
               ? 'bg-yellow-50 text-yellow-600'
               : 'text-gray-400 hover:text-green-600 hover:bg-gray-50'
@@ -224,8 +277,6 @@ export default function SearchBar() {
           ) : (
             <Mic className="w-4 h-4" />
           )}
-
-          {/* Pulsing Visual Effect for Listening */}
           {voiceState === 'listening' && (
             <span className="absolute inset-0 rounded-full animate-ping bg-red-400 opacity-75"></span>
           )}
@@ -235,8 +286,8 @@ export default function SearchBar() {
       {/* Floating Status & Error Banner */}
       {(voiceState === 'listening' || voiceState === 'processing' || voiceState === 'error') && (
         <div className={`absolute top-full mt-2 w-full px-4 py-3 rounded-lg shadow-lg border text-sm z-50 flex items-center gap-2 transition-all ${
-          voiceState === 'error' 
-            ? 'bg-red-50 border-red-200 text-red-700' 
+          voiceState === 'error'
+            ? 'bg-red-50 border-red-200 text-red-700'
             : 'bg-green-50 border-green-200 text-green-800'
         }`}>
           {voiceState === 'listening' && (
@@ -263,21 +314,54 @@ export default function SearchBar() {
         </div>
       )}
 
+      {/* Recent Searches Dropdown — only for logged-in users */}
+      {showRecentSearches && (
+        <div className="absolute top-full mt-2 w-full bg-white border border-gray-200 rounded-xl shadow-xl overflow-hidden z-50">
+          <div className="flex items-center justify-between px-4 py-2.5 border-b border-gray-100 bg-gray-50/60">
+            <span className="text-xs font-semibold text-gray-500 uppercase tracking-wide">Recent Searches</span>
+            <button
+              onClick={handleClearAll}
+              className="text-xs text-green-600 hover:text-green-700 font-medium transition-colors"
+            >
+              Clear all
+            </button>
+          </div>
+          <ul>
+            {recentSearches.map((entry) => (
+              <li
+                key={entry.id}
+                onClick={() => handleRecentClick(entry.query)}
+                className="flex items-center gap-3 px-4 py-2.5 hover:bg-gray-50 cursor-pointer transition-colors group"
+              >
+                <Clock className="w-3.5 h-3.5 text-gray-400 flex-shrink-0" />
+                <span className="flex-1 text-sm text-gray-700">{entry.query}</span>
+                <button
+                  onClick={(e) => handleRemoveRecent(e, entry.query)}
+                  className="opacity-0 group-hover:opacity-100 p-0.5 rounded-full hover:bg-gray-200 transition-all"
+                >
+                  <X className="w-3 h-3 text-gray-500" />
+                </button>
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
+
       {/* Search Results Dropdown */}
-      {isDropdownOpen && query.trim() !== '' && (
+      {showProductResults && (
         <div className="absolute top-full mt-2 w-full bg-white border border-gray-200 rounded-lg shadow-xl overflow-hidden z-50">
           {filteredProducts.length > 0 ? (
             <ul className="max-h-96 overflow-y-auto">
               {filteredProducts.map(product => (
-                <li 
+                <li
                   key={product.id}
                   onClick={() => handleProductClick(product.id)}
                   className="flex items-center gap-4 p-3 hover:bg-gray-50 cursor-pointer border-b border-gray-100 last:border-b-0 transition-colors"
                 >
-                  <img 
-                    src={product.image} 
-                    alt={product.name} 
-                    className="w-12 h-12 object-cover rounded-md border border-gray-200"
+                  <img
+                    src={product.image}
+                    alt={product.name}
+                    className="w-12 h-12 object-cover object-top rounded-md border border-gray-200"
                   />
                   <div className="flex-1 min-w-0">
                     <p className="text-sm font-medium text-gray-900 truncate">{product.name}</p>

@@ -84,7 +84,7 @@ function ProductCard({ product, badgeIcon: BadgeIcon, badgeText, badgeColorClass
           <img
             src={product.image}
             alt={product.name}
-            className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+            className="w-full h-full object-cover object-top group-hover:scale-110 transition-transform duration-500"
           />
         </Link>
         {/* Badge */}
