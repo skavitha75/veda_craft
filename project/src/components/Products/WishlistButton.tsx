@@ -14,6 +14,7 @@ export default function WishlistButton({ product }: WishlistButtonProps) {
     <button
       onClick={(e) => {
         e.preventDefault();
+        console.log('[TRACE] Frontend ProductCard -> WishlistButton product.id =', product.id);
         toggleWishlist(product);
       }}
       aria-label={wishlisted ? 'Remove from wishlist' : 'Add to wishlist'}

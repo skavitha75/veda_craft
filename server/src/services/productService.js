@@ -28,6 +28,13 @@ const PRODUCT_COLUMNS = `
 const toProductDto = (product) => {
   if (!product) return null;
 
+  const imageUrl = product.image_url || product.image || '';
+  const images = Array.isArray(product.images)
+    ? product.images
+    : imageUrl
+    ? [imageUrl]
+    : [];
+
   return {
     id: product.id,
     category_id: product.category_id,
@@ -43,10 +50,8 @@ const toProductDto = (product) => {
     total_reviews: product.total_reviews,
     is_featured: product.is_featured,
     is_active: product.is_active,
-    image_url: product.image_url,
-    image_path: product.image_path,
-    image: product.image_url,
-    images: product.image_url ? [product.image_url] : [],
+    image: imageUrl,
+    images,
     created_at: product.created_at,
     updated_at: product.updated_at,
   };

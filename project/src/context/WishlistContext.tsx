@@ -1,7 +1,7 @@
 import { createContext, useContext, useState, useEffect, type ReactNode } from 'react';
 import { Product } from '../types/product';
 import { useAuth } from './AuthContext';
-import { supabase } from '../lib/supabase';
+import * as wishlistApi from '../services/wishlistApi';
 
 interface WishlistContextType {
   items: Product[];
@@ -15,54 +15,79 @@ const WishlistContext = createContext<WishlistContextType | undefined>(undefined
 
 export function WishlistProvider({ children }: { children: ReactNode }) {
   const { user } = useAuth();
-  const [items, setItems] = useState<Product[]>(() => {
-    const savedWishlist = localStorage.getItem('wishlist');
-    return savedWishlist ? JSON.parse(savedWishlist) : [];
-  });
+  const [items, setItems] = useState<Product[]>([]);
 
+  // Load wishlist from backend when user logs in or on app init
   useEffect(() => {
-    localStorage.setItem('wishlist', JSON.stringify(items));
-  }, [items]);
+    let mounted = true;
 
-  const syncWishlistToBackend = async (method: 'POST' | 'DELETE', product?: Product) => {
-    if (!user) return;
-    try {
-      const { data: { session } } = await supabase.auth.getSession();
-      const token = session?.access_token;
-      if (!token) return;
-
-      const response = await fetch('http://localhost:5000/api/v1/wishlist', {
-        method,
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${token}`,
-        },
-        body: product ? JSON.stringify(product) : undefined,
-      });
-      if (!response.ok) {
-        console.warn('Failed to sync wishlist to backend');
+    const load = async () => {
+      if (!user) {
+        if (mounted) setItems([]);
+        return;
       }
-    } catch (error) {
-      console.warn('Wishlist backend sync failed', error);
-    }
-  };
+
+      try {
+        const backendItems = await wishlistApi.getWishlist();
+        if (mounted) {
+          // dedupe by id
+          const map = new Map<number, Product>();
+          backendItems.forEach((p) => map.set(p.id, p));
+          setItems(Array.from(map.values()));
+        }
+      } catch (err) {
+        console.warn('Failed to load wishlist', err);
+      }
+    };
+
+    void load();
+
+    return () => {
+      mounted = false;
+    };
+  }, [user]);
 
   const addToWishlist = (product: Product) => {
+    console.log('[TRACE] WishlistContext addToWishlist product.id =', product.id);
+    // optimistic add
     setItems((currentItems) => {
-      if (!currentItems.find((item) => item.id === product.id)) {
-        const nextItems = [...currentItems, product];
-        void syncWishlistToBackend('POST', product);
-        return nextItems;
-      }
-      return currentItems;
+      if (currentItems.some((i) => i.id === product.id)) return currentItems;
+      return [...currentItems, product];
     });
+
+    void (async () => {
+      try {
+        const updated = await wishlistApi.addToWishlist(product);
+        // update to authoritative backend response (dedupe)
+        const map = new Map<number, Product>();
+        updated.forEach((p) => map.set(p.id, p));
+        setItems(Array.from(map.values()));
+      } catch (err) {
+        // rollback optimistic add
+        setItems((currentItems) => currentItems.filter((i) => i.id !== product.id));
+        console.warn('Failed to add wishlist item', err);
+      }
+    })();
   };
 
   const removeFromWishlist = (productId: number) => {
+    console.log('[TRACE] WishlistContext removeFromWishlist productId =', productId);
+    // optimistic remove
+    const prev = items;
     setItems((currentItems) => currentItems.filter((item) => item.id !== productId));
-    if (user) {
-      void syncWishlistToBackend('DELETE');
-    }
+
+    void (async () => {
+      try {
+        const updated = await wishlistApi.removeFromWishlist(productId);
+        const map = new Map<number, Product>();
+        updated.forEach((p) => map.set(p.id, p));
+        setItems(Array.from(map.values()));
+      } catch (err) {
+        // rollback
+        setItems(prev);
+        console.warn('Failed to remove wishlist item', err);
+      }
+    })();
   };
 
   const isInWishlist = (productId: number) => {

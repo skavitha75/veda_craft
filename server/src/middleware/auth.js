@@ -42,8 +42,11 @@ export const authenticate = async (req, res, next) => {
       });
     }
 
-    // Attach the authenticated user to the request object
+    // Attach the authenticated user and access token to the request object
     req.user = data.user;
+    // preserve the original bearer token for downstream services that
+    // need to create a scoped Supabase client so RLS policies are evaluated
+    req.accessToken = token;
 
     return next();
   } catch (err) {
@@ -68,6 +71,7 @@ export const optionalAuth = async (req, res, next) => {
     const { data } = await supabase.auth.getUser(token);
 
     req.user = data?.user ?? null;
+    req.accessToken = token;
 
     return next();
   } catch {

@@ -3,7 +3,7 @@ import * as wishlistService from '../services/wishlistService.js';
 
 export const getWishlist = async (req, res) => {
   try {
-    const wishlist = await wishlistService.getWishlist(req.user.id);
+    const wishlist = await wishlistService.getWishlist(req.user.id, req.accessToken);
     return sendSuccess(res, wishlist, 'Wishlist retrieved successfully');
   } catch (error) {
     const statusCode = error instanceof AppError ? error.statusCode : 500;
@@ -13,7 +13,8 @@ export const getWishlist = async (req, res) => {
 
 export const toggleWishlistItem = async (req, res) => {
   try {
-    const wishlist = await wishlistService.toggleItem(req.user.id, req.body);
+    console.log('[TRACE] wishlistController received body:', req.body);
+    const wishlist = await wishlistService.toggleItem(req.user.id, req.body, req.accessToken);
     return sendSuccess(res, wishlist, 'Wishlist updated');
   } catch (error) {
     const statusCode = error instanceof AppError ? error.statusCode : 500;
@@ -23,7 +24,8 @@ export const toggleWishlistItem = async (req, res) => {
 
 export const removeWishlistItem = async (req, res) => {
   try {
-    const wishlist = await wishlistService.removeItem(req.user.id, Number(req.params.id));
+    console.log('[TRACE] wishlistController remove id:', req.params.id);
+    const wishlist = await wishlistService.removeItem(req.user.id, Number(req.params.id), req.accessToken);
     return sendSuccess(res, wishlist, 'Item removed from wishlist');
   } catch (error) {
     const statusCode = error instanceof AppError ? error.statusCode : 500;

@@ -1,4 +1,4 @@
-import { supabase } from '../config/supabase.js';
+import { createScopedClient } from '../config/supabase.js';
 import { AppError } from '../utils/apiResponse.js';
 
 const PRODUCT_COLUMNS = 'id, name, slug, description, price, discount_price, stock, rating, total_reviews, is_featured, is_active, created_at, updated_at';
@@ -20,14 +20,15 @@ const toProductDto = (product) => {
     is_active: product.is_active,
     created_at: product.created_at,
     updated_at: product.updated_at,
-    image: product.image_url || '',
-    images: product.image_url ? [product.image_url] : [],
+    image: product.image || '',
+    images: product.image ? [product.image] : [],
   };
 };
 
-const getProductsByIds = async (productIds) => {
+const getProductsByIds = async (productIds, token) => {
   if (!productIds.length) return [];
 
+  const supabase = createScopedClient(token);
   const { data, error } = await supabase
     .from('products')
     .select(PRODUCT_COLUMNS)
@@ -39,11 +40,11 @@ const getProductsByIds = async (productIds) => {
   return (data || []).map(toProductDto).filter(Boolean);
 };
 
-const buildWishlistResponse = async (rows) => {
+const buildWishlistResponse = async (rows, token) => {
   if (!rows?.length) return [];
 
   const productIds = [...new Set(rows.map((row) => row.product_id).filter(Boolean))];
-  const products = await getProductsByIds(productIds);
+  const products = await getProductsByIds(productIds, token);
   const productMap = new Map(products.map((product) => [product.id, product]));
 
   return rows
@@ -56,7 +57,8 @@ const buildWishlistResponse = async (rows) => {
     .filter((entry) => entry.product);
 };
 
-export const getWishlist = async (userId) => {
+export const getWishlist = async (userId, token) => {
+  const supabase = createScopedClient(token);
   const { data, error } = await supabase
     .from('wishlists')
     .select('id, product_id, created_at')
@@ -65,16 +67,19 @@ export const getWishlist = async (userId) => {
 
   if (error) throw new AppError(error.message, 500);
 
-  const wishlistRows = await buildWishlistResponse(data || []);
+  const wishlistRows = await buildWishlistResponse(data || [], token);
   return wishlistRows.map((entry) => entry.product);
 };
 
-export const toggleItem = async (userId, product) => {
+export const toggleItem = async (userId, product, token) => {
   const productId = Number(product?.id ?? product?.product_id);
+  console.log('[TRACE] wishlistService.toggleItem received product/raw:', product, 'mapped productId:', productId);
 
   if (!Number.isFinite(productId) || productId <= 0) {
     throw new AppError('Product id is required', 400);
   }
+
+  const supabase = createScopedClient(token);
 
   const { data: existing, error: lookupError } = await supabase
     .from('wishlists')
@@ -90,17 +95,21 @@ export const toggleItem = async (userId, product) => {
     .from('wishlists')
     .insert({ user_id: userId, product_id: productId });
 
+  console.log('[TRACE] Supabase insert attempted with product_id =', productId, 'user_id =', userId);
+
   if (insertError) throw new AppError(insertError.message, 500);
 
-  return getWishlist(userId);
+  return getWishlist(userId, token);
 };
 
-export const removeItem = async (userId, productId) => {
+export const removeItem = async (userId, productId, token) => {
   const normalizedProductId = Number(productId);
 
   if (!Number.isFinite(normalizedProductId) || normalizedProductId <= 0) {
     throw new AppError('Product id is required', 400);
   }
+
+  const supabase = createScopedClient(token);
 
   const { data: existing, error: lookupError } = await supabase
     .from('wishlists')
@@ -120,5 +129,5 @@ export const removeItem = async (userId, productId) => {
 
   if (deleteError) throw new AppError(deleteError.message, 500);
 
-  return getWishlist(userId);
+  return getWishlist(userId, token);
 };
