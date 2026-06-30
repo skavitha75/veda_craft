@@ -2,8 +2,17 @@ import { createScopedClient } from '../config/supabase.js';
 
 const MAX_RECENT = 6;
 
+// Check if the error is because the table doesn't exist or permissions not granted yet
+const isTableMissingError = (error) =>
+  error?.code === '42P01' ||
+  error?.code === '42501' ||
+  error?.message?.includes('user_recent_searches') ||
+  error?.message?.includes('does not exist') ||
+  error?.message?.includes('permission denied');
+
 /**
  * Get recent searches for a user from the database.
+ * Returns empty array gracefully if table doesn't exist yet.
  */
 export const getRecentSearches = async (userId, token) => {
   const supabase = createScopedClient(token);
@@ -14,7 +23,13 @@ export const getRecentSearches = async (userId, token) => {
     .order('searched_at', { ascending: false })
     .limit(MAX_RECENT);
 
-  if (error) throw new Error(error.message);
+  if (error) {
+    if (isTableMissingError(error)) {
+      console.warn('[RecentSearch] Table not found — run add_user_recent_searches.sql in Supabase.');
+      return [];
+    }
+    throw new Error(error.message);
+  }
   return data || [];
 };
 
@@ -40,7 +55,13 @@ export const saveRecentSearch = async (userId, query, token) => {
     .from('user_recent_searches')
     .insert({ user_id: userId, query: trimmed });
 
-  if (insertError) throw new Error(insertError.message);
+  if (insertError) {
+    if (isTableMissingError(insertError)) {
+      console.warn('[RecentSearch] Table not found — skipping save.');
+      return;
+    }
+    throw new Error(insertError.message);
+  }
 
   // Keep only latest MAX_RECENT entries — delete older ones
   const { data: all } = await supabase

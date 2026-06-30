@@ -23,7 +23,7 @@ export default function ProfilePage() {
 
   return (
     <div className="min-h-screen bg-[#f5f0e8]">
-      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+      <div className="w-full px-4 sm:px-6 lg:px-8 py-6">
         <div className="flex flex-col md:flex-row gap-6">
           
           {/* Sidebar */}

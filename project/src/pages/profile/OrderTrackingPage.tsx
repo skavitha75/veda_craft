@@ -194,32 +194,78 @@ export default function OrderTrackingPage() {
         })}
       </div>
 
+      <style>{`
+        @keyframes truckDrive {
+          0%   { transform: translateX(-10%); }
+          80%  { transform: translateX(72%); }
+          85%  { transform: translateX(68%); }
+          90%  { transform: translateX(72%); }
+          100% { transform: translateX(72%); }
+        }
+        @keyframes housePop {
+          0%, 75% { transform: scale(0.8); opacity: 0.3; }
+          85%      { transform: scale(1.2); opacity: 1; }
+          100%     { transform: scale(1.0); opacity: 1; }
+        }
+        @keyframes roadPulse {
+          0%, 100% { opacity: 0.4; }
+          50%       { opacity: 0.9; }
+        }
+        .truck-animate { animation: truckDrive 3s ease-in-out infinite; }
+        .house-animate { animation: housePop 3s ease-in-out infinite; }
+        .road-pulse    { animation: roadPulse 1.5s ease-in-out infinite; }
+      `}</style>
+
       <div
-        className={`rounded-lg p-4 flex items-start gap-3 mb-5 ${
+        className={`rounded-lg p-4 mb-5 ${
           order.status === 'Cancelled'
             ? 'border border-red-100 bg-red-50'
             : 'border border-yellow-200 bg-yellow-50/30'
         }`}
       >
         {order.status === 'Cancelled' ? (
-          <XCircle className="w-7 h-7 text-red-500 flex-shrink-0 mt-0.5" />
+          <div className="flex items-start gap-3">
+            <XCircle className="w-7 h-7 text-red-500 flex-shrink-0 mt-0.5" />
+            <div>
+              <p className="text-sm font-bold text-red-600">Your order has been cancelled</p>
+              <p className="text-xs text-gray-600 mt-1">This order will not be shipped.</p>
+            </div>
+          </div>
+        ) : order.status === 'Delivered' ? (
+          <div className="flex items-start gap-3">
+            <Home className="w-7 h-7 text-green-500 flex-shrink-0 mt-0.5" />
+            <div>
+              <p className="text-sm font-bold text-[#2d8f3a]">{`Delivered on ${formatDisplayDate(order.createdAt)}`}</p>
+              <p className="text-xs text-gray-600 mt-1">Your order has been delivered successfully.</p>
+            </div>
+          </div>
         ) : (
-          <Truck className="w-7 h-7 text-yellow-500 flex-shrink-0 mt-0.5" />
+          <div>
+            <p className="text-sm font-bold text-[#2d8f3a] mb-3">
+              Arriving by {formatDisplayDate(expectedDate)}
+            </p>
+            {/* Animated truck delivery */}
+            <div className="relative h-10 flex items-end overflow-hidden">
+              {/* Road */}
+              <div className="absolute bottom-1 left-0 right-0 h-0.5 bg-yellow-300 road-pulse rounded-full" />
+              {/* Dashed road markers */}
+              <div className="absolute bottom-1.5 left-[10%] right-[20%] flex gap-3">
+                {[...Array(8)].map((_, i) => (
+                  <div key={i} className="h-px w-4 bg-yellow-200 road-pulse rounded" />
+                ))}
+              </div>
+              {/* Truck */}
+              <div className="absolute bottom-2 truck-animate">
+                <Truck className="w-8 h-8 text-yellow-500" />
+              </div>
+              {/* House destination */}
+              <div className="absolute bottom-2 right-4 house-animate">
+                <Home className="w-6 h-6 text-[#2d8f3a]" />
+              </div>
+            </div>
+            <p className="text-xs text-gray-600 mt-2">Your order is on the way and will be delivered soon.</p>
+          </div>
         )}
-        <div>
-          <p className={`text-sm font-bold ${order.status === 'Cancelled' ? 'text-red-600' : 'text-[#2d8f3a]'}`}>
-            {order.status === 'Cancelled'
-              ? 'Your order has been cancelled'
-              : order.status === 'Delivered'
-              ? `Delivered on ${formatDisplayDate(order.createdAt)}`
-              : `Arriving by ${formatDisplayDate(expectedDate)}`}
-          </p>
-          <p className="text-xs text-gray-600 mt-1">
-            {order.status === 'Cancelled'
-              ? 'This order will not be shipped.'
-              : 'Your order is on the way and will be delivered soon.'}
-          </p>
-        </div>
       </div>
 
       <div className="grid md:grid-cols-2 gap-5 mb-7">

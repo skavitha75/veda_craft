@@ -1,5 +1,5 @@
 import { useParams, Link, useNavigate } from 'react-router-dom';
-import { ChevronRight, Star, Leaf, HeartPulse, Sparkles, Sprout, Minus, Plus, ShieldCheck, Flame, Droplets, Wind, Gem, Palette, Recycle, Sun, Package, Coffee, Flower2, Zap, Award, HandHeart } from 'lucide-react';
+import { ChevronRight, Star, Share2, Leaf, HeartPulse, Sparkles, Sprout, Minus, Plus, ShieldCheck, Flame, Droplets, Wind, Gem, Palette, Recycle, Sun, Package, Coffee, Flower2, Zap, Award, HandHeart } from 'lucide-react';
 import { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { ecoProducts } from '../data/ecoProducts';
@@ -11,6 +11,7 @@ import { fashionProducts } from '../data/fashionProducts';
 import ProductTabs from '../components/Products/ProductTabs';
 import ReviewCard from '../components/Products/ReviewCard';
 import ProductSection from '../components/Products/ProductSection';
+import WishlistButton from '../components/Products/WishlistButton';
 import { useCart } from '../context/CartContext';
 import { getProductBySlug } from '../services/productApi';
 import { mapApiProductToProduct, mapLocalProductToProduct, Product, ApiProduct } from '../types/product';
@@ -24,6 +25,17 @@ const allProducts = [
   ...decorProducts,
   ...fashionProducts,
 ];
+
+const getRelatedProducts = (product?: { id: number }) => {
+  if (!product) return allProducts;
+  if (ecoProducts.some(p => p.id === product.id)) return ecoProducts;
+  if (foodProducts.some(p => p.id === product.id)) return foodProducts;
+  if (wellnessProducts.some(p => p.id === product.id)) return wellnessProducts;
+  if (craftProducts.some(p => p.id === product.id)) return craftProducts;
+  if (decorProducts.some(p => p.id === product.id)) return decorProducts;
+  if (fashionProducts.some(p => p.id === product.id)) return fashionProducts;
+  return allProducts;
+};
 
 // Dynamic content (description, how to use, core instructions) based on product category
 type ProductContent = {
@@ -469,6 +481,7 @@ export default function ProductDetailsPage() {
   const [product, setProduct] = useState<Product | null>(null);
   const [loading, setLoading] = useState(true);
   const [similarProducts, setSimilarProducts] = useState<Product[]>([]);
+  const [recentlyViewed, setRecentlyViewed] = useState<Product[]>([]);
   const [quantity, setQuantity] = useState(1);
   const [pincode, setPincode] = useState('');
   const [deliveryChecked, setDeliveryChecked] = useState(false);
@@ -503,12 +516,21 @@ export default function ProductDetailsPage() {
           };
           setProduct(resolved);
 
-          // Related products: local lookup by category, mapped to domain model
-          const related = allProducts
-            .filter((p) => p.category === resolved.category && getProductSlug(p.name) !== resolved.slug)
-            .slice(0, 5)
+          // Related products: local lookup by top-level category
+          const sourceProducts = getRelatedProducts(localProduct);
+          const related = sourceProducts
+            .filter((p) => p.id !== resolved.id && getProductSlug(p.name) !== resolved.slug)
+            .slice(0, 6)
             .map(mapLocalProductToProduct);
           setSimilarProducts(related);
+
+          // Recently viewed products
+          const storedRecent = localStorage.getItem('recentlyViewed');
+          let recentList: Product[] = storedRecent ? JSON.parse(storedRecent) : [];
+          recentList = recentList.filter((p) => p.id !== resolved.id);
+          const updatedRecent = [resolved, ...recentList].slice(0, 10);
+          localStorage.setItem('recentlyViewed', JSON.stringify(updatedRecent));
+          setRecentlyViewed(recentList.slice(0, 6));
         }
       } catch (error) {
         console.warn('Backend unavailable, using local product data:', error);
@@ -517,11 +539,20 @@ export default function ProductDetailsPage() {
           setProduct(fallback);
 
           if (fallback) {
-            const related = allProducts
-              .filter((p) => p.category === fallback.category && getProductSlug(p.name) !== fallback.slug)
-              .slice(0, 5)
+            const sourceProducts = getRelatedProducts(localProduct);
+            const related = sourceProducts
+              .filter((p) => p.id !== fallback.id && getProductSlug(p.name) !== fallback.slug)
+              .slice(0, 6)
               .map(mapLocalProductToProduct);
             setSimilarProducts(related);
+
+            // Recently viewed products
+            const storedRecent = localStorage.getItem('recentlyViewed');
+            let recentList: Product[] = storedRecent ? JSON.parse(storedRecent) : [];
+            recentList = recentList.filter((p) => p.id !== fallback.id);
+            const updatedRecent = [fallback, ...recentList].slice(0, 10);
+            localStorage.setItem('recentlyViewed', JSON.stringify(updatedRecent));
+            setRecentlyViewed(recentList.slice(0, 6));
           }
         }
       } finally {
@@ -539,6 +570,29 @@ export default function ProductDetailsPage() {
     } else {
       setDeliveryChecked(false);
       alert('Please enter a valid 6-digit pincode.');
+    }
+  };
+
+  const handleShare = async () => {
+    if (!product) return;
+    
+    if (navigator.share) {
+      try {
+        await navigator.share({
+          title: product.name,
+          text: product.description || 'Check out this amazing product on VedaCraft!',
+          url: window.location.href,
+        });
+      } catch (error) {
+        console.error('Error sharing', error);
+      }
+    } else {
+      try {
+        await navigator.clipboard.writeText(window.location.href);
+        alert('Product link copied to clipboard!');
+      } catch (err) {
+        console.error('Failed to copy', err);
+      }
     }
   };
 
@@ -596,8 +650,20 @@ export default function ProductDetailsPage() {
                 </div>
               ))}
             </div>
-            <div className="flex-1 flex items-start justify-center">
+            <div className="flex-1 flex items-start justify-center relative group">
                <img src={product.image} alt={product.name} className="w-full h-auto rounded-xl object-contain shadow-sm border border-gray-100" />
+               
+               {/* Floating Action Group */}
+               <div className="absolute top-4 right-4 flex flex-col gap-3 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
+                 <WishlistButton product={product} />
+                 <button 
+                   onClick={handleShare}
+                   className="w-7 h-7 rounded-full bg-white shadow flex items-center justify-center transition-all duration-200 hover:scale-110 text-gray-400 hover:text-green-600"
+                   aria-label="Share product"
+                 >
+                   <Share2 className="w-4 h-4" />
+                 </button>
+               </div>
             </div>
           </div>
 
@@ -783,6 +849,15 @@ export default function ProductDetailsPage() {
         </div>
 
       </div>
+
+      {/* Recently Viewed Products */}
+      {recentlyViewed.length > 0 && (
+        <div className="bg-white pt-8 pb-4 border-t border-gray-100">
+          <div className="max-w-7xl mx-auto">
+            <ProductSection title="Recently Viewed" products={recentlyViewed} />
+          </div>
+        </div>
+      )}
 
       {/* Similar Products */}
       {similarProducts.length > 0 && (

@@ -32,3 +32,9 @@ create policy "Users can insert own recent searches"
 create policy "Users can delete own recent searches"
   on public.user_recent_searches for delete
   using (auth.uid() = user_id);
+
+-- ── Permissions ────────────────────────────────────────────
+-- Grant table access to authenticated users
+-- (RLS policies alone are not enough — base privileges also needed)
+grant usage on schema public to authenticated;
+grant select, insert, delete on public.user_recent_searches to authenticated;
