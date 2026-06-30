@@ -15,6 +15,7 @@ import wishlistRouter from './wishlistRoutes.js';
 import orderRouter from './orderRoutes.js';
 import recentSearchRouter from './recentSearchRoutes.js';
 import paymentRouter from './paymentRoutes.js';
+import chatRouter from './chatRoutes.js';
 
 const router = Router();
 
@@ -28,6 +29,7 @@ router.use('/wishlist', wishlistRouter);
 router.use('/orders', orderRouter);
 router.use('/recent-searches', recentSearchRouter);
 router.use('/payment', paymentRouter);
+router.use('/chat', chatRouter);
 
 // ─── Future Feature Routes (add here when ready) ─────────────────────────────
 // router.use('/categories', categoriesRouter);

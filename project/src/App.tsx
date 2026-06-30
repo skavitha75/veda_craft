@@ -29,6 +29,7 @@ import { CartProvider } from './context/CartContext';
 import { WishlistProvider } from './context/WishlistContext';
 import { AuthProvider } from './context/AuthContext';
 import CartDrawer from './components/Cart/CartDrawer';
+import ChatbotWidget from './components/Chatbot/ChatbotWidget';
 
 function App() {
   return (
@@ -83,6 +84,7 @@ function App() {
             </div>
             <Footer />
             <CartDrawer />
+            <ChatbotWidget />
           </div>
         </BrowserRouter>
         </CartProvider>
