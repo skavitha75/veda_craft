@@ -20,7 +20,19 @@ type BrowserAudioContext = typeof AudioContext;
 type AudioWindow = Window & {
   AudioContext?: BrowserAudioContext;
   webkitAudioContext?: BrowserAudioContext;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  Razorpay?: any;
 };
+
+function loadScript(src: string): Promise<boolean> {
+  return new Promise((resolve) => {
+    const script = document.createElement('script');
+    script.src = src;
+    script.onload = () => resolve(true);
+    script.onerror = () => resolve(false);
+    document.body.appendChild(script);
+  });
+}
 
 function createOrderPlacedSound() {
   const audioWindow = window as AudioWindow;
@@ -222,6 +234,61 @@ export default function CheckoutPage() {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
+  const finalizeOrder = async (
+    token: string | undefined,
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    playOrderPlacedSound: any,
+    total: number,
+    itemCount: number,
+    firstProduct: string,
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    razorpayDetails?: any
+  ) => {
+    const payload = {
+      items: checkoutItems,
+      address: selectedAddress,
+      paymentMethod: selectedPayment,
+      total,
+      itemCount,
+      product:
+        checkoutItems.length > 1
+          ? `${firstProduct} + ${checkoutItems.length - 1} more`
+          : firstProduct,
+      ...razorpayDetails,
+    };
+
+    await saveOrder({
+      userId: user?.id,
+      ...payload,
+    });
+
+    if (token) {
+      try {
+        const url = razorpayDetails
+          ? 'http://localhost:5000/api/v1/payment/verify'
+          : 'http://localhost:5000/api/v1/orders';
+
+        await fetch(url, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify(payload),
+        });
+      } catch (error) {
+        console.warn('Order backend sync failed', error);
+      }
+    }
+
+    if (!isBuyNow) {
+      clearCart();
+    }
+
+    setOrderPlaced(true);
+    void playOrderPlacedSound?.();
+  };
+
   const handleContinue = async () => {
     if (currentStep === 3) {
       const playOrderPlacedSound = createOrderPlacedSound();
@@ -235,50 +302,70 @@ export default function CheckoutPage() {
       const { data: { session } } = await supabase.auth.getSession();
       const token = session?.access_token;
 
-      await saveOrder({
-        userId: user?.id,
-        items: checkoutItems,
-        address: selectedAddress,
-        paymentMethod: selectedPayment,
-        total,
-        itemCount,
-        product:
-          checkoutItems.length > 1
-            ? `${firstProduct} + ${checkoutItems.length - 1} more`
-            : firstProduct,
-      });
-
-      if (token) {
+      if (selectedPayment !== 'cod') {
+        // Razorpay Flow
         try {
-          await fetch('http://localhost:5000/api/v1/orders', {
+          const res = await fetch('http://localhost:5000/api/v1/payment/create-order', {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',
-              Authorization: `Bearer ${token}`,
+              ...(token ? { Authorization: `Bearer ${token}` } : {}),
             },
-            body: JSON.stringify({
-              items: checkoutItems,
-              address: selectedAddress,
-              paymentMethod: selectedPayment,
-              total,
-              itemCount,
-              product:
-                checkoutItems.length > 1
-                  ? `${firstProduct} + ${checkoutItems.length - 1} more`
-                  : firstProduct,
-            }),
+            body: JSON.stringify({ amount: total }),
           });
-        } catch (error) {
-          console.warn('Order backend sync failed', error);
+
+          const data = await res.json();
+          if (!data.success) {
+            alert('Failed to initiate payment. Please try again.');
+            return;
+          }
+
+          const isLoaded = await loadScript('https://checkout.razorpay.com/v1/checkout.js');
+          if (!isLoaded) {
+            alert('Razorpay SDK failed to load. Are you online?');
+            return;
+          }
+
+          const options = {
+            key: data.data.key_id || 'rzp_test_your_key_id', // Add your Razorpay Key ID
+            amount: data.data.amount,
+            currency: data.data.currency,
+            name: 'VedaCraft',
+            description: 'Test Transaction',
+            order_id: data.data.id,
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            handler: async function (response: any) {
+              await finalizeOrder(token, playOrderPlacedSound, total, itemCount, firstProduct, {
+                razorpay_payment_id: response.razorpay_payment_id,
+                razorpay_order_id: response.razorpay_order_id,
+                razorpay_signature: response.razorpay_signature,
+              });
+            },
+            prefill: {
+              name: user?.user_metadata?.full_name || user?.email?.split('@')[0] || '',
+              email: user?.email || '',
+              contact: selectedAddress?.phoneNumber || '',
+            },
+            theme: {
+              color: '#16a34a',
+            },
+          };
+
+          const paymentObject = new window.Razorpay(options);
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          paymentObject.on('payment.failed', function (response: any) {
+            alert(`Payment failed: ${response.error.description}`);
+          });
+          paymentObject.open();
+        } catch (err) {
+          console.error('Payment initialization error', err);
+          alert('Failed to start payment process.');
         }
+        return;
       }
 
-      if (!isBuyNow) {
-        clearCart();
-      }
-
-      setOrderPlaced(true);
-      void playOrderPlacedSound?.();
+      // COD Flow
+      await finalizeOrder(token, playOrderPlacedSound, total, itemCount, firstProduct);
       return;
     }
     goToStep(currentStep + 1);

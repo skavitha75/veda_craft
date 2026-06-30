@@ -31,6 +31,19 @@ export default function LoginPage() {
         setError('Please enter a valid 10-digit mobile number.');
         return;
       }
+
+      // Send SMS OTP via Supabase + Twilio
+      const { error: signInError } = await supabase.auth.signInWithOtp({
+        phone: '+91' + inputValue,
+        options: {
+          shouldCreateUser: true,
+        }
+      });
+
+      if (signInError) {
+        setError(signInError.message);
+        return;
+      }
     } else {
       const isEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(inputValue);
       if (!isEmail) {
@@ -78,24 +91,23 @@ export default function LoginPage() {
       }
       navigate(redirect);
     } else {
-      if (code.length !== 6 && code.length !== 4) {
-        setError('Please enter a valid OTP.');
+      if (code.length !== 6) {
+        setError('Please enter the 6-digit OTP sent to your mobile.');
         return;
       }
 
-      const { error: signInError } = await supabase.auth.signInWithOtp({
-        phone: inputValue,
-        options: {
-          shouldCreateUser: true,
-        }
+      // Verify SMS OTP via Supabase
+      const { error: verifyError } = await supabase.auth.verifyOtp({
+        phone: '+91' + inputValue,
+        token: code,
+        type: 'sms',
       });
 
-      if (signInError) {
-        setError(signInError.message);
+      if (verifyError) {
+        setError(verifyError.message);
         return;
       }
 
-      login(inputValue);
       navigate(redirect);
     }
   };

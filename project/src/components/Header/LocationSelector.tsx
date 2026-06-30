@@ -1,11 +1,12 @@
 import { useState } from 'react';
-import { MapPin, ChevronDown } from 'lucide-react';
+import { MapPin, ChevronDown, Loader2 } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 import LocationSelectorModal from './LocationSelectorModal';
 
 export default function LocationSelector() {
   const { selectedLocation } = useAuth();
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const isDetecting = selectedLocation.text === 'Detecting...';
 
   return (
     <>
@@ -17,10 +18,19 @@ export default function LocationSelector() {
         <div className="flex flex-col leading-tight">
           <span className="text-[10px] text-gray-500 font-bold uppercase tracking-wider">Deliver to</span>
           <div className="flex items-center gap-0.5">
-            <span className="text-xs text-gray-800 font-bold truncate max-w-[120px]" title={selectedLocation.text}>
-              {selectedLocation.text}
-            </span>
-            <ChevronDown className="w-3.5 h-3.5 text-gray-500 flex-shrink-0" />
+            {isDetecting ? (
+              <div className="flex items-center gap-1">
+                <Loader2 className="w-3 h-3 text-green-600 animate-spin" />
+                <span className="text-xs text-green-600 font-bold">Detecting...</span>
+              </div>
+            ) : (
+              <>
+                <span className="text-xs text-gray-800 font-bold truncate max-w-[120px]" title={selectedLocation.text}>
+                  {selectedLocation.text}
+                </span>
+                <ChevronDown className="w-3.5 h-3.5 text-gray-500 flex-shrink-0" />
+              </>
+            )}
           </div>
         </div>
       </div>

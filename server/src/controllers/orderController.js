@@ -1,7 +1,10 @@
 import { sendError, sendSuccess } from '../utils/apiResponse.js';
 import { supabaseAdmin } from '../config/supabase.js';
+import { sendOrderConfirmationEmail } from '../services/emailService.js';
 
 const getUserId = (req) => req.user?.id || 'guest';
+const getUserEmail = (req) => req.user?.email || '';
+const getUserName = (req) => req.user?.user_metadata?.full_name || req.user?.email?.split('@')[0] || '';
 
 export const getOrders = async (req, res, next) => {
   try {
@@ -29,13 +32,30 @@ export const createOrder = async (req, res, next) => {
   try {
     const payload = req.body || {};
     const userId = getUserId(req);
+    const userEmail = getUserEmail(req);
+    const userName = getUserName(req);
 
     if (!supabaseAdmin) {
-      return sendSuccess(res, {
+      const mockOrder = {
         id: `local-${Date.now()}`,
         user_id: userId,
         ...payload,
-      }, 'Order created successfully', 201);
+      };
+
+      // Try sending email even for mock/local setup if email is available
+      if (userEmail) {
+        // Run in background, don't await
+        sendOrderConfirmationEmail({
+          email: userEmail,
+          name: userName,
+          orderId: mockOrder.id,
+          items: payload.items || [],
+          total: Number(payload.total || 0),
+          address: payload.address || null,
+        }).catch(err => console.error('Background email error:', err));
+      }
+
+      return sendSuccess(res, mockOrder, 'Order created successfully', 201);
     }
 
     const { data, error } = await supabaseAdmin
@@ -56,6 +76,18 @@ export const createOrder = async (req, res, next) => {
       .single();
 
     if (error) throw error;
+
+    // Send email asynchronously without blocking the response
+    if (userEmail) {
+      sendOrderConfirmationEmail({
+        email: userEmail,
+        name: userName,
+        orderId: data.id,
+        items: data.items || [],
+        total: data.total,
+        address: data.address || null,
+      }).catch(err => console.error('Background email error:', err));
+    }
 
     return sendSuccess(res, data, 'Order created successfully', 201);
   } catch (error) {

@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState, useEffect, useCallback } from 'react';
+import React, { createContext, useContext, useState, useEffect, useCallback, useRef } from 'react';
 import { supabase } from '../lib/supabase';
 
 export interface Address {
@@ -58,8 +58,10 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const [selectedLocation, setSelectedLocation] = useState<SelectedLocation>(() => {
     const saved = localStorage.getItem('vc_selected_location');
     if (saved) return JSON.parse(saved);
-    return { type: 'pincode', value: '627002', text: 'Tirunelveli - 627002' };
+    return { type: 'pincode', value: '', text: 'Detecting...' };
   });
+
+  const hasAutoDetected = useRef(false);
 
   // ─── Fetch addresses directly from Supabase ───────────────────────────────
   const fetchAddresses = useCallback(async () => {
@@ -134,6 +136,67 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       console.error('fetchProfile error:', err);
     }
   };
+
+  // ─── Auto Detect Location on first visit ─────────────────────────────────
+  useEffect(() => {
+    const alreadySaved = localStorage.getItem('vc_selected_location');
+    if (alreadySaved || hasAutoDetected.current) return;
+
+    hasAutoDetected.current = true;
+
+    if (!navigator.geolocation) {
+      // Fallback default
+      const fallback = { type: 'pincode' as const, value: '627002', text: 'Tirunelveli - 627002' };
+      setSelectedLocation(fallback);
+      localStorage.setItem('vc_selected_location', JSON.stringify(fallback));
+      return;
+    }
+
+    navigator.geolocation.getCurrentPosition(
+      async (position) => {
+        const { latitude, longitude } = position.coords;
+        try {
+          // OpenStreetMap Nominatim reverse geocoding (free, no API key)
+          const res = await fetch(
+            `https://nominatim.openstreetmap.org/reverse?lat=${latitude}&lon=${longitude}&format=json&addressdetails=1`,
+            { headers: { 'Accept-Language': 'en' } }
+          );
+          const data = await res.json();
+          const addr = data.address || {};
+
+          const city =
+            addr.city ||
+            addr.town ||
+            addr.village ||
+            addr.county ||
+            addr.state_district ||
+            addr.state ||
+            'India';
+          const pincode = addr.postcode || '000000';
+
+          const loc: SelectedLocation = {
+            type: 'pincode',
+            value: pincode,
+            text: `${city} - ${pincode}`,
+          };
+          setSelectedLocation(loc);
+          localStorage.setItem('vc_selected_location', JSON.stringify(loc));
+        } catch {
+          // Fallback if geocoding fails
+          const fallback = { type: 'pincode' as const, value: '627002', text: 'Tirunelveli - 627002' };
+          setSelectedLocation(fallback);
+          localStorage.setItem('vc_selected_location', JSON.stringify(fallback));
+        }
+      },
+      () => {
+        // Permission denied or error → fallback
+        const fallback = { type: 'pincode' as const, value: '627002', text: 'Tirunelveli - 627002' };
+        setSelectedLocation(fallback);
+        localStorage.setItem('vc_selected_location', JSON.stringify(fallback));
+      },
+      { timeout: 10000, enableHighAccuracy: false }
+    );
+  }, []);
 
   useEffect(() => {
     supabase.auth.getSession().then(({ data: { session } }) => {

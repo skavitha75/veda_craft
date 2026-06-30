@@ -76,41 +76,52 @@ export default function LocationSelectorModal({ isOpen, onClose }: LocationSelec
     }
 
     setGeoLoading(true);
-    navigator.geolocation.getCurrentPosition(
-      (position) => {
-        // Mock a real city from coordinates
-        const lat = position.coords.latitude;
-        const lng = position.coords.longitude;
-        
-        // Approximate location logic
-        let city = 'Chennai';
-        let pin = '600001';
-        
-        if (Math.abs(lat - 8.71) < 0.5 && Math.abs(lng - 77.75) < 0.5) {
-          city = 'Tirunelveli';
-          pin = '627002';
-        } else if (Math.abs(lat - 12.97) < 0.5 && Math.abs(lng - 77.59) < 0.5) {
-          city = 'Bengaluru';
-          pin = '560001';
-        } else if (Math.abs(lat - 13.08) < 0.5 && Math.abs(lng - 80.27) < 0.5) {
-          city = 'Chennai';
-          pin = '600001';
-        }
+    setPincodeError('');
 
-        updateLocation({
-          type: 'pincode',
-          value: pin,
-          text: `Detected: ${city} - ${pin}`
-        });
-        setGeoLoading(false);
-        onClose();
+    navigator.geolocation.getCurrentPosition(
+      async (position) => {
+        const { latitude, longitude } = position.coords;
+        try {
+          // Real reverse geocoding via OpenStreetMap Nominatim (free, no API key needed)
+          const res = await fetch(
+            `https://nominatim.openstreetmap.org/reverse?lat=${latitude}&lon=${longitude}&format=json&addressdetails=1`,
+            { headers: { 'Accept-Language': 'en' } }
+          );
+          const data = await res.json();
+          const addr = data.address || {};
+
+          const city =
+            addr.city ||
+            addr.town ||
+            addr.village ||
+            addr.county ||
+            addr.state_district ||
+            addr.state ||
+            'India';
+          const pincode = addr.postcode || '000000';
+
+          updateLocation({
+            type: 'pincode',
+            value: pincode,
+            text: `${city} - ${pincode}`,
+          });
+          setGeoLoading(false);
+          onClose();
+        } catch {
+          setPincodeError('Unable to fetch location details. Try entering a pincode manually.');
+          setGeoLoading(false);
+        }
       },
       (error) => {
         console.error(error);
-        setPincodeError('Unable to retrieve your location');
+        if (error.code === error.PERMISSION_DENIED) {
+          setPincodeError('Location permission denied. Please allow access or enter a pincode.');
+        } else {
+          setPincodeError('Unable to retrieve your location. Try entering a pincode manually.');
+        }
         setGeoLoading(false);
       },
-      { timeout: 10000 }
+      { timeout: 10000, enableHighAccuracy: false }
     );
   };
 

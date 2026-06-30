@@ -7,15 +7,21 @@
  */
 
 // eslint-disable-next-line no-unused-vars
+import fs from 'fs';
+
 export const errorHandler = (err, req, res, next) => {
   // Log the full error in development
   if (process.env.NODE_ENV === 'development') {
-    console.error('[Error]', {
+    const errDetails = {
       message: err.message,
       stack: err.stack,
       path: req.path,
       method: req.method,
-    });
+    };
+    console.error('[Error]', errDetails);
+    try {
+      fs.writeFileSync('last_error.json', JSON.stringify(errDetails, null, 2));
+    } catch (e) {}
   } else {
     // Minimal logging in production
     console.error(`[Error] ${req.method} ${req.path} — ${err.message}`);
