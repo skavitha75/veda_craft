@@ -13,6 +13,7 @@ import productRouter from './productRoutes.js';
 import cartRouter from './cartRoutes.js';
 import wishlistRouter from './wishlistRoutes.js';
 import orderRouter from './orderRoutes.js';
+import recentSearchRouter from './recentSearchRoutes.js';
 
 const router = Router();
 
@@ -24,6 +25,7 @@ router.use('/products', productRouter);
 router.use('/cart', cartRouter);
 router.use('/wishlist', wishlistRouter);
 router.use('/orders', orderRouter);
+router.use('/recent-searches', recentSearchRouter);
 
 // ─── Future Feature Routes (add here when ready) ─────────────────────────────
 // router.use('/categories', categoriesRouter);

@@ -16,6 +16,8 @@ const PRODUCT_COLUMNS = `
   is_active,
   created_at,
   updated_at,
+  image_url,
+  image_path,
   category:categories!inner (
     id,
     name,
@@ -106,7 +108,23 @@ const applyFilters = async (query, filters) => {
   if (filters.search) {
     const term = filters.search.replaceAll('%', '').replaceAll(',', ' ').trim();
     if (term) {
-      nextQuery = nextQuery.or(`name.ilike.%${term}%,slug.ilike.%${term}%,description.ilike.%${term}%`);
+      // Try to find a matching category by name or slug
+      const { data: matchedCategories } = await supabase
+        .from('categories')
+        .select('id')
+        .or(`name.ilike.%${term}%,slug.ilike.%${term}%`);
+
+      const categoryIds = (matchedCategories || []).map(c => c.id);
+
+      if (categoryIds.length > 0) {
+        // Match product name/slug/description OR any matching category
+        const categoryFilter = categoryIds.map(id => `category_id.eq.${id}`).join(',');
+        nextQuery = nextQuery.or(
+          `name.ilike.%${term}%,slug.ilike.%${term}%,description.ilike.%${term}%,${categoryFilter}`
+        );
+      } else {
+        nextQuery = nextQuery.or(`name.ilike.%${term}%,slug.ilike.%${term}%,description.ilike.%${term}%`);
+      }
     }
   }
 
