@@ -363,7 +363,8 @@ export default function CheckoutPage() {
             },
           };
 
-          const paymentObject = new window.Razorpay(options);
+          const audioWin = window as AudioWindow;
+          const paymentObject = new audioWin.Razorpay!(options);
           // eslint-disable-next-line @typescript-eslint/no-explicit-any
           paymentObject.on('payment.failed', function (response: any) {
             alert(`Payment failed: ${response.error.description}`);

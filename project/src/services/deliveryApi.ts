@@ -10,7 +10,7 @@ export const checkDeliveryState = async (stateName: string): Promise<DeliveryAva
     const response = await fetch(`http://localhost:5000/api/v1/delivery/check-state?state=${encodeURIComponent(stateName)}`);
     
     if (!response.ok) {
-      return { is_active: false };
+      return null; // Don't block checkout on API error
     }
 
     const json = await response.json();
@@ -18,9 +18,9 @@ export const checkDeliveryState = async (stateName: string): Promise<DeliveryAva
       return json.data;
     }
 
-    return { is_active: false };
+    return null; // Don't block checkout if unexpected response
   } catch (error) {
     console.error('Failed to check delivery state:', error);
-    return { is_active: false };
+    return null; // Don't block checkout when server is unreachable
   }
 };
