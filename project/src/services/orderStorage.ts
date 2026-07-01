@@ -15,6 +15,7 @@ export interface SavedOrder {
   items: CartItem[];
   address?: Address;
   userId?: string;
+  updatedAt?: string;
 }
 
 function readAllOrders(): SavedOrder[] {
@@ -76,6 +77,7 @@ function normalizeOrder(row: any, fallbackUserId?: string): SavedOrder {
           ? JSON.parse(addressValue)
           : undefined,
     userId: row.user_id || row.userId || fallbackUserId,
+    updatedAt: row.updated_at || row.updatedAt,
   };
 }
 
@@ -117,7 +119,7 @@ export async function updateOrderStatus(
 ): Promise<SavedOrder | null> {
   const localOrders = readAllOrders();
   const localOrder = localOrders.find((order) => order.id === orderId);
-  const updatedLocalOrder = localOrder ? { ...localOrder, status } : null;
+  const updatedLocalOrder = localOrder ? { ...localOrder, status, updatedAt: new Date().toISOString() } : null;
 
   if (updatedLocalOrder) {
     writeAllOrders(

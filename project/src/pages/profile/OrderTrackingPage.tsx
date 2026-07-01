@@ -168,31 +168,82 @@ export default function OrderTrackingPage() {
         </div>
       )}
 
-      <div className="relative grid grid-cols-5 gap-2 mb-8">
-        <div className="absolute left-[10%] right-[10%] top-5 h-px bg-gray-200" />
-        <div
-          className="absolute left-[10%] top-5 h-px bg-[#2d8f3a] transition-all"
-          style={{ width: `${Math.min(activeStep / (trackingSteps.length - 1), 1) * 80}%` }}
-        />
-        {trackingSteps.map((step, index) => {
-          const Icon = step.icon;
-          const isActive = index <= activeStep;
-          return (
-            <div key={step.label} className="relative flex flex-col items-center gap-2 text-center">
-              <div
-                className={`w-10 h-10 rounded-full border flex items-center justify-center bg-white ${
-                  isActive ? 'border-[#2d8f3a] text-[#2d8f3a]' : 'border-yellow-200 text-yellow-300'
-                }`}
-              >
-                <Icon className="w-4 h-4" />
-              </div>
-              <span className={`text-xs sm:text-sm font-semibold ${isActive ? 'text-gray-900' : 'text-gray-600'}`}>
-                {step.label}
-              </span>
+      {order.status === 'Cancelled' ? (
+        <div className="relative flex justify-between items-center mb-12 px-[10%]">
+          <div className="absolute left-[15%] right-[15%] top-5 h-px bg-red-200" />
+          <div className="absolute left-[15%] right-[15%] top-5 h-px bg-red-500" />
+          
+          <div className="relative flex flex-col items-center gap-2 text-center z-10 w-24">
+            <div className="w-10 h-10 rounded-full border flex items-center justify-center bg-white border-green-500 text-green-500">
+              <Check className="w-4 h-4" />
             </div>
-          );
-        })}
-      </div>
+            <div className="flex flex-col items-center mt-1">
+              <span className="text-xs sm:text-sm font-semibold text-gray-900">Ordered</span>
+              <span className="text-[11px] text-gray-500 whitespace-nowrap mt-0.5">{formatDisplayDate(order.createdAt)}</span>
+            </div>
+          </div>
+
+          <div className="relative flex flex-col items-center gap-2 text-center z-10 w-24">
+            <div className="w-10 h-10 rounded-full border flex items-center justify-center bg-white border-red-500 text-red-500 shadow-[0_0_0_4px_rgba(239,68,68,0.1)]">
+              <XCircle className="w-4 h-4" />
+            </div>
+            <div className="flex flex-col items-center mt-1">
+              <span className="text-xs sm:text-sm font-semibold text-red-600">Cancelled</span>
+              {order.updatedAt && (
+                <span className="text-[11px] text-gray-500 whitespace-nowrap mt-0.5">{formatDisplayDate(order.updatedAt)}</span>
+              )}
+            </div>
+          </div>
+        </div>
+      ) : (
+        <div className="relative grid grid-cols-5 gap-2 mb-8 mt-4">
+          <div className="absolute left-[10%] right-[10%] top-5 h-px bg-gray-200" />
+          <div
+            className="absolute left-[10%] top-5 h-px bg-[#2d8f3a] transition-all"
+            style={{ width: `${Math.min(activeStep / (trackingSteps.length - 1), 1) * 80}%` }}
+          />
+          {trackingSteps.map((step, index) => {
+            const isCompleted = index < activeStep || (index === activeStep && order.status === 'Delivered');
+            const isCurrent = index === activeStep && order.status !== 'Delivered';
+            const isActive = index <= activeStep;
+            
+            const Icon = isCompleted ? Check : step.icon;
+            
+            // Calculate estimated date for this step
+            const stepDate = new Date(order.createdAt);
+            if (index === 4 && order.status === 'Delivered' && order.updatedAt) {
+              // Use actual updated date if delivered
+              stepDate.setTime(new Date(order.updatedAt).getTime());
+            } else {
+              stepDate.setDate(stepDate.getDate() + index);
+            }
+
+            return (
+              <div key={step.label} className="relative flex flex-col items-center gap-2 text-center">
+                <div
+                  className={`w-10 h-10 rounded-full border flex items-center justify-center transition-colors z-10 ${
+                    isCompleted
+                      ? 'bg-[#2d8f3a] border-[#2d8f3a] text-white shadow-sm'
+                      : isCurrent
+                        ? 'bg-white border-[#2d8f3a] text-[#2d8f3a]'
+                        : 'bg-white border-gray-200 text-gray-300'
+                  }`}
+                >
+                  <Icon className="w-4 h-4" />
+                </div>
+                <div className="flex flex-col items-center">
+                  <span className={`text-xs sm:text-sm font-semibold ${isActive ? 'text-gray-900' : 'text-gray-400'}`}>
+                    {step.label}
+                  </span>
+                  <span className={`text-[10px] whitespace-nowrap mt-0.5 ${isActive ? 'text-gray-600' : 'text-gray-400'}`}>
+                    {formatDisplayDate(stepDate.toISOString())}
+                  </span>
+                </div>
+              </div>
+            );
+          })}
+        </div>
+      )}
 
       <style>{`
         @keyframes truckDrive {

@@ -13,6 +13,7 @@ import AddAddressDrawer from '../components/Checkout/AddAddressDrawer';
 import type { Address } from '../components/Checkout/AddAddressDrawer';
 import { saveOrder } from '../services/orderStorage';
 import { supabase } from '../lib/supabase';
+import { checkDeliveryState, type DeliveryAvailability } from '../services/deliveryApi';
 
 const STEP_KEYS = ['address', 'summary', 'payment'] as const;
 
@@ -128,6 +129,9 @@ export default function CheckoutPage() {
   // Order placed state
   const [orderPlaced, setOrderPlaced] = useState(false);
 
+  // Delivery Availability State
+  const [deliveryInfo, setDeliveryInfo] = useState<DeliveryAvailability | null>(null);
+
   // Sync URL with step
   useEffect(() => {
     const key = STEP_KEYS[currentStep - 1];
@@ -147,6 +151,14 @@ export default function CheckoutPage() {
   }, [addresses, selectedAddressId]);
 
   const selectedAddress = addresses.find((a) => a.id === selectedAddressId);
+
+  useEffect(() => {
+    if (selectedAddress?.state) {
+      checkDeliveryState(selectedAddress.state).then(setDeliveryInfo);
+    } else {
+      setDeliveryInfo(null);
+    }
+  }, [selectedAddress?.state]);
 
   const handleOpenAddAddress = () => {
     setEditingAddress(null);
@@ -372,6 +384,7 @@ export default function CheckoutPage() {
   };
 
   const canContinue = (() => {
+    if (deliveryInfo && !deliveryInfo.is_active) return false;
     if (currentStep === 1) return !!selectedAddress;
     if (currentStep === 2) return checkoutItems.length > 0;
     if (currentStep === 3) return !!selectedPayment;
@@ -503,6 +516,7 @@ export default function CheckoutPage() {
             onContinue={handleContinue}
             canContinue={canContinue}
             isBuyNow={isBuyNow}
+            deliveryInfo={deliveryInfo}
           />
         </div>
       </div>

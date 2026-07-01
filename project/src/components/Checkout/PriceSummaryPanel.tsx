@@ -8,6 +8,7 @@ interface PriceSummaryPanelProps {
   onContinue: () => void;
   canContinue: boolean;
   isBuyNow?: boolean;
+  deliveryInfo?: { is_active: boolean; estimated_days?: number } | null;
 }
 
 export default function PriceSummaryPanel({
@@ -16,6 +17,7 @@ export default function PriceSummaryPanel({
   onContinue,
   canContinue,
   isBuyNow = false,
+  deliveryInfo,
 }: PriceSummaryPanelProps) {
   const { t } = useTranslation();
 
@@ -124,6 +126,23 @@ export default function PriceSummaryPanel({
             <span>{t('checkout.secureCheckout')}</span>
           </div>
         </div>
+
+        {/* Delivery State Info */}
+        {deliveryInfo && !deliveryInfo.is_active && (
+          <div className="px-5 pb-4">
+            <div className="bg-red-50 border border-red-200 rounded-md px-4 py-3 text-sm text-red-600 font-semibold text-center">
+              Sorry, we currently do not deliver to your state.
+            </div>
+          </div>
+        )}
+        
+        {deliveryInfo && deliveryInfo.is_active && deliveryInfo.estimated_days && (
+          <div className="px-5 pb-4">
+             <div className="bg-green-50 border border-green-200 text-green-700 text-sm font-semibold px-4 py-2.5 rounded-md text-center">
+               Estimated Delivery: {deliveryInfo.estimated_days} Days
+             </div>
+          </div>
+        )}
 
         {/* Sticky CTA Footer */}
         <div className="p-5 border-t border-gray-100 bg-gray-50/50">

@@ -1,6 +1,5 @@
 {
-  "message": "TypeError: fetch failed",
-  "stack": "AppError: TypeError: fetch failed\n    at Module.getProductByIdOrSlug (file:///C:/Users/kavitha/Downloads/veda_craft/server/src/services/productService.js:194:20)\n    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)\n    at async getProductById (file:///C:/Users/kavitha/Downloads/veda_craft/server/src/controllers/productController.js:15:21)",
-  "path": "/api/v1/products/terracotta-flower-pot",
+  "message": "permission denied for table serviceable_pincodes",
+  "path": "/api/v1/delivery/check/600001",
   "method": "GET"
 }
