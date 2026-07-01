@@ -1,12 +1,14 @@
 import { Outlet, NavLink, useNavigate } from 'react-router-dom';
 import {
-  User, ShoppingBag, Bell, MapPin, HelpCircle, LogOut
+  User, ShoppingBag, Bell, MapPin, HelpCircle, LogOut, Leaf, Ruler
 } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 
 const sidebarItems = [
   { label: 'My Profile',    to: '/profile',               icon: User },
   { label: 'My Orders',     to: '/profile/orders',        icon: ShoppingBag },
+  { label: 'My Size Profile',to: '/profile/size-profile', icon: Ruler },
+  { label: 'My Eco-Impact', to: '/profile/eco-impact',    icon: Leaf },
   { label: 'Notifications', to: '/profile/notifications', icon: Bell },
   { label: 'Address',       to: '/profile/address',       icon: MapPin },
   { label: 'Help & Support',to: '/profile/help',          icon: HelpCircle },

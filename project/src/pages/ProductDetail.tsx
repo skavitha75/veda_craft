@@ -1,5 +1,5 @@
 import { useParams, Link, useNavigate } from 'react-router-dom';
-import { ChevronRight, Star, Share2, Leaf, HeartPulse, Sparkles, Sprout, Minus, Plus, ShieldCheck, Flame, Droplets, Wind, Gem, Palette, Recycle, Sun, Package, Coffee, Flower2, Zap, Award, HandHeart } from 'lucide-react';
+import { ChevronRight, Star, Share2, Leaf, HeartPulse, Sparkles, Sprout, Minus, Plus, ShieldCheck, Flame, Droplets, Wind, Gem, Palette, Recycle, Sun, Package, Coffee, Flower2, Zap, Award, HandHeart, Shirt } from 'lucide-react';
 import { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { ecoProducts } from '../data/ecoProducts';
@@ -710,6 +710,26 @@ export default function ProductDetailsPage() {
                 <Plus className="w-4 h-4" />
               </button>
             </div>
+
+            {/* Size Recommendation for Fashion */}
+            {fashionProducts.some(p => p.name === product.name && ['Cotton Apparel', 'Linen Wear'].includes(p.category)) && (
+              <div className="mb-8 bg-[#fdf8f4] border border-[#f9eadf] rounded-xl p-4 flex items-start gap-4">
+                <div className="bg-orange-100 p-2.5 rounded-full text-orange-600 flex-shrink-0">
+                  <Shirt className="w-5 h-5" />
+                </div>
+                <div>
+                  <h4 className="font-bold text-orange-900 text-sm flex items-center gap-1.5">
+                    ✨ Recommended Size: M
+                  </h4>
+                  <p className="text-orange-800/80 text-xs mt-1 leading-relaxed">
+                    Based on your saved profile measurements, Size M fits you perfectly for this item.
+                  </p>
+                  <Link to="/profile/size-profile" className="text-orange-600 text-xs font-semibold mt-2 inline-block hover:underline">
+                    Edit Measurements
+                  </Link>
+                </div>
+              </div>
+            )}
 
             {/* Action Buttons */}
             <div className="grid grid-cols-2 gap-4 mb-10">

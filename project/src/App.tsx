@@ -6,6 +6,7 @@ import EcoPage from './pages/EcoPage';
 import WellnessPage from './pages/WellnessPage';
 import FoodPage from './pages/FoodPage';
 import CraftPage from './pages/CraftPage';
+
 import FashionPage from './pages/FashionPage';
 import DecorItemsPage from './pages/DecorItemsPage';
 import ProductDetail from './pages/ProductDetail';
@@ -21,6 +22,8 @@ import OrderTrackingPage from './pages/profile/OrderTrackingPage';
 import Notifications from './pages/profile/Notifications';
 import AddressPage from './pages/profile/AddressPage';
 import HelpSupport from './pages/profile/HelpSupport';
+import EcoImpact from './pages/profile/EcoImpact';
+import SizeProfile from './pages/profile/SizeProfile';
 import ProtectedRoute from './components/ProtectedRoute';
 import ProfileGuard from './components/ProfileGuard';
 import ProfileCompletion from './pages/ProfileCompletion';
@@ -73,6 +76,8 @@ function App() {
                         <Route index element={<MyProfile />} />
                         <Route path="orders" element={<MyOrders />} />
                         <Route path="orders/:orderId" element={<OrderTrackingPage />} />
+                        <Route path="size-profile" element={<SizeProfile />} />
+                        <Route path="eco-impact" element={<EcoImpact />} />
                         <Route path="notifications" element={<Notifications />} />
                         <Route path="address" element={<AddressPage />} />
                         <Route path="help" element={<HelpSupport />} />
