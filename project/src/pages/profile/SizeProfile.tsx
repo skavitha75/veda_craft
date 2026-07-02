@@ -26,12 +26,12 @@ export default function SizeProfile() {
   };
 
   return (
-    <div className="space-y-6 animate-fade-in max-w-4xl mx-auto">
+    <div className="space-y-6 animate-fade-in">
       {/* Header */}
-      <div className="bg-gradient-to-r from-orange-50 to-rose-50 rounded-2xl p-6 shadow-sm border border-orange-100">
+      <div className="bg-gradient-to-r from-green-50 to-emerald-50 rounded-2xl p-6 shadow-sm border border-green-100">
         <div className="flex items-center gap-4">
           <div className="w-16 h-16 bg-white rounded-full flex items-center justify-center shadow-md">
-            <Ruler className="w-8 h-8 text-orange-600" />
+            <Ruler className="w-8 h-8 text-green-600" />
           </div>
           <div>
             <h1 className="text-2xl font-bold text-gray-800">My Size Profile</h1>
@@ -47,7 +47,7 @@ export default function SizeProfile() {
         <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
             <h2 className="text-lg font-bold text-gray-800 flex items-center gap-2">
-              <Shirt className="w-5 h-5 text-orange-500" /> Standard Sizes
+              <Shirt className="w-5 h-5 text-green-600" /> Standard Sizes
             </h2>
             
             {/* Gender Toggle */}
@@ -79,7 +79,7 @@ export default function SizeProfile() {
               <select
                 value={sizes.topSize}
                 onChange={(e) => setSizes({ ...sizes, topSize: e.target.value })}
-                className="w-full px-4 py-3 rounded-lg border border-gray-200 focus:border-orange-500 focus:ring-2 focus:ring-orange-200 outline-none transition-all"
+                className="w-full px-4 py-3 rounded-lg border border-gray-200 focus:border-green-500 focus:ring-2 focus:ring-green-200 outline-none transition-all"
               >
                 <option value="XS">XS (Extra Small)</option>
                 <option value="S">S (Small)</option>
@@ -94,7 +94,7 @@ export default function SizeProfile() {
               <select
                 value={sizes.bottomSize}
                 onChange={(e) => setSizes({ ...sizes, bottomSize: e.target.value })}
-                className="w-full px-4 py-3 rounded-lg border border-gray-200 focus:border-orange-500 focus:ring-2 focus:ring-orange-200 outline-none transition-all"
+                className="w-full px-4 py-3 rounded-lg border border-gray-200 focus:border-green-500 focus:ring-2 focus:ring-green-200 outline-none transition-all"
               >
                 <option value="28">28</option>
                 <option value="30">30</option>
@@ -112,7 +112,7 @@ export default function SizeProfile() {
         <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
             <h2 className="text-lg font-bold text-gray-800 flex items-center gap-2">
-              <Scissors className="w-5 h-5 text-orange-500" /> Exact Measurements
+              <Scissors className="w-5 h-5 text-green-600" /> Exact Measurements
             </h2>
             
             {/* Unit Toggle */}
@@ -148,7 +148,7 @@ export default function SizeProfile() {
                   step="0.1"
                   value={measurements.shoulder}
                   onChange={(e) => setMeasurements({ ...measurements, shoulder: e.target.value })}
-                  className="w-full px-4 py-3 rounded-lg border border-gray-200 focus:border-orange-500 focus:ring-2 focus:ring-orange-200 outline-none transition-all pr-12"
+                  className="w-full px-4 py-3 rounded-lg border border-gray-200 focus:border-green-500 focus:ring-2 focus:ring-green-200 outline-none transition-all pr-12"
                   placeholder="e.g. 17"
                 />
                 <span className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 font-medium">{unit}</span>
@@ -164,7 +164,7 @@ export default function SizeProfile() {
                   step="0.1"
                   value={measurements.chest}
                   onChange={(e) => setMeasurements({ ...measurements, chest: e.target.value })}
-                  className="w-full px-4 py-3 rounded-lg border border-gray-200 focus:border-orange-500 focus:ring-2 focus:ring-orange-200 outline-none transition-all pr-12"
+                  className="w-full px-4 py-3 rounded-lg border border-gray-200 focus:border-green-500 focus:ring-2 focus:ring-green-200 outline-none transition-all pr-12"
                   placeholder="e.g. 38"
                 />
                 <span className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 font-medium">{unit}</span>
@@ -180,7 +180,7 @@ export default function SizeProfile() {
                   step="0.1"
                   value={measurements.waist}
                   onChange={(e) => setMeasurements({ ...measurements, waist: e.target.value })}
-                  className="w-full px-4 py-3 rounded-lg border border-gray-200 focus:border-orange-500 focus:ring-2 focus:ring-orange-200 outline-none transition-all pr-12"
+                  className="w-full px-4 py-3 rounded-lg border border-gray-200 focus:border-green-500 focus:ring-2 focus:ring-green-200 outline-none transition-all pr-12"
                   placeholder="e.g. 32"
                 />
                 <span className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 font-medium">{unit}</span>
@@ -196,7 +196,7 @@ export default function SizeProfile() {
                   step="0.1"
                   value={measurements.hips}
                   onChange={(e) => setMeasurements({ ...measurements, hips: e.target.value })}
-                  className="w-full px-4 py-3 rounded-lg border border-gray-200 focus:border-orange-500 focus:ring-2 focus:ring-orange-200 outline-none transition-all pr-12"
+                  className="w-full px-4 py-3 rounded-lg border border-gray-200 focus:border-green-500 focus:ring-2 focus:ring-green-200 outline-none transition-all pr-12"
                   placeholder="e.g. 39"
                 />
                 <span className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 font-medium">{unit}</span>
@@ -214,7 +214,7 @@ export default function SizeProfile() {
           )}
           <button
             type="submit"
-            className="px-6 py-3 bg-orange-600 text-white font-medium rounded-xl hover:bg-orange-700 transition-colors flex items-center gap-2"
+            className="px-6 py-3 bg-green-600 text-white font-medium rounded-xl hover:bg-green-700 transition-colors flex items-center gap-2"
           >
             <Save className="w-5 h-5" /> Save Profile
           </button>

@@ -371,9 +371,7 @@ export default function SearchBar() {
                       <span>{product.category}</span>
                     </p>
                   </div>
-                  <div className="text-sm font-bold text-gray-900">
-                    &#8377;{product.price}
-                  </div>
+
                 </li>
               ))}
             </ul>
