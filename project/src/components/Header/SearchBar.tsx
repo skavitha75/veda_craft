@@ -360,15 +360,15 @@ export default function SearchBar() {
                 >
                   <img
                     src={product.image}
-                    alt={product.name}
+                    alt={t(`productsData.${product.name}`, product.name)}
                     className="w-12 h-12 object-cover object-top rounded-md border border-gray-200"
                   />
                   <div className="flex-1 min-w-0">
-                    <p className="text-sm font-medium text-gray-900 truncate">{product.name}</p>
+                    <p className="text-sm font-medium text-gray-900 truncate">{t(`productsData.${product.name}`, product.name)}</p>
                     <p className="text-xs text-gray-500 flex gap-2">
-                      <span>{product.mainCategory}</span>
+                      <span>{t(`productsData.${product.mainCategory}`, product.mainCategory)}</span>
                       <span>•</span>
-                      <span>{product.category}</span>
+                      <span>{t(`productsData.${product.category}`, product.category)}</span>
                     </p>
                   </div>
 

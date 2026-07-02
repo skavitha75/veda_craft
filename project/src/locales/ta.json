@@ -206,5 +206,13 @@
     "errNoSpeech": "பேச்சு எதுவும் கண்டறியப்படவில்லை. மீண்டும் முயற்சிக்கவும்.",
     "errMicUnavailable": "மைக்ரோஃபோன் கிடைக்கவில்லை",
     "errUnsupported": "இந்த உலாவியில் குரல் தேடல் ஆதரிக்கப்படவில்லை"
+  },
+  "productsData": {
+    "Palm Leaf Storage Basket": "பனை ஓலை சேமிப்பு கூடை",
+    "Kakimar Home Made Hair Oil": "காக்கிமார் வீட்டு முடி எண்ணெய்",
+    "Neem Wood Comb": "வேப்ப மர சீப்பு",
+    "Handwoven Jute Basket": "கைத்தறி சணல் கூடை",
+    "Herbal Grain Mix": "மூலிகை தானிய கலவை",
+    "Eco-Craft": "சுற்றுச்சூழல் கைவினை"
   }
 }

@@ -630,12 +630,12 @@ export default function ProductDetailsPage() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         
         {/* Breadcrumb */}
-        <nav className="flex items-center text-sm text-gray-500 mb-8">
+        <nav className="flex items-center text-sm text-gray-500 mb-8 whitespace-nowrap overflow-x-auto pb-2 scrollbar-hide">
           <Link to="/" className="hover:text-green-600">{t('product.returnHome').split(' ')[0]}</Link>
           <ChevronRight className="w-4 h-4 mx-2" />
-          <span className="hover:text-green-600 cursor-pointer">{product.category}</span>
+          <span className="hover:text-green-600 cursor-pointer">{t(`productsData.${product.category}`, product.category)}</span>
           <ChevronRight className="w-4 h-4 mx-2" />
-          <span className="text-gray-800 font-medium">{product.name}</span>
+          <span className="text-gray-800 font-medium">{t(`productsData.${product.name}`, product.name)}</span>
         </nav>
 
         {/* Main Product Area */}
@@ -651,7 +651,7 @@ export default function ProductDetailsPage() {
               ))}
             </div>
             <div className="flex-1 flex items-start justify-center relative group">
-               <img src={product.image} alt={product.name} className="w-full h-auto rounded-xl object-contain shadow-sm border border-gray-100" />
+               <img src={product.image} alt={t(`productsData.${product.name}`, product.name)} className="w-full h-auto rounded-xl object-contain shadow-sm border border-gray-100" />
                
                {/* Floating Action Group */}
                <div className="absolute top-4 right-4 flex flex-col gap-3 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
@@ -669,7 +669,7 @@ export default function ProductDetailsPage() {
 
           {/* Product Info */}
           <div className="flex flex-col">
-            <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-2">{product.name}</h1>
+            <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-2">{t(`productsData.${product.name}`, product.name)}</h1>
             <p className="text-sm text-gray-500 mb-4">{t('product.biodegradable')}</p>
 
             {/* Rating */}
@@ -838,14 +838,16 @@ export default function ProductDetailsPage() {
         {/* Product Highlights */}
         <div className="py-8 border-t border-gray-100 mb-8">
           <h2 className="text-lg font-bold text-gray-900 mb-6">{t('product.highlights')}</h2>
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             {getProductHighlights(product.category).map((highlight, index) => (
-              <div key={index} className="flex flex-col items-center">
-                <div className="w-12 h-12 bg-green-50 rounded-full flex items-center justify-center text-green-700 mb-3">
+              <div key={index} className="flex items-start gap-3 bg-white p-4 rounded-xl border border-gray-100">
+                <div className="bg-green-50 p-2 rounded-lg text-green-600 mt-0.5">
                   {highlight.icon}
                 </div>
-                <h4 className="font-semibold text-gray-900 text-sm mb-1">{highlight.title}</h4>
-                <p className="text-xs text-gray-600">{highlight.desc}</p>
+                <div>
+                  <h3 className="font-semibold text-gray-900 mb-1">{t(`productsData.${product.category}.highlights.${index}.title`, highlight.title)}</h3>
+                  <p className="text-sm text-gray-500">{t(`productsData.${product.category}.highlights.${index}.desc`, highlight.desc)}</p>
+                </div>
               </div>
             ))}
           </div>
@@ -853,9 +855,9 @@ export default function ProductDetailsPage() {
 
         {/* Tabs Section */}
         <ProductTabs 
-          description={getProductContent(product.category, product.name).description}
-          howToUse={getProductContent(product.category, product.name).howToUse}
-          coreInstructions={getProductContent(product.category, product.name).coreInstructions}
+          description={t(`productsData.${product.category}.description`, getProductContent(product.category, product.name).description)}
+          howToUse={t(`productsData.${product.category}.howToUse`, getProductContent(product.category, product.name).howToUse)}
+          coreInstructions={t(`productsData.${product.category}.coreInstructions`, getProductContent(product.category, product.name).coreInstructions)}
         />
 
         {/* Reviews Section */}

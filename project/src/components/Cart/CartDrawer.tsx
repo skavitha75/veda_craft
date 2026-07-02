@@ -54,10 +54,10 @@ export default function CartDrawer() {
               {items.map((item) => (
                 <div key={item.id} className="bg-white p-3 border border-gray-200 rounded-sm">
                   <div className="flex gap-4 relative">
-                    <img src={item.image} alt={item.name} className="w-20 h-20 object-cover rounded-sm border border-gray-100" />
+                    <img src={item.image} alt={t(`productsData.${item.name}`, item.name)} className="w-20 h-20 object-cover rounded-sm border border-gray-100" />
                     
                     <div className="flex-1 pr-8">
-                      <h3 className="text-sm font-medium text-gray-900 leading-tight mb-1">{item.name}</h3>
+                      <h3 className="text-sm font-medium text-gray-900 leading-tight mb-1">{t(`productsData.${item.name}`, item.name)}</h3>
                       {item.rating && (
                         <div className="flex items-center gap-0.5 mb-2">
                           <span className="text-[10px] text-gray-600 font-medium">{item.rating}</span>

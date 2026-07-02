@@ -3,6 +3,7 @@ import { Star, ShoppingCart, Heart, SlidersHorizontal, ChevronDown, ChevronUp, X
 import { Link } from 'react-router-dom';
 import { getProductsByCategory } from '../../services/productApi';
 import { LocalProduct, Product as DomainProduct, ApiProduct, mapApiProductToProduct, mapLocalProductToProduct } from '../../types/product';
+import { useTranslation } from 'react-i18next';
 import { useCart } from '../../context/CartContext';
 import { useWishlist } from '../../context/WishlistContext';
 
@@ -58,6 +59,7 @@ function FilterSection({
 function ProductCard({ product, badgeIcon: BadgeIcon, badgeText, badgeColorClass }: { product: DomainProduct, badgeIcon: React.ElementType, badgeText: string, badgeColorClass: string }) {
   const { addToCart } = useCart();
   const { isInWishlist, toggleWishlist } = useWishlist();
+  const { t } = useTranslation();
   const wished = isInWishlist(product.id);
   const [added, setAdded] = useState(false);
 
@@ -83,7 +85,7 @@ function ProductCard({ product, badgeIcon: BadgeIcon, badgeText, badgeColorClass
         <Link to={`/product/${product.slug || product.id}`} className="block w-full h-full">
           <img
             src={product.image}
-            alt={product.name}
+            alt={t(`productsData.${product.name}`, product.name)}
             className="w-full h-full object-cover object-top group-hover:scale-110 transition-transform duration-500"
           />
         </Link>
@@ -109,9 +111,9 @@ function ProductCard({ product, badgeIcon: BadgeIcon, badgeText, badgeColorClass
 
       <div className="p-3 flex flex-col gap-1 flex-1">
         <Link to={`/product/${product.slug || product.id}`} className="hover:text-green-600 transition-colors">
-          <h3 className="text-xs font-semibold text-gray-800 leading-tight line-clamp-2">{product.name}</h3>
+          <h3 className="text-xs font-semibold text-gray-800 leading-tight line-clamp-2">{t(`productsData.${product.name}`, product.name)}</h3>
         </Link>
-        <p className="text-[10px] text-green-600 font-medium">{product.category}</p>
+        <p className="text-[10px] text-green-600 font-medium">{t(`productsData.${product.category}`, product.category)}</p>
 
         <div className="flex items-center justify-between mt-auto pt-2">
           <span className="text-sm font-bold text-gray-900">₹ {product.price}</span>

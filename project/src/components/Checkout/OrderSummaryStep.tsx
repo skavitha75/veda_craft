@@ -81,7 +81,7 @@ export default function OrderSummaryStep({
               <div className="w-20 h-20 sm:w-24 sm:h-24 flex-shrink-0 border border-gray-100 rounded overflow-hidden bg-gray-50">
                 <img
                   src={item.image}
-                  alt={item.name}
+                  alt={t(`productsData.${item.name}`, item.name)}
                   className="w-full h-full object-cover"
                 />
               </div>
@@ -89,7 +89,7 @@ export default function OrderSummaryStep({
               {/* Product Info */}
               <div className="flex-1 min-w-0">
                 <h3 className="text-sm sm:text-base font-medium text-gray-900 mb-1 line-clamp-2">
-                  {item.name}
+                  {t(`productsData.${item.name}`, item.name)}
                 </h3>
 
                 {/* Rating */}
